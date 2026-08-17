@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -m pip install --quiet pypdf pdfplumber pymupdf Pillow)",
+      "Bash(python3 -c \"import fitz; print\\('pymupdf ok', fitz.version\\)\")",
+      "Bash(mkdir -p text images)",
+      "Bash(python3 extract.py \"/Users/jonalon/Documents/Desig-nare/Curriculum.pdf\" curriculum)",
+      "Bash(python3 extract.py \"/Users/jonalon/Documents/Desig-nare/Inicio.pdf\" inicio)",
+      "Bash(python3 extract.py \"/Users/jonalon/Documents/Desig-nare/UX _ Core actions _ Datascope.pdf\" datascope)",
+      "Bash(python3 extract.py \"/Users/jonalon/Documents/Desig-nare/UX _ Corigin.pdf\" corigin)",
+      "Bash(python3 extract.py \"/Users/jonalon/Documents/Desig-nare/UX _ Juicio.pdf\" juicio)",
+      "Bash(python3 -c ' *)",
+      "Bash(python3)",
+      "Bash(npm create *)",
+      "Bash(npm exec *)",
+      "Bash(npm install *)",
+      "Bash(curl -sS -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5173 --max-time 5)",
+      "Bash(npm run *)",
+      "Bash(tee /tmp/vite-dev.log)",
+      "Bash(find \"/Users/jonalon/Documents/Desig-nare\" -iname \"*.woff*\" -o -iname \"*.otf\" -o -iname \"*.ttf\" 2>/dev/null | head -50 *)",
+      "Bash(python3 -c \"import fitz; print\\('pymupdf ok'\\)\")",
+      "Bash(curl -sS -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5173 --max-time 3)",
+      "Bash(disown)",
+      "Bash(sort -t: -k2 -u)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit -q -m 'Checkpoint: light mode baseline before dark mode exploration *)"
+    ]
+  }
+}
