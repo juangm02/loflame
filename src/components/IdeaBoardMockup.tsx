@@ -23,7 +23,7 @@ export default function IdeaBoardMockup({
   notes: MockupNote[];
 }) {
   return (
-    <div className="overflow-hidden rounded-3xl border border-ink/10 bg-white shadow-[0_1px_2px_rgba(20,22,31,0.06),0_24px_48px_-20px_rgba(20,22,31,0.3)]">
+    <div className="overflow-hidden rounded-3xl border border-ink/10 bg-card shadow-[0_1px_2px_var(--shadow-soft),0_24px_48px_-20px_var(--shadow-strong)]">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink/8 px-5 py-3.5">
         <span className="font-display text-lg font-extrabold text-indigo-600">{appName}</span>
         <div className="flex gap-1 rounded-full bg-paper-dim p-1">
@@ -31,14 +31,14 @@ export default function IdeaBoardMockup({
             <span
               key={tab}
               className={`rounded-full px-3 py-1 text-[11px] font-semibold ${
-                i === 0 ? "bg-white text-ink shadow-sm" : "text-ink/45"
+                i === 0 ? "bg-card text-ink shadow-sm" : "text-ink/45"
               }`}
             >
               {tab}
             </span>
           ))}
         </div>
-        <span className="rounded-full bg-navy px-3 py-1.5 text-[11px] font-bold text-paper">+ New idea</span>
+        <span className="rounded-full bg-navy px-3 py-1.5 text-[11px] font-bold text-fixed-light">+ New idea</span>
       </div>
 
       <div className="grid sm:grid-cols-[200px_1fr]">
@@ -64,17 +64,17 @@ export default function IdeaBoardMockup({
         <div
           className="p-6"
           style={{
-            backgroundImage: "radial-gradient(rgba(20,22,31,0.08) 1px, transparent 1px)",
+            backgroundImage: "radial-gradient(var(--pattern-dot) 1px, transparent 1px)",
             backgroundSize: "14px 14px",
           }}
         >
-          <div className="max-w-sm rounded-2xl border border-ink/8 bg-white p-4 shadow-lg">
+          <div className="max-w-sm rounded-2xl border border-ink/8 bg-card p-4 shadow-lg">
             <p className="text-sm font-extrabold text-ink">{detail.title}</p>
             <p className="mt-1.5 text-[11px] leading-relaxed text-ink-soft">{detail.body}</p>
             <div className="mt-3 flex items-center">
               <div className="flex -space-x-1.5">
                 {Array.from({ length: Math.min(detail.avatarCount, 4) }).map((_, i) => (
-                  <span key={i} className="h-5 w-5 rounded-full border-2 border-white bg-ink/20" />
+                  <span key={i} className="h-5 w-5 rounded-full border-2 border-card bg-ink/20" />
                 ))}
               </div>
               {detail.avatarCount > 4 && (
@@ -88,7 +88,7 @@ export default function IdeaBoardMockup({
               {notes.map((n, i) => (
                 <div
                   key={i}
-                  className="w-36 rounded-lg p-2.5 text-[10px] font-semibold text-ink/85 shadow-md"
+                  className="w-36 rounded-lg p-2.5 text-[10px] font-semibold text-fixed-dark/85 shadow-md"
                   style={{ background: n.color, transform: `rotate(${i % 2 ? 2 : -2}deg)` }}
                 >
                   {n.text}

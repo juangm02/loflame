@@ -8,10 +8,10 @@ export default function Footer() {
   const { lang, tr } = useLanguage();
 
   return (
-    <footer className="relative overflow-hidden bg-navy text-paper">
+    <footer className="relative overflow-hidden bg-navy text-fixed-light">
       <div className="mx-auto max-w-6xl px-6 py-24 sm:px-8 sm:py-32">
         <RevealOnScroll>
-          <p className="font-display text-lg italic text-paper/70">
+          <p className="font-display text-lg italic text-fixed-light/70">
             {lang === "es" ? "Gracias por tu atención" : "Thanks for your attention"} 🙂👋
           </p>
         </RevealOnScroll>
@@ -52,7 +52,7 @@ export default function Footer() {
                   </>
                 )}
               </p>
-              <ul className="mt-5 space-y-2 text-sm text-paper/80">
+              <ul className="mt-5 space-y-2 text-sm text-fixed-light/80">
                 <li>
                   <FooterLink href="#">Be&nbsp;&nbsp;{site.behance}</FooterLink>
                 </li>
@@ -67,7 +67,7 @@ export default function Footer() {
           </RevealOnScroll>
 
           <RevealOnScroll delay={0.15} className="text-right">
-            <p className="text-xs uppercase tracking-wide text-paper/50">
+            <p className="text-xs uppercase tracking-wide text-fixed-light/50">
               {tr({ es: "Diseñado y creado por", en: "Designed & created by" })}
             </p>
             <motion.div
@@ -75,9 +75,9 @@ export default function Footer() {
               className="mt-2 inline-flex items-center gap-2 text-lg font-bold"
             >
               <LogoMark className="h-6 w-auto" />
-              Lo<span className="italic text-paper/70">flame</span>
+              Lo<span className="italic text-fixed-light/70">flame</span>
             </motion.div>
-            <p className="mt-3 text-xs text-paper/40">
+            <p className="mt-3 text-xs text-fixed-light/40">
               {tr({ es: "Marca personal de", en: "Personal brand by" })} <br /> {site.name}
               <br />
               2025. {tr({ es: "Todos los derechos reservados", en: "All rights reserved" })}

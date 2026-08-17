@@ -17,7 +17,7 @@ export default function ProjectCard({ project, index }: { project: ProjectMeta; 
       <motion.div
         whileHover={project.disabled ? undefined : { y: -4 }}
         transition={{ type: "spring", stiffness: 260, damping: 22 }}
-        className="group overflow-hidden rounded-3xl border border-ink/8 bg-white/60 shadow-sm transition-shadow duration-300 hover:shadow-xl hover:shadow-black/5"
+        className="group overflow-hidden rounded-3xl border border-ink/8 bg-card/60 shadow-sm transition-shadow duration-300 hover:shadow-xl hover:shadow-black/5"
       >
         <div className="flex flex-col sm:flex-row">
           <div className="relative aspect-[4/3] w-full overflow-hidden sm:aspect-auto sm:w-64 sm:shrink-0">
@@ -38,8 +38,8 @@ export default function ProjectCard({ project, index }: { project: ProjectMeta; 
               </div>
             )}
             {project.disabled && (
-              <div className="absolute inset-0 flex items-center justify-center bg-navy/50 backdrop-blur-[1px]">
-                <span className="rounded-full bg-navy px-3 py-1 text-xs font-semibold text-paper">
+              <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[1px]">
+                <span className="rounded-full bg-navy px-3 py-1 text-xs font-semibold text-fixed-light">
                   {tr(cta.underConstruction)}
                 </span>
               </div>

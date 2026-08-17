@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 
-const shadowLight =
-  "shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(20,22,31,0.06),0_8px_16px_-10px_rgba(20,22,31,0.2)]";
+const shadowLight = "shadow-[inset_0_1px_0_var(--shadow-hi),0_1px_2px_var(--shadow-soft),0_8px_16px_-10px_var(--shadow-strong)]";
 const shadowLightHover =
   "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_2px_6px_rgba(20,22,31,0.12),0_16px_26px_-10px_rgba(20,22,31,0.38)]";
 const shadowDark =
@@ -30,8 +29,8 @@ export default function TagCloud({ tags, dark = false }: { tags: string[]; dark?
           <span
             className={`inline-block cursor-default select-none rounded-[18px_4px_18px_4px] px-4 py-1.5 text-sm font-semibold transition-all duration-200 ease-out will-change-transform hover:scale-[1.03] ${
               dark
-                ? `bg-navy-soft text-paper/85 ${shadowDark} ${shadowDarkHover} hover:bg-paper hover:text-navy`
-                : `bg-white text-ink/75 ${shadowLight} ${shadowLightHover} hover:bg-navy hover:text-paper`
+                ? `bg-navy-soft text-fixed-light/85 ${shadowDark} ${shadowDarkHover} hover:bg-fixed-light hover:text-navy`
+                : `bg-card text-ink/75 ${shadowLight} ${shadowLightHover} hover:bg-navy hover:text-fixed-light`
             }`}
           >
             {tag}

@@ -58,7 +58,7 @@ export default function Header({ right }: { right?: ReactNode }) {
                     transition={{ type: "spring", stiffness: 400, damping: 32 }}
                   />
                 )}
-                <span className={`relative z-10 ${tabItem.active ? "text-paper" : "text-ink/70"}`}>
+                <span className={`relative z-10 ${tabItem.active ? "text-fixed-light" : "text-ink/70"}`}>
                   {tabItem.label}
                 </span>
               </Link>

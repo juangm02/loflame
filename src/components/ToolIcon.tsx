@@ -14,7 +14,7 @@ export default function ToolIcon({ name, mono, color }: ToolData) {
         />
         <div className="absolute inset-[3px] rounded-full bg-paper" />
         <div
-          className="relative z-10 flex h-11 w-11 items-center justify-center rounded-2xl bg-white text-[11px] font-extrabold tracking-tight shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_1px_2px_rgba(20,22,31,0.06),0_8px_14px_-10px_rgba(20,22,31,0.22)] transition-shadow duration-200 ease-out group-hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.9),0_2px_6px_rgba(20,22,31,0.1),0_16px_24px_-10px_rgba(20,22,31,0.36)]"
+          className="relative z-10 flex h-11 w-11 items-center justify-center rounded-2xl bg-card text-[11px] font-extrabold tracking-tight shadow-[inset_0_1px_0_var(--shadow-hi),0_1px_2px_var(--shadow-soft),0_8px_14px_-10px_var(--shadow-strong)] transition-shadow duration-200 ease-out group-hover:shadow-[inset_0_1px_0_var(--shadow-hi),0_2px_6px_var(--shadow-soft),0_16px_24px_-10px_var(--shadow-strong)]"
           style={{ color }}
         >
           {mono}

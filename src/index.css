@@ -6,6 +6,11 @@
   --font-sans: "Archivo", system-ui, sans-serif;
   --font-display: "Funnel Display", "Archivo", system-ui, sans-serif;
 
+  /* Base palette. Light-mode values live here; dark-mode overrides for the
+     same custom properties are declared below in :root[data-theme="dark"].
+     To fully revert to light-only, delete that block (and the
+     data-theme="dark" attribute on <html> in index.html) — everything else
+     keeps working since these are the same tokens either way. */
   --color-paper: #f1f0ee;
   --color-paper-dim: #e8e7e3;
   --color-ink: #14161f;
@@ -13,6 +18,47 @@
   --color-navy: #10152a;
   --color-navy-soft: #1b2140;
   --color-ghost: #d8d7d2;
+
+  /* Card/surface token: replaces literal "white" so cards invert in dark mode. */
+  --color-card: #ffffff;
+
+  /* Constant light tone for text/fills placed on top of --color-navy.
+     Deliberately NOT theme-dependent: navy itself doesn't change between
+     themes, so anything sitting on it (buttons, footer, pills) shouldn't
+     either — this is what "text-paper on bg-navy" was really trying to
+     mean all along. */
+  --color-fixed-light: #f1f0ee;
+
+  /* Mirror of the above: constant dark tone for text placed on top of
+     inherently light/bright fills (sticky-note colors, brand-accent
+     chips) that don't change with the theme either. */
+  --color-fixed-dark: #14161f;
+}
+
+:root {
+  /* Layered-shadow tokens (inset highlight / tight shadow / long shadow),
+     referenced via var() inside arbitrary shadow-[...] values in TagCloud,
+     ToolIcon, ArchitectureTree, IdeaBoardMockup, FigmaEmbed. Swapping these
+     two blocks is what re-lights every card for dark mode without touching
+     each component. */
+  --shadow-hi: rgba(255, 255, 255, 0.9);
+  --shadow-soft: rgba(20, 22, 31, 0.08);
+  --shadow-strong: rgba(20, 22, 31, 0.28);
+  --pattern-dot: rgba(20, 22, 31, 0.08);
+}
+
+:root[data-theme="dark"] {
+  --color-paper: #131316;
+  --color-paper-dim: #1c1c22;
+  --color-ink: #f1f0ee;
+  --color-ink-soft: #a3a2ab;
+  --color-ghost: #35353c;
+  --color-card: #1c1c22;
+
+  --shadow-hi: rgba(255, 255, 255, 0.06);
+  --shadow-soft: rgba(0, 0, 0, 0.4);
+  --shadow-strong: rgba(0, 0, 0, 0.6);
+  --pattern-dot: rgba(255, 255, 255, 0.08);
 }
 
 @layer base {
@@ -32,11 +78,12 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
   ::selection {
     background: var(--color-navy);
-    color: var(--color-paper);
+    color: var(--color-fixed-light);
   }
 
   a {

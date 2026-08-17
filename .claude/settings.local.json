@@ -24,7 +24,8 @@
       "Bash(sort -t: -k2 -u)",
       "Bash(git init *)",
       "Bash(git add *)",
-      "Bash(git commit -q -m 'Checkpoint: light mode baseline before dark mode exploration *)"
+      "Bash(git commit -q -m 'Checkpoint: light mode baseline before dark mode exploration *)",
+      "Bash(git commit -q -m 'Add dark mode as new default \\(revertible\\) *)"
     ]
   }
 }

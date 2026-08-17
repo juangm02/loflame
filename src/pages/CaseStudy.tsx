@@ -97,7 +97,7 @@ export default function CaseStudy() {
             ))}
           </RevealOnScroll>
 
-          <RevealOnScroll delay={0.08} className="flex flex-col gap-5 rounded-2xl border border-ink/8 bg-white/50 p-6 text-sm">
+          <RevealOnScroll delay={0.08} className="flex flex-col gap-5 rounded-2xl border border-ink/8 bg-card/50 p-6 text-sm">
             <MetaRow label={tr({ es: "Empresa", en: "Company" })} value={tr(study.meta.company)} />
             {study.meta.period && (
               <MetaRow label={tr({ es: "Periodo", en: "Period" })} value={tr(study.meta.period)} />
@@ -130,7 +130,7 @@ export default function CaseStudy() {
           <div className="mt-14 grid gap-5 sm:grid-cols-3">
             {study.objectives.map((obj, i) => (
               <RevealOnScroll key={i} delay={i * 0.06}>
-                <div className="h-full rounded-2xl border border-ink/8 bg-white/50 p-6">
+                <div className="h-full rounded-2xl border border-ink/8 bg-card/50 p-6">
                   <ObjectiveIcon index={i} accent={meta.accent} />
                   <p className="mt-4 text-sm leading-relaxed text-ink-soft">{tr(obj)}</p>
                 </div>
@@ -196,7 +196,7 @@ export default function CaseStudy() {
             <div className="mt-14 grid gap-4 no-scrollbar sm:grid-cols-5">
               {study.designThinking.map((phase, i) => (
                 <RevealOnScroll key={i} delay={i * 0.05}>
-                  <div className="h-full rounded-2xl border border-ink/8 bg-white/50 p-5">
+                  <div className="h-full rounded-2xl border border-ink/8 bg-card/50 p-5">
                     <p className="text-sm font-extrabold text-ink">{tr(phase.phase)}</p>
                     <ul className="mt-3 space-y-1.5">
                       {phase.items.map((item, j) => (
@@ -219,14 +219,14 @@ export default function CaseStudy() {
             >
               <h2
                 className={`font-display text-4xl font-extrabold sm:text-5xl ${
-                  proc.highlight ? "text-paper" : "text-ink"
+                  proc.highlight ? "text-fixed-light" : "text-ink"
                 }`}
               >
                 {tr(proc.title)}
               </h2>
               <p
                 className={`mt-5 max-w-2xl text-[15px] leading-relaxed ${
-                  proc.highlight ? "text-paper/70" : "text-ink-soft"
+                  proc.highlight ? "text-fixed-light/70" : "text-ink-soft"
                 }`}
               >
                 {tr(proc.body)}
@@ -237,7 +237,7 @@ export default function CaseStudy() {
                     <li
                       key={j}
                       className={`flex gap-2 text-sm leading-relaxed ${
-                        proc.highlight ? "text-paper/80" : "text-ink-soft"
+                        proc.highlight ? "text-fixed-light/80" : "text-ink-soft"
                       }`}
                     >
                       <span className={`mt-1.5 h-1 w-1 shrink-0 rounded-full ${proc.highlight ? "bg-paper/50" : "bg-ink/40"}`} />
@@ -275,7 +275,7 @@ export default function CaseStudy() {
               <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 {study.research.categories.map((cat, i) => (
                   <RevealOnScroll key={i} delay={i * 0.05}>
-                    <div className="h-full rounded-2xl border border-ink/8 bg-white/50 p-5">
+                    <div className="h-full rounded-2xl border border-ink/8 bg-card/50 p-5">
                       <p className="text-sm font-extrabold text-ink">{tr(cat.title)}</p>
                       <ol className="mt-3 space-y-2.5">
                         {cat.questions.map((q, j) => (
@@ -293,7 +293,7 @@ export default function CaseStudy() {
               <div className="mt-10 grid gap-4 sm:grid-cols-2">
                 {study.research.quotes.map((q, i) => (
                   <RevealOnScroll key={i} delay={i * 0.05}>
-                    <div className="h-full rounded-2xl border border-ink/8 bg-white/50 p-5">
+                    <div className="h-full rounded-2xl border border-ink/8 bg-card/50 p-5">
                       <p className="font-display text-2xl leading-none text-ink/15">"</p>
                       <p className="mt-1 text-sm italic leading-relaxed text-ink-soft">{tr(q)}</p>
                     </div>
@@ -320,10 +320,10 @@ export default function CaseStudy() {
               </p>
             </RevealOnScroll>
             <RevealOnScroll delay={0.06} className="mt-8 rounded-3xl bg-navy px-8 py-12 text-center sm:px-16">
-              <p className="mx-auto max-w-2xl font-display text-xl font-bold leading-snug text-paper sm:text-2xl">
+              <p className="mx-auto max-w-2xl font-display text-xl font-bold leading-snug text-fixed-light sm:text-2xl">
                 {tr(study.problemStatement.quote)}
               </p>
-              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-paper/60">
+              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-fixed-light/60">
                 {tr(study.problemStatement.detail)}
               </p>
             </RevealOnScroll>
@@ -510,7 +510,7 @@ export default function CaseStudy() {
             <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {study.testimonials.quotes.map((q, i) => (
                 <RevealOnScroll key={i} delay={i * 0.04}>
-                  <div className="h-full rounded-2xl border border-ink/8 bg-white/50 p-6">
+                  <div className="h-full rounded-2xl border border-ink/8 bg-card/50 p-6">
                     <p className="font-display text-3xl leading-none text-ink/15">"</p>
                     <p className="mt-1 text-sm leading-relaxed text-ink-soft">{tr(q)}</p>
                   </div>
@@ -546,11 +546,11 @@ export default function CaseStudy() {
           </section>
         )}
 
-        <RevealOnScroll className="mt-36 flex flex-col items-center gap-6 rounded-3xl border border-ink/8 bg-white/50 px-6 py-16 text-center">
+        <RevealOnScroll className="mt-36 flex flex-col items-center gap-6 rounded-3xl border border-ink/8 bg-card/50 px-6 py-16 text-center">
           <motion.span
             animate={{ y: [0, -6, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="flex h-12 w-12 items-center justify-center rounded-full bg-navy text-paper"
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-navy text-fixed-light"
           >
             ✦
           </motion.span>
@@ -589,7 +589,7 @@ function BrowserMock({ accent }: { accent: string }) {
       initial={{ opacity: 0, y: 16, rotate: -3 }}
       animate={{ opacity: 1, y: 0, rotate: -3 }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      className="absolute right-6 top-6 hidden w-56 rounded-xl bg-white/95 p-3 shadow-2xl sm:block"
+      className="absolute right-6 top-6 hidden w-56 rounded-xl bg-card/95 p-3 shadow-2xl sm:block"
     >
       <div className="flex gap-1.5">
         <span className="h-2 w-2 rounded-full bg-red-400" />

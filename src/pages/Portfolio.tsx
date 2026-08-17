@@ -95,7 +95,7 @@ export default function Portfolio() {
             <p className="mt-6 max-w-3xl text-[17px] leading-relaxed text-ink-soft">{tr(portfolioPage.aboutBody)}</p>
           </RevealOnScroll>
 
-          <div className="mt-14 rounded-3xl border border-ink/8 bg-white/50 p-8 sm:p-10">
+          <div className="mt-14 rounded-3xl border border-ink/8 bg-card/50 p-8 sm:p-10">
             <TagCloud tags={portfolioPage.tags.map((tg) => (typeof tg === "string" ? tg : tr(tg)))} />
             <div className="mt-8 h-px w-full bg-ink/8" />
             <div className="mt-8 flex flex-wrap gap-x-7 gap-y-6">
