@@ -72,7 +72,7 @@ export default function CaseStudyTabs({ items }: { items: TabItem[] }) {
               {item.active && (
                 <motion.span
                   layoutId="case-tab-underline"
-                  className="absolute inset-x-0 -bottom-px h-[2px] rounded-full bg-navy"
+                  className="absolute inset-x-0 -bottom-px h-[2px] rounded-full bg-accent"
                   transition={{ type: "spring", stiffness: 420, damping: 34 }}
                 />
               )}

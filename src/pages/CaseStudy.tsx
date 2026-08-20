@@ -11,16 +11,20 @@ import FigmaEmbed from "../components/FigmaEmbed";
 import CaseStudyTabs from "../components/CaseStudyTabs";
 import { caseStudies, caseStudyNav, projects, nav, cta, type Bilingual } from "../data/content";
 import { useLanguage } from "../context/LanguageContext";
+import { resolveAccent, useIsDarkTheme } from "../lib/useIsDarkTheme";
 
 const NAV_SLUGS = ["datascope", "juicio", "corigin", "hospital-sjd", "arrelat"];
 
 export default function CaseStudy() {
   const { slug = "" } = useParams();
   const { tr } = useLanguage();
+  const isDark = useIsDarkTheme();
   const study = caseStudies[slug];
   const meta = projects.find((p) => p.slug === slug);
 
   if (!study || !meta) return <Navigate to="/" replace />;
+
+  const accent = resolveAccent(meta.accent, meta.accentDark, isDark);
 
   return (
     <div>
@@ -71,9 +75,9 @@ export default function CaseStudy() {
         <RevealOnScroll delay={0.15}>
           <div
             className="relative mt-14 flex h-64 items-end overflow-hidden rounded-3xl p-8 sm:h-80"
-            style={{ background: `linear-gradient(135deg, ${meta.accent}, #0b0f22)` }}
+            style={{ background: `linear-gradient(135deg, ${accent}, #0b0f22)` }}
           >
-            <BrowserMock accent={meta.accent} />
+            <BrowserMock accent={accent} />
             <span className="relative font-display text-3xl font-extrabold text-white sm:text-4xl">
               {tr(study.briefTitle)}
             </span>
@@ -114,7 +118,7 @@ export default function CaseStudy() {
           <RevealOnScroll>
             <div
               className="aspect-square w-full max-w-sm rounded-3xl"
-              style={{ background: `linear-gradient(160deg, ${meta.accent}22, ${meta.accent}55)` }}
+              style={{ background: `linear-gradient(160deg, ${accent}22, ${accent}55)` }}
             />
           </RevealOnScroll>
           <RevealOnScroll delay={0.08}>
@@ -131,7 +135,7 @@ export default function CaseStudy() {
             {study.objectives.map((obj, i) => (
               <RevealOnScroll key={i} delay={i * 0.06}>
                 <div className="h-full rounded-2xl border border-ink/8 bg-card/50 p-6">
-                  <ObjectiveIcon index={i} accent={meta.accent} />
+                  <ObjectiveIcon index={i} accent={accent} />
                   <p className="mt-4 text-sm leading-relaxed text-ink-soft">{tr(obj)}</p>
                 </div>
               </RevealOnScroll>
@@ -215,18 +219,22 @@ export default function CaseStudy() {
         {study.processSections?.map((proc, i) => (
           <section key={i} className="mt-32">
             <RevealOnScroll
-              className={proc.highlight ? "rounded-3xl bg-navy px-6 py-10 sm:px-12 sm:py-14" : undefined}
+              className={
+                proc.highlight
+                  ? "rounded-3xl bg-surface-feature px-6 py-10 dark:border-[0.5px] dark:border-ghost dark:border-l-[3px] dark:border-l-accent sm:px-12 sm:py-14"
+                  : undefined
+              }
             >
               <h2
                 className={`font-display text-4xl font-extrabold sm:text-5xl ${
-                  proc.highlight ? "text-fixed-light" : "text-ink"
+                  proc.highlight ? "text-on-accent dark:text-ink" : "text-ink"
                 }`}
               >
                 {tr(proc.title)}
               </h2>
               <p
                 className={`mt-5 max-w-2xl text-[15px] leading-relaxed ${
-                  proc.highlight ? "text-fixed-light/70" : "text-ink-soft"
+                  proc.highlight ? "text-on-accent/70 dark:text-ink-soft" : "text-ink-soft"
                 }`}
               >
                 {tr(proc.body)}
@@ -237,10 +245,14 @@ export default function CaseStudy() {
                     <li
                       key={j}
                       className={`flex gap-2 text-sm leading-relaxed ${
-                        proc.highlight ? "text-fixed-light/80" : "text-ink-soft"
+                        proc.highlight ? "text-on-accent/80 dark:text-ink-soft" : "text-ink-soft"
                       }`}
                     >
-                      <span className={`mt-1.5 h-1 w-1 shrink-0 rounded-full ${proc.highlight ? "bg-paper/50" : "bg-ink/40"}`} />
+                      <span
+                        className={`mt-1.5 h-1 w-1 shrink-0 rounded-full ${
+                          proc.highlight ? "bg-on-accent/50 dark:bg-ink/40" : "bg-ink/40"
+                        }`}
+                      />
                       {tr(b)}
                     </li>
                   ))}
@@ -319,17 +331,20 @@ export default function CaseStudy() {
                 {tr(study.problemStatement.intro)}
               </p>
             </RevealOnScroll>
-            <RevealOnScroll delay={0.06} className="mt-8 rounded-3xl bg-navy px-8 py-12 text-center sm:px-16">
-              <p className="mx-auto max-w-2xl font-display text-xl font-bold leading-snug text-fixed-light sm:text-2xl">
+            <RevealOnScroll
+              delay={0.06}
+              className="mt-8 rounded-3xl bg-surface-feature px-8 py-12 text-center dark:border-[0.5px] dark:border-ghost dark:border-l-[3px] dark:border-l-accent sm:px-16"
+            >
+              <p className="mx-auto max-w-2xl font-display text-xl font-bold leading-snug text-on-accent dark:text-ink sm:text-2xl">
                 {tr(study.problemStatement.quote)}
               </p>
-              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-fixed-light/60">
+              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-on-accent/60 dark:text-ink-soft">
                 {tr(study.problemStatement.detail)}
               </p>
             </RevealOnScroll>
             <RevealOnScroll delay={0.1} className="mt-6 flex flex-wrap justify-center gap-2">
               {study.problemStatement.tags.map((tag, i) => (
-                <span key={i} className="rounded-full bg-navy/5 px-3.5 py-1 text-xs font-semibold text-ink/55">
+                <span key={i} className="rounded-full bg-accent/5 px-3.5 py-1 text-xs font-semibold text-ink/55">
                   {tr(tag)}
                 </span>
               ))}
@@ -472,7 +487,7 @@ export default function CaseStudy() {
                     </div>
                     <div>
                       {f.status && (
-                        <span className="inline-block rounded-full bg-navy/5 px-3 py-1 text-xs font-semibold text-ink/50">
+                        <span className="inline-block rounded-full bg-accent/5 px-3 py-1 text-xs font-semibold text-ink/50">
                           {tr(f.status)}
                         </span>
                       )}
@@ -550,7 +565,7 @@ export default function CaseStudy() {
           <motion.span
             animate={{ y: [0, -6, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="flex h-12 w-12 items-center justify-center rounded-full bg-navy text-fixed-light"
+            className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-on-accent"
           >
             ✦
           </motion.span>

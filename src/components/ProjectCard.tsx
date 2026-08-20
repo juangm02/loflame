@@ -4,6 +4,7 @@ import type { ProjectMeta } from "../data/content";
 import { useLanguage } from "../context/LanguageContext";
 import { cta } from "../data/content";
 import { logos, covers } from "../lib/projectAssets";
+import { resolveAccent, useIsDarkTheme } from "../lib/useIsDarkTheme";
 import RevealOnScroll from "./RevealOnScroll";
 
 export default function ProjectCard({ project, index }: { project: ProjectMeta; index: number }) {
@@ -11,6 +12,7 @@ export default function ProjectCard({ project, index }: { project: ProjectMeta; 
   const cover = covers[project.cover];
   const logo = logos[project.logo];
   const initial = project.name.trim().charAt(0).toUpperCase();
+  const accent = resolveAccent(project.accent, project.accentDark, useIsDarkTheme());
 
   return (
     <RevealOnScroll delay={index * 0.05}>
@@ -31,7 +33,7 @@ export default function ProjectCard({ project, index }: { project: ProjectMeta; 
               <div
                 className="flex h-full w-full items-center justify-center"
                 style={{
-                  background: `linear-gradient(140deg, ${project.accent}, #10152a)`,
+                  background: `linear-gradient(140deg, ${accent}, #10152a)`,
                 }}
               >
                 <MonogramMark letter={initial} />
@@ -39,7 +41,7 @@ export default function ProjectCard({ project, index }: { project: ProjectMeta; 
             )}
             {project.disabled && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[1px]">
-                <span className="rounded-full bg-navy px-3 py-1 text-xs font-semibold text-fixed-light">
+                <span className="rounded-full bg-accent px-3 py-1 text-xs font-semibold text-on-accent">
                   {tr(cta.underConstruction)}
                 </span>
               </div>
@@ -57,7 +59,7 @@ export default function ProjectCard({ project, index }: { project: ProjectMeta; 
               ) : (
                 <span
                   className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-sm font-extrabold text-white ring-1 ring-ink/10"
-                  style={{ background: project.accent }}
+                  style={{ background: accent }}
                 >
                   {initial}
                 </span>

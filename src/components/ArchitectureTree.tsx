@@ -11,14 +11,14 @@ export default function ArchitectureTree({ root, branches }: { root: string; bra
   return (
     <div className="w-full">
       <div className="flex justify-center">
-        <span className="rounded-full bg-navy px-5 py-2 text-sm font-bold text-fixed-light">{root}</span>
+        <span className="rounded-full bg-accent px-5 py-2 text-sm font-bold text-on-accent">{root}</span>
       </div>
       <div className="mx-auto h-8 w-px bg-ink/15" />
 
       <div className="grid gap-6 sm:grid-cols-3">
         {branches.map((branch, i) => (
           <div key={i} className="overflow-hidden rounded-2xl border border-ink/8 bg-card/70 shadow-[0_1px_2px_var(--shadow-soft),0_10px_20px_-14px_var(--shadow-strong)]">
-            <div className="bg-navy px-4 py-2.5 text-center text-sm font-extrabold text-fixed-light">{branch.title}</div>
+            <div className="bg-accent px-4 py-2.5 text-center text-sm font-extrabold text-on-accent">{branch.title}</div>
             <div className="divide-y divide-ink/8">
               {branch.groups.map((g, j) => (
                 <div key={j} className="px-4 py-3">

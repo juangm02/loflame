@@ -38,7 +38,7 @@ export default function IdeaBoardMockup({
             </span>
           ))}
         </div>
-        <span className="rounded-full bg-navy px-3 py-1.5 text-[11px] font-bold text-fixed-light">+ New idea</span>
+        <span className="rounded-full bg-accent px-3 py-1.5 text-[11px] font-bold text-on-accent">+ New idea</span>
       </div>
 
       <div className="grid sm:grid-cols-[200px_1fr]">
@@ -46,7 +46,7 @@ export default function IdeaBoardMockup({
           <div className="rounded-full border border-ink/10 px-3 py-1.5 text-[10px] text-ink/40">🔍 Search by keywords</div>
           <div className="mt-3 space-y-2">
             {cards.map((c, i) => (
-              <div key={i} className={`rounded-xl border p-2.5 ${i === 0 ? "border-navy/25 bg-navy/[0.03]" : "border-ink/8"}`}>
+              <div key={i} className={`rounded-xl border p-2.5 ${i === 0 ? "border-accent/25 bg-accent/[0.03]" : "border-ink/8"}`}>
                 <p className="line-clamp-1 text-[11px] font-bold text-ink">{c.title}</p>
                 <div className="mt-1 flex flex-wrap gap-1">
                   {c.tags.slice(0, 2).map((tag, j) => (

@@ -144,7 +144,7 @@ export const portfolioPage = {
   tools: [
     { name: "Figma", mono: "Fi", color: "#7B61FF" },
     { name: "Claude Code", mono: "CC", color: "#D97757" },
-    { name: "GitHub", mono: "Gh", color: "#333333" },
+    { name: "GitHub", mono: "Gh", color: "#333333", colorDark: "#6e7681" },
     { name: "NotebookLM", mono: "NL", color: "#4285F4" },
     { name: "Maze", mono: "Mz", color: "#FF5A36" },
     { name: "Illustrator", mono: "Ai", color: "#FF9A00" },
@@ -164,6 +164,10 @@ export interface ProjectMeta {
   description: Bilingual;
   disabled?: boolean;
   accent: string;
+  /** Optional dark-mode override for `accent`, used when the light-mode hex
+   * fails contrast against the dark-mode page background (#131316). See the
+   * 2026-02 accessibility pass notes. */
+  accentDark?: string;
 }
 
 export interface CaseStudyContent {
@@ -338,6 +342,7 @@ export const projects: ProjectMeta[] = [
       "This project was developed as a design exercise based on a realistic business scenario, focused on solving operational and management challenges in a fast-food restaurant. The owner launched Juicio during the COVID-19 pandemic in 2020, and since then the business has become increasingly popular, leading to a significant increase in workload."
     ),
     accent: "#1B2A6B",
+    accentDark: "#5468C6",
   },
   {
     slug: "hospital-sjd",

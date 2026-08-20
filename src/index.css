@@ -1,6 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600&family=Funnel+Display:wght@400;500;600;700;800&display=swap");
 @import "tailwindcss";
 
+/* Lets `dark:` utilities target our data-theme attribute instead of
+   prefers-color-scheme, so component-level dark-mode-only tweaks (a
+   hairline border, a text-color swap) can live as plain Tailwind
+   variants next to the rest of the className instead of new CSS. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
   /* Body: Archivo. Headings: Funnel Display (both Google Fonts). */
   --font-sans: "Archivo", system-ui, sans-serif;
@@ -15,23 +21,39 @@
   --color-paper-dim: #e8e7e3;
   --color-ink: #14161f;
   --color-ink-soft: #4a4b57;
-  --color-navy: #10152a;
-  --color-navy-soft: #1b2140;
   --color-ghost: #d8d7d2;
 
   /* Card/surface token: replaces literal "white" so cards invert in dark mode. */
   --color-card: #ffffff;
 
-  /* Constant light tone for text/fills placed on top of --color-navy.
-     Deliberately NOT theme-dependent: navy itself doesn't change between
-     themes, so anything sitting on it (buttons, footer, pills) shouldn't
-     either — this is what "text-paper on bg-navy" was really trying to
-     mean all along. */
-  --color-fixed-light: #f1f0ee;
+  /* Interactive brand accent, split by role (2026-02 accessibility pass):
+     - accent: fills that need to read as a UI component against the page
+       (buttons, active nav pill, focus rings). Theme-aware — light mode
+       keeps the original dark navy fill; dark mode brightens it so it
+       still separates (>=3:1) from the near-black page instead of
+       disappearing into it.
+     - accent-hover: hover state for accent fills.
+     - accent-text: accent used AS TEXT (links). Needs its own lighter
+       dark-mode value because the accent fill color itself fails AA as
+       text on the dark page.
+     - surface-feature: large feature surfaces (footer, highlighted
+       case-study blocks). In light mode this is still the solid dark
+       navy block; in dark mode it becomes a quiet elevated surface
+       (separation comes from a hairline + accent border, not fill
+       contrast — see dark: overrides on those components). */
+  --color-accent: #10152a;
+  --color-accent-hover: #1b2140;
+  --color-accent-text: #10152a;
+  --color-surface-feature: #10152a;
 
-  /* Mirror of the above: constant dark tone for text placed on top of
-     inherently light/bright fills (sticky-note colors, brand-accent
-     chips) that don't change with the theme either. */
+  /* Constant light tone for text/fills placed on top of --color-accent.
+     Deliberately NOT theme-dependent: it's tuned to pass against both the
+     light-mode accent value (#10152a) and the dark-mode one (#4661d6). */
+  --color-on-accent: #f1f0ee;
+
+  /* Constant dark tone for text placed on top of inherently bright fills
+     (sticky-note colors, brand-accent chips) that don't change with the
+     theme either. */
   --color-fixed-dark: #14161f;
 }
 
@@ -54,6 +76,11 @@
   --color-ink-soft: #a3a2ab;
   --color-ghost: #35353c;
   --color-card: #1c1c22;
+
+  --color-accent: #4661d6;
+  --color-accent-hover: #5a72e6;
+  --color-accent-text: #8ea0f2;
+  --color-surface-feature: #1b1c24;
 
   --shadow-hi: rgba(255, 255, 255, 0.06);
   --shadow-soft: rgba(0, 0, 0, 0.4);
@@ -82,8 +109,8 @@
   }
 
   ::selection {
-    background: var(--color-navy);
-    color: var(--color-fixed-light);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
   }
 
   a {

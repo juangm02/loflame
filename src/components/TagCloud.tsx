@@ -29,8 +29,8 @@ export default function TagCloud({ tags, dark = false }: { tags: string[]; dark?
           <span
             className={`inline-block cursor-default select-none rounded-[18px_4px_18px_4px] px-4 py-1.5 text-sm font-semibold transition-all duration-200 ease-out will-change-transform hover:scale-[1.03] ${
               dark
-                ? `bg-navy-soft text-fixed-light/85 ${shadowDark} ${shadowDarkHover} hover:bg-fixed-light hover:text-navy`
-                : `bg-card text-ink/75 ${shadowLight} ${shadowLightHover} hover:bg-navy hover:text-fixed-light`
+                ? `bg-accent-hover text-on-accent/85 ${shadowDark} ${shadowDarkHover} hover:bg-on-accent hover:text-accent-text`
+                : `bg-card text-ink/75 ${shadowLight} ${shadowLightHover} hover:bg-accent hover:text-on-accent`
             }`}
           >
             {tag}

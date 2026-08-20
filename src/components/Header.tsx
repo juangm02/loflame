@@ -54,11 +54,11 @@ export default function Header({ right }: { right?: ReactNode }) {
                 {tabItem.active && (
                   <motion.span
                     layoutId="nav-pill"
-                    className="absolute inset-0 rounded-full bg-navy"
+                    className="absolute inset-0 rounded-full bg-accent"
                     transition={{ type: "spring", stiffness: 400, damping: 32 }}
                   />
                 )}
-                <span className={`relative z-10 ${tabItem.active ? "text-fixed-light" : "text-ink/70"}`}>
+                <span className={`relative z-10 ${tabItem.active ? "text-on-accent" : "text-ink/70"}`}>
                   {tabItem.label}
                 </span>
               </Link>
