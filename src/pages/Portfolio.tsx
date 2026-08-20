@@ -44,52 +44,51 @@ export default function Portfolio() {
 
   return (
     <div>
-      <div className="relative overflow-hidden">
+      <Header
+        right={
+          <>
+            <button
+              onClick={() => scrollTo(aboutRef)}
+              className={`underline-draw hidden transition-colors sm:inline ${active === "about" ? "text-ink" : "text-ink/45"}`}
+            >
+              {tr(nav.aboutMe)}
+            </button>
+            <button
+              onClick={() => scrollTo(projectsRef)}
+              className={`underline-draw hidden transition-colors sm:inline ${active === "projects" ? "text-ink" : "text-ink/45"}`}
+            >
+              {tr(nav.myProjects)}
+            </button>
+          </>
+        }
+      />
+
+      <div className="relative">
         <ClothBackground className="absolute inset-0" />
-        <div className="relative z-10">
-          <Header
-            right={
-              <>
-                <button
-                  onClick={() => scrollTo(aboutRef)}
-                  className={`underline-draw hidden transition-colors sm:inline ${active === "about" ? "text-ink" : "text-ink/45"}`}
-                >
-                  {tr(nav.aboutMe)}
-                </button>
-                <button
-                  onClick={() => scrollTo(projectsRef)}
-                  className={`underline-draw hidden transition-colors sm:inline ${active === "projects" ? "text-ink" : "text-ink/45"}`}
-                >
-                  {tr(nav.myProjects)}
-                </button>
-              </>
-            }
-          />
 
-          <section className="mx-auto max-w-6xl grid items-center gap-14 px-5 pt-10 sm:px-8 sm:pt-14 lg:grid-cols-[1fr_1fr] lg:gap-16">
-            <RevealOnScroll>
-              <p className="font-display text-sm font-bold uppercase tracking-[0.2em] text-ink/40">{site.name}</p>
-              <h1 className="mt-4 font-display text-6xl font-extrabold leading-[0.95] tracking-tight text-ink sm:text-7xl lg:text-8xl">
-                {tr(portfolioPage.title)
-                  .split("\n")
-                  .map((line, i) => (
-                    <span key={i} className="block">
-                      {line}
-                    </span>
-                  ))}
-              </h1>
-              <p className="mt-6 max-w-md text-lg font-semibold text-ink-soft">{tr(portfolioPage.subtitle)}</p>
-              <p className="mt-4 max-w-md text-[15px] leading-relaxed text-ink-soft/90">{tr(portfolioPage.intro)}</p>
-              <CTAButton className="mt-10">
-                {lang === "es" ? "¿Algún proyecto en mente? ¡Hablemos!" : "Have a project in mind? Let's talk!"}
-              </CTAButton>
-            </RevealOnScroll>
+        <section className="relative z-10 mx-auto max-w-6xl grid items-center gap-14 px-5 pt-10 sm:px-8 sm:pt-14 lg:grid-cols-[1fr_1fr] lg:gap-16">
+          <RevealOnScroll>
+            <p className="font-display text-sm font-bold uppercase tracking-[0.2em] text-ink/40">{site.name}</p>
+            <h1 className="mt-4 font-display text-6xl font-extrabold leading-[0.95] tracking-tight text-ink sm:text-7xl lg:text-8xl">
+              {tr(portfolioPage.title)
+                .split("\n")
+                .map((line, i) => (
+                  <span key={i} className="block">
+                    {line}
+                  </span>
+                ))}
+            </h1>
+            <p className="mt-6 max-w-md text-lg font-semibold text-ink-soft">{tr(portfolioPage.subtitle)}</p>
+            <p className="mt-4 max-w-md text-[15px] leading-relaxed text-ink-soft/90">{tr(portfolioPage.intro)}</p>
+            <CTAButton className="mt-10">
+              {lang === "es" ? "¿Algún proyecto en mente? ¡Hablemos!" : "Have a project in mind? Let's talk!"}
+            </CTAButton>
+          </RevealOnScroll>
 
-            <RevealOnScroll delay={0.1}>
-              <TiltImage src={portraitSide} alt={site.name} className="aspect-[16/10] w-full shadow-2xl shadow-black/10" />
-            </RevealOnScroll>
-          </section>
-        </div>
+          <RevealOnScroll delay={0.1}>
+            <TiltImage src={portraitSide} alt={site.name} className="aspect-[16/10] w-full shadow-2xl shadow-black/10" />
+          </RevealOnScroll>
+        </section>
       </div>
 
       <main className="mx-auto max-w-6xl px-5 pb-32 sm:px-8">

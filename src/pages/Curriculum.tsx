@@ -13,46 +13,45 @@ export default function Curriculum() {
 
   return (
     <div>
-      <div className="relative overflow-hidden">
+      <Header
+        right={
+          <>
+            <a href="#" className="underline-draw hidden sm:inline">
+              Behance
+            </a>
+            <a href="#" className="underline-draw hidden sm:inline">
+              LinkedIn
+            </a>
+          </>
+        }
+      />
+
+      <div className="relative">
         <ClothBackground className="absolute inset-0" />
-        <div className="relative z-10">
-          <Header
-            right={
-              <>
-                <a href="#" className="underline-draw hidden sm:inline">
-                  Behance
-                </a>
-                <a href="#" className="underline-draw hidden sm:inline">
-                  LinkedIn
-                </a>
-              </>
-            }
-          />
 
-          <section className="mx-auto max-w-6xl grid items-center gap-14 px-5 pt-10 sm:px-8 sm:pt-14 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
-            <RevealOnScroll>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-ink/40">
-                {tr(curriculumPage.kicker)}
-              </p>
-              <h1 className="mt-4 font-display text-6xl font-extrabold leading-[0.95] tracking-tight text-ink sm:text-7xl lg:text-8xl">
-                {site.name.split(" ").map((word, i) => (
-                  <span key={i} className="block">
-                    {word}
-                  </span>
-                ))}
-              </h1>
-              <p className="mt-7 max-w-md text-2xl font-bold leading-tight text-ink sm:text-3xl">
-                {tr(curriculumPage.headline)}
-              </p>
-              <p className="mt-3 max-w-md text-lg text-ink-soft">{tr(curriculumPage.subline)}</p>
-              <CTAButton className="mt-10">{tr({ es: "¿Algún proyecto en mente? ¡Hablemos!", en: "Have a project in mind? Let's talk!" })}</CTAButton>
-            </RevealOnScroll>
+        <section className="relative z-10 mx-auto max-w-6xl grid items-center gap-14 px-5 pt-10 sm:px-8 sm:pt-14 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+          <RevealOnScroll>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-ink/40">
+              {tr(curriculumPage.kicker)}
+            </p>
+            <h1 className="mt-4 font-display text-6xl font-extrabold leading-[0.95] tracking-tight text-ink sm:text-7xl lg:text-8xl">
+              {site.name.split(" ").map((word, i) => (
+                <span key={i} className="block">
+                  {word}
+                </span>
+              ))}
+            </h1>
+            <p className="mt-7 max-w-md text-2xl font-bold leading-tight text-ink sm:text-3xl">
+              {tr(curriculumPage.headline)}
+            </p>
+            <p className="mt-3 max-w-md text-lg text-ink-soft">{tr(curriculumPage.subline)}</p>
+            <CTAButton className="mt-10">{tr({ es: "¿Algún proyecto en mente? ¡Hablemos!", en: "Have a project in mind? Let's talk!" })}</CTAButton>
+          </RevealOnScroll>
 
-            <RevealOnScroll delay={0.1}>
-              <TiltImage src={portraitSeated} alt={site.name} className="aspect-[4/3] w-full shadow-2xl shadow-black/10" />
-            </RevealOnScroll>
-          </section>
-        </div>
+          <RevealOnScroll delay={0.1}>
+            <TiltImage src={portraitSeated} alt={site.name} className="aspect-[4/3] w-full shadow-2xl shadow-black/10" />
+          </RevealOnScroll>
+        </section>
       </div>
 
       <main className="mx-auto max-w-6xl px-5 pb-32 sm:px-8">
