@@ -3,6 +3,7 @@ import Footer from "../components/Footer";
 import CTAButton from "../components/CTAButton";
 import TiltImage from "../components/TiltImage";
 import RevealOnScroll from "../components/RevealOnScroll";
+import ClothBackground from "../components/ClothBackground";
 import { curriculumPage, site } from "../data/content";
 import { useLanguage } from "../context/LanguageContext";
 import portraitSeated from "../assets/img/portrait-seated.jpg";
@@ -12,44 +13,49 @@ export default function Curriculum() {
 
   return (
     <div>
-      <Header
-        right={
-          <>
-            <a href="#" className="underline-draw hidden sm:inline">
-              Behance
-            </a>
-            <a href="#" className="underline-draw hidden sm:inline">
-              LinkedIn
-            </a>
-          </>
-        }
-      />
+      <div className="relative overflow-hidden">
+        <ClothBackground className="absolute inset-0" />
+        <div className="relative z-10">
+          <Header
+            right={
+              <>
+                <a href="#" className="underline-draw hidden sm:inline">
+                  Behance
+                </a>
+                <a href="#" className="underline-draw hidden sm:inline">
+                  LinkedIn
+                </a>
+              </>
+            }
+          />
 
-      <main className="mx-auto max-w-6xl px-5 pb-32 pt-10 sm:px-8 sm:pt-14">
-        <section className="grid items-center gap-14 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
-          <RevealOnScroll>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-ink/40">
-              {tr(curriculumPage.kicker)}
-            </p>
-            <h1 className="mt-4 font-display text-6xl font-extrabold leading-[0.95] tracking-tight text-ink sm:text-7xl lg:text-8xl">
-              {site.name.split(" ").map((word, i) => (
-                <span key={i} className="block">
-                  {word}
-                </span>
-              ))}
-            </h1>
-            <p className="mt-7 max-w-md text-2xl font-bold leading-tight text-ink sm:text-3xl">
-              {tr(curriculumPage.headline)}
-            </p>
-            <p className="mt-3 max-w-md text-lg text-ink-soft">{tr(curriculumPage.subline)}</p>
-            <CTAButton className="mt-10">{tr({ es: "¿Algún proyecto en mente? ¡Hablemos!", en: "Have a project in mind? Let's talk!" })}</CTAButton>
-          </RevealOnScroll>
+          <section className="mx-auto max-w-6xl grid items-center gap-14 px-5 pt-10 sm:px-8 sm:pt-14 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+            <RevealOnScroll>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-ink/40">
+                {tr(curriculumPage.kicker)}
+              </p>
+              <h1 className="mt-4 font-display text-6xl font-extrabold leading-[0.95] tracking-tight text-ink sm:text-7xl lg:text-8xl">
+                {site.name.split(" ").map((word, i) => (
+                  <span key={i} className="block">
+                    {word}
+                  </span>
+                ))}
+              </h1>
+              <p className="mt-7 max-w-md text-2xl font-bold leading-tight text-ink sm:text-3xl">
+                {tr(curriculumPage.headline)}
+              </p>
+              <p className="mt-3 max-w-md text-lg text-ink-soft">{tr(curriculumPage.subline)}</p>
+              <CTAButton className="mt-10">{tr({ es: "¿Algún proyecto en mente? ¡Hablemos!", en: "Have a project in mind? Let's talk!" })}</CTAButton>
+            </RevealOnScroll>
 
-          <RevealOnScroll delay={0.1}>
-            <TiltImage src={portraitSeated} alt={site.name} className="aspect-[4/3] w-full shadow-2xl shadow-black/10" />
-          </RevealOnScroll>
-        </section>
+            <RevealOnScroll delay={0.1}>
+              <TiltImage src={portraitSeated} alt={site.name} className="aspect-[4/3] w-full shadow-2xl shadow-black/10" />
+            </RevealOnScroll>
+          </section>
+        </div>
+      </div>
 
+      <main className="mx-auto max-w-6xl px-5 pb-32 sm:px-8">
         <section className="mt-40 grid gap-10 sm:mt-48 lg:grid-cols-[1fr_1fr]">
           <RevealOnScroll>
             <h2 className="font-display text-7xl font-extrabold uppercase leading-[0.9] text-outline sm:text-8xl">

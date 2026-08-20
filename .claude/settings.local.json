@@ -29,7 +29,10 @@
       "Bash(cd /Users/jonalon/Documents/Desig-nare/GoLivePortfolio *)",
       "Bash(python3 -m json.tool /private/tmp/claude-501/-Users-jonalon-Documents-Desig-nare-GoLivePortfolio/31a7f092-acea-4b70-8356-c526c53dc109/scratchpad/color-tokens.json)",
       "Bash(git commit -m 'Fix dark-mode figure-ground contrast per accessibility spec *)",
-      "Bash(git commit -m 'Update local permissions cache with recent allowed commands *)"
+      "Bash(git commit -m 'Update local permissions cache with recent allowed commands *)",
+      "Bash(npm audit *)",
+      "Bash(npm uninstall *)",
+      "Bash(git commit -m 'Add cloth-sim background to Portfolio/Curriculum hero \\(revertible\\) *)"
     ]
   }
 }
