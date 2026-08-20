@@ -25,7 +25,11 @@
       "Bash(git init *)",
       "Bash(git add *)",
       "Bash(git commit -q -m 'Checkpoint: light mode baseline before dark mode exploration *)",
-      "Bash(git commit -q -m 'Add dark mode as new default \\(revertible\\) *)"
+      "Bash(git commit -q -m 'Add dark mode as new default \\(revertible\\) *)",
+      "Bash(cd /Users/jonalon/Documents/Desig-nare/GoLivePortfolio *)",
+      "Bash(python3 -m json.tool /private/tmp/claude-501/-Users-jonalon-Documents-Desig-nare-GoLivePortfolio/31a7f092-acea-4b70-8356-c526c53dc109/scratchpad/color-tokens.json)",
+      "Bash(git commit -m 'Fix dark-mode figure-ground contrast per accessibility spec *)",
+      "Bash(git commit -m 'Update local permissions cache with recent allowed commands *)"
     ]
   }
 }
