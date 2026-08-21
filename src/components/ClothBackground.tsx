@@ -40,6 +40,7 @@ const STIFFNESS = 0.2;
 const DAMPING = 0.9;
 const GRAVITY = 0.12;
 const GRAVITY_DURATION = 8; // seconds the initial sag plays for
+const GRAVITY_FADE = 3; // seconds, ramps to 0 instead of cutting off at GRAVITY_DURATION
 const REPULSION_RADIUS = 45;
 const WAVE_RADIUS = 95;
 const WAVE_WIDTH = 22;
@@ -167,8 +168,16 @@ export default function ClothBackground({ className }: { className?: string }) {
       mouseY = -9999;
     }
 
-    function gravityActive() {
-      return (performance.now() - startTime) / 1000 < GRAVITY_DURATION;
+    // Ramps 1 -> 0 over the last GRAVITY_FADE seconds of GRAVITY_DURATION
+    // instead of cutting off abruptly, so the cloth eases out of its initial
+    // sag rather than snapping still.
+    function gravityMultiplier() {
+      const elapsed = (performance.now() - startTime) / 1000;
+      const fadeStart = GRAVITY_DURATION - GRAVITY_FADE;
+      if (elapsed <= fadeStart) return 1;
+      if (elapsed >= GRAVITY_DURATION) return 0;
+      const t = (elapsed - fadeStart) / GRAVITY_FADE;
+      return 1 - smoothstep(clamp(t, 0, 1));
     }
 
     function step() {
@@ -194,11 +203,11 @@ export default function ClothBackground({ className }: { className?: string }) {
         }
       }
 
-      const gActive = gravityActive();
+      const gravity = GRAVITY * gravityMultiplier();
       for (const p of particles) {
         if (p.fixed) continue;
 
-        if (gActive) p.ay += GRAVITY;
+        if (gravity > 0) p.ay += gravity;
 
         const dx = p.x - mouseX;
         const dy = p.y - mouseY;
