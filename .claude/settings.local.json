@@ -32,7 +32,9 @@
       "Bash(git commit -m 'Update local permissions cache with recent allowed commands *)",
       "Bash(npm audit *)",
       "Bash(npm uninstall *)",
-      "Bash(git commit -m 'Add cloth-sim background to Portfolio/Curriculum hero \\(revertible\\) *)"
+      "Bash(git commit -m 'Add cloth-sim background to Portfolio/Curriculum hero \\(revertible\\) *)",
+      "Bash(git commit -m 'Fix sticky header disappearing on scroll *)",
+      "Bash(git commit -m 'Add 100px extra height to cloth-sim hero background *)"
     ]
   }
 }
