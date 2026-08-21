@@ -8,6 +8,10 @@ import { curriculumPage, site } from "../data/content";
 import { useLanguage } from "../context/LanguageContext";
 import portraitSeated from "../assets/img/portrait-seated.jpg";
 
+// Temporary: hide the hero portrait to preview a text-only hero. Flip back
+// to true to restore it — this is the only line that needs to change.
+const SHOW_HERO_IMAGE = false;
+
 export default function Curriculum() {
   const { tr } = useLanguage();
 
@@ -29,7 +33,11 @@ export default function Curriculum() {
       <div className="relative pb-[100px]">
         <ClothBackground className="absolute inset-0" />
 
-        <section className="relative z-10 mx-auto max-w-6xl grid items-center gap-14 px-5 pt-10 sm:px-8 sm:pt-14 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+        <section
+          className={`relative z-10 mx-auto max-w-6xl grid items-center gap-14 px-5 pt-10 sm:px-8 sm:pt-14 ${
+            SHOW_HERO_IMAGE ? "lg:grid-cols-[1.05fr_1fr] lg:gap-16" : ""
+          }`}
+        >
           <RevealOnScroll>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-ink/40">
               {tr(curriculumPage.kicker)}
@@ -48,9 +56,11 @@ export default function Curriculum() {
             <CTAButton className="mt-10">{tr({ es: "¿Algún proyecto en mente? ¡Hablemos!", en: "Have a project in mind? Let's talk!" })}</CTAButton>
           </RevealOnScroll>
 
-          <RevealOnScroll delay={0.1}>
-            <TiltImage src={portraitSeated} alt={site.name} className="aspect-[4/3] w-full shadow-2xl shadow-black/10" />
-          </RevealOnScroll>
+          {SHOW_HERO_IMAGE && (
+            <RevealOnScroll delay={0.1}>
+              <TiltImage src={portraitSeated} alt={site.name} className="aspect-[4/3] w-full shadow-2xl shadow-black/10" />
+            </RevealOnScroll>
+          )}
         </section>
       </div>
 

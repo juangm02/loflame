@@ -12,6 +12,10 @@ import { portfolioPage, nav, site, projects } from "../data/content";
 import { useLanguage } from "../context/LanguageContext";
 import portraitSide from "../assets/img/portrait-side.jpg";
 
+// Temporary: hide the hero portrait to preview a text-only hero. Flip back
+// to true to restore it — this is the only line that needs to change.
+const SHOW_HERO_IMAGE = false;
+
 export default function Portfolio() {
   const { lang, tr } = useLanguage();
   const aboutRef = useRef<HTMLDivElement>(null);
@@ -66,7 +70,11 @@ export default function Portfolio() {
       <div className="relative pb-[100px]">
         <ClothBackground className="absolute inset-0" />
 
-        <section className="relative z-10 mx-auto max-w-6xl grid items-center gap-14 px-5 pt-10 sm:px-8 sm:pt-14 lg:grid-cols-[1fr_1fr] lg:gap-16">
+        <section
+          className={`relative z-10 mx-auto max-w-6xl grid items-center gap-14 px-5 pt-10 sm:px-8 sm:pt-14 ${
+            SHOW_HERO_IMAGE ? "lg:grid-cols-[1fr_1fr] lg:gap-16" : ""
+          }`}
+        >
           <RevealOnScroll>
             <p className="font-display text-sm font-bold uppercase tracking-[0.2em] text-ink/40">{site.name}</p>
             <h1 className="mt-4 font-display text-6xl font-extrabold leading-[0.95] tracking-tight text-ink sm:text-7xl lg:text-8xl">
@@ -85,9 +93,11 @@ export default function Portfolio() {
             </CTAButton>
           </RevealOnScroll>
 
-          <RevealOnScroll delay={0.1}>
-            <TiltImage src={portraitSide} alt={site.name} className="aspect-[16/10] w-full shadow-2xl shadow-black/10" />
-          </RevealOnScroll>
+          {SHOW_HERO_IMAGE && (
+            <RevealOnScroll delay={0.1}>
+              <TiltImage src={portraitSide} alt={site.name} className="aspect-[16/10] w-full shadow-2xl shadow-black/10" />
+            </RevealOnScroll>
+          )}
         </section>
       </div>
 
