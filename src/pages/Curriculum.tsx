@@ -26,7 +26,7 @@ export default function Curriculum() {
         }
       />
 
-      <div className="relative">
+      <div className="relative pb-[100px]">
         <ClothBackground className="absolute inset-0" />
 
         <section className="relative z-10 mx-auto max-w-6xl grid items-center gap-14 px-5 pt-10 sm:px-8 sm:pt-14 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
