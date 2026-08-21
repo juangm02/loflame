@@ -38,7 +38,7 @@ export default function Curriculum() {
             SHOW_HERO_IMAGE ? "lg:grid-cols-[1.05fr_1fr] lg:gap-16" : ""
           }`}
         >
-          <RevealOnScroll>
+          <RevealOnScroll className={SHOW_HERO_IMAGE ? undefined : "mx-auto max-w-2xl text-center"}>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-ink/40">
               {tr(curriculumPage.kicker)}
             </p>
@@ -49,10 +49,12 @@ export default function Curriculum() {
                 </span>
               ))}
             </h1>
-            <p className="mt-7 max-w-md text-2xl font-bold leading-tight text-ink sm:text-3xl">
+            <p className={`mt-7 max-w-md text-2xl font-bold leading-tight text-ink sm:text-3xl ${SHOW_HERO_IMAGE ? "" : "mx-auto"}`}>
               {tr(curriculumPage.headline)}
             </p>
-            <p className="mt-3 max-w-md text-lg text-ink-soft">{tr(curriculumPage.subline)}</p>
+            <p className={`mt-3 max-w-md text-lg text-ink-soft ${SHOW_HERO_IMAGE ? "" : "mx-auto"}`}>
+              {tr(curriculumPage.subline)}
+            </p>
             <CTAButton className="mt-10">{tr({ es: "¿Algún proyecto en mente? ¡Hablemos!", en: "Have a project in mind? Let's talk!" })}</CTAButton>
           </RevealOnScroll>
 

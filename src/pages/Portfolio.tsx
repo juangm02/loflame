@@ -75,7 +75,7 @@ export default function Portfolio() {
             SHOW_HERO_IMAGE ? "lg:grid-cols-[1fr_1fr] lg:gap-16" : ""
           }`}
         >
-          <RevealOnScroll>
+          <RevealOnScroll className={SHOW_HERO_IMAGE ? undefined : "mx-auto max-w-2xl text-center"}>
             <p className="font-display text-sm font-bold uppercase tracking-[0.2em] text-ink/40">{site.name}</p>
             <h1 className="mt-4 font-display text-6xl font-extrabold leading-[0.95] tracking-tight text-ink sm:text-7xl lg:text-8xl">
               {tr(portfolioPage.title)
@@ -86,8 +86,12 @@ export default function Portfolio() {
                   </span>
                 ))}
             </h1>
-            <p className="mt-6 max-w-md text-lg font-semibold text-ink-soft">{tr(portfolioPage.subtitle)}</p>
-            <p className="mt-4 max-w-md text-[15px] leading-relaxed text-ink-soft/90">{tr(portfolioPage.intro)}</p>
+            <p className={`mt-6 max-w-md text-lg font-semibold text-ink-soft ${SHOW_HERO_IMAGE ? "" : "mx-auto"}`}>
+              {tr(portfolioPage.subtitle)}
+            </p>
+            <p className={`mt-4 max-w-md text-[15px] leading-relaxed text-ink-soft/90 ${SHOW_HERO_IMAGE ? "" : "mx-auto"}`}>
+              {tr(portfolioPage.intro)}
+            </p>
             <CTAButton className="mt-10">
               {lang === "es" ? "¿Algún proyecto en mente? ¡Hablemos!" : "Have a project in mind? Let's talk!"}
             </CTAButton>
