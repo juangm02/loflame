@@ -9,9 +9,15 @@ import ArchitectureTree from "../components/ArchitectureTree";
 import IdeaBoardMockup from "../components/IdeaBoardMockup";
 import FigmaEmbed from "../components/FigmaEmbed";
 import CaseStudyTabs from "../components/CaseStudyTabs";
-import { caseStudies, caseStudyNav, projects, nav, cta, type Bilingual } from "../data/content";
+import CaseStudyVideo from "../components/CaseStudyVideo";
+import { caseStudies, caseStudyNav, projects, nav, cta, type Bilingual, type PlaceholderVideo } from "../data/content";
 import { useLanguage } from "../context/LanguageContext";
 import { resolveAccent, useIsDarkTheme } from "../lib/useIsDarkTheme";
+import { caseStudyVideos } from "../lib/caseStudyMedia";
+
+function isPlaceholderVideo(ph: Bilingual | PlaceholderVideo): ph is PlaceholderVideo {
+  return "videoKey" in ph;
+}
 
 const NAV_SLUGS = ["datascope", "juicio", "corigin", "hospital-sjd", "arrelat"];
 
@@ -263,7 +269,23 @@ export default function CaseStudy() {
               <div className={`grid gap-5 ${proc.placeholders.length > 1 ? "sm:grid-cols-2" : ""} mt-8`}>
                 {proc.placeholders.map((ph, j) => (
                   <RevealOnScroll key={j} delay={0.06 + j * 0.05}>
-                    <ImagePlaceholder label={tr(ph)} className="aspect-[4/3]" />
+                    {isPlaceholderVideo(ph) ? (
+                      (() => {
+                        const video = caseStudyVideos[ph.videoKey];
+                        return video ? (
+                          <CaseStudyVideo
+                            src={video.src}
+                            poster={video.poster}
+                            alt={tr(ph.alt)}
+                            className="aspect-[1000/242]"
+                          />
+                        ) : (
+                          <ImagePlaceholder label={tr(ph.alt)} className="aspect-[4/3]" />
+                        );
+                      })()
+                    ) : (
+                      <ImagePlaceholder label={tr(ph)} className="aspect-[4/3]" />
+                    )}
                   </RevealOnScroll>
                 ))}
               </div>

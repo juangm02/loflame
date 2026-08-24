@@ -5,6 +5,14 @@ export interface Bilingual {
   en: string;
 }
 
+/** A processSection placeholder slot with a real clip attached (see
+ * lib/caseStudyMedia.ts, resolved by `videoKey`) instead of the usual
+ * "pendiente de anexar" dashed box. */
+export interface PlaceholderVideo {
+  videoKey: string;
+  alt: Bilingual;
+}
+
 const t = (es: string, en: string): Bilingual => ({ es, en });
 
 export const site = {
@@ -204,7 +212,7 @@ export interface CaseStudyContent {
     title: Bilingual;
     body: Bilingual;
     bullets?: Bilingual[];
-    placeholders?: Bilingual[];
+    placeholders?: (Bilingual | PlaceholderVideo)[];
     highlight?: boolean;
   }[];
 
@@ -1221,7 +1229,13 @@ export const caseStudies: Record<string, CaseStudyContent> = {
           t("Librería de componentes reutilizable entre pantallas", "Reusable component library shared across screens"),
         ],
         placeholders: [
-          t("Muestra del design system / tokens / tipografía — pendiente de anexar.", "Design system / tokens / typography sample — pending."),
+          {
+            videoKey: "hospital-kpi-cards",
+            alt: t(
+              "Estados activos de las tarjetas KPI del design system: valores distintos de 0 activan el estado, cediendo peso visual a los estados de alerta y crítico (ámbar/rojo), que son los primeros que percibe el ojo.",
+              "Active states for the design system's KPI cards: nonzero values trigger the active state, ceding visual weight to the alert/critical states (amber/red), which are the first the eye perceives."
+            ),
+          },
         ],
       },
       {

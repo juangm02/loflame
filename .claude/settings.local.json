@@ -34,7 +34,24 @@
       "Bash(npm uninstall *)",
       "Bash(git commit -m 'Add cloth-sim background to Portfolio/Curriculum hero \\(revertible\\) *)",
       "Bash(git commit -m 'Fix sticky header disappearing on scroll *)",
-      "Bash(git commit -m 'Add 100px extra height to cloth-sim hero background *)"
+      "Bash(git commit -m 'Add 100px extra height to cloth-sim hero background *)",
+      "Bash(git commit -m 'Hide hero portrait on Portfolio/Curriculum to preview text-only hero \\(revertible\\) *)",
+      "Bash(git commit -m 'Center hero text block and CTA in Portfolio/Curriculum \\(text-only preview\\) *)",
+      "Bash(git commit -m 'Fade cloth-sim gravity out gradually instead of cutting off at 8s *)",
+      "Bash(ffmpeg -version)",
+      "Bash(ls -la ~ | grep -i \"docu\")",
+      "Bash(python3 -c \"from PIL import Image; print\\('PIL available'\\)\")",
+      "Bash(python3 -)",
+      "Bash(npm init *)",
+      "Bash(node -e \"console.log\\(require\\('ffmpeg-static'\\)\\)\")",
+      "Bash(chmod +x /private/tmp/claude-501/-Users-jonalon-Documents-Desig-nare-GoLivePortfolio/31a7f092-acea-4b70-8356-c526c53dc109/scratchpad/node_modules/ffmpeg-static/ffmpeg)",
+      "Bash(/private/tmp/claude-501/-Users-jonalon-Documents-Desig-nare-GoLivePortfolio/31a7f092-acea-4b70-8356-c526c53dc109/scratchpad/node_modules/ffmpeg-static/ffmpeg -version)",
+      "Bash(/private/tmp/claude-501/-Users-jonalon-Documents-Desig-nare-GoLivePortfolio/31a7f092-acea-4b70-8356-c526c53dc109/scratchpad/node_modules/ffmpeg-static/ffmpeg -y -i '/Users/jonalon/Documents/SANT JOAN DE DEU/Data Wall/Portfolio assets/CompF.gif' -c:v libx264 -pix_fmt yuv420p -crf 23 -preset slow -movflags +faststart -an /private/tmp/claude-501/-Users-jonalon-Documents-Desig-nare-GoLivePortfolio/31a7f092-acea-4b70-8356-c526c53dc109/scratchpad/CompF-crf23.mp4)",
+      "Bash(/private/tmp/claude-501/-Users-jonalon-Documents-Desig-nare-GoLivePortfolio/31a7f092-acea-4b70-8356-c526c53dc109/scratchpad/node_modules/ffmpeg-static/ffmpeg -y -i '/Users/jonalon/Documents/SANT JOAN DE DEU/Data Wall/Portfolio assets/CompF.gif' -vf 'scale=trunc\\(iw/2\\)*2:trunc\\(ih/2\\)*2' -c:v libx264 -pix_fmt yuv420p -crf 23 -preset slow -movflags +faststart -an /private/tmp/claude-501/-Users-jonalon-Documents-Desig-nare-GoLivePortfolio/31a7f092-acea-4b70-8356-c526c53dc109/scratchpad/CompF-crf23.mp4)",
+      "Bash(/private/tmp/claude-501/-Users-jonalon-Documents-Desig-nare-GoLivePortfolio/31a7f092-acea-4b70-8356-c526c53dc109/scratchpad/node_modules/ffmpeg-static/ffmpeg -y -i '/Users/jonalon/Documents/SANT JOAN DE DEU/Data Wall/Portfolio assets/CompF.gif' -vf 'scale=trunc\\(iw/2\\)*2:trunc\\(ih/2\\)*2' -c:v libx264 -pix_fmt yuv420p -crf 20 -preset slow -movflags +faststart -an /private/tmp/claude-501/-Users-jonalon-Documents-Desig-nare-GoLivePortfolio/31a7f092-acea-4b70-8356-c526c53dc109/scratchpad/CompF-crf20.mp4)",
+      "Bash(cp __TRACKED_VAR__/CompF-crf20.mp4 /Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/assets/video/hospital-sjd-kpi-cards.mp4)",
+      "Bash(cp __TRACKED_VAR__/CompF-poster.jpg /Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/assets/img/hospital-sjd-kpi-cards-poster.jpg)",
+      "Bash(awk '{print $2}')"
     ]
   }
 }
