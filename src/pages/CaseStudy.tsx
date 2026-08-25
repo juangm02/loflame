@@ -10,10 +10,12 @@ import IdeaBoardMockup from "../components/IdeaBoardMockup";
 import FigmaEmbed from "../components/FigmaEmbed";
 import CaseStudyTabs from "../components/CaseStudyTabs";
 import CaseStudyVideo from "../components/CaseStudyVideo";
+import ObjectiveIcon from "../components/ObjectiveIcon";
+import ObjectivesScrollShowcase from "../components/ObjectivesScrollShowcase";
 import { caseStudies, caseStudyNav, projects, nav, cta, type Bilingual, type PlaceholderVideo } from "../data/content";
 import { useLanguage } from "../context/LanguageContext";
 import { resolveAccent, useIsDarkTheme } from "../lib/useIsDarkTheme";
-import { caseStudyVideos } from "../lib/caseStudyMedia";
+import { caseStudyVideos, caseStudyComparativaImages, caseStudyImages } from "../lib/caseStudyMedia";
 
 function isPlaceholderVideo(ph: Bilingual | PlaceholderVideo): ph is PlaceholderVideo {
   return "videoKey" in ph;
@@ -122,10 +124,18 @@ export default function CaseStudy() {
 
         <section className="mt-32 grid items-center gap-10 lg:grid-cols-2">
           <RevealOnScroll>
-            <div
-              className="aspect-square w-full max-w-sm rounded-3xl"
-              style={{ background: `linear-gradient(160deg, ${accent}22, ${accent}55)` }}
-            />
+            {study.approachImage && caseStudyImages[study.approachImage.key] ? (
+              <img
+                src={caseStudyImages[study.approachImage.key]}
+                alt={tr(study.approachImage.alt)}
+                className="aspect-square w-full max-w-sm rounded-3xl object-cover"
+              />
+            ) : (
+              <div
+                className="aspect-square w-full max-w-sm rounded-3xl"
+                style={{ background: `linear-gradient(160deg, ${accent}22, ${accent}55)` }}
+              />
+            )}
           </RevealOnScroll>
           <RevealOnScroll delay={0.08}>
             <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.approachTitle)}</h2>
@@ -134,23 +144,39 @@ export default function CaseStudy() {
         </section>
 
         <section className="mt-32">
-          <RevealOnScroll>
-            <h2 className="text-center font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.objectivesTitle)}</h2>
-          </RevealOnScroll>
-          <div className="mt-14 grid gap-5 sm:grid-cols-3">
-            {study.objectives.map((obj, i) => (
-              <RevealOnScroll key={i} delay={i * 0.06}>
-                <div className="h-full rounded-2xl border border-ink/8 bg-card/50 p-6">
-                  <ObjectiveIcon index={i} accent={accent} />
-                  <p className="mt-4 text-sm leading-relaxed text-ink-soft">{tr(obj)}</p>
-                </div>
+          {study.objectivesComparativa ? (
+            <ObjectivesScrollShowcase
+              title={tr(study.objectivesTitle)}
+              objectives={study.objectives.map((obj) => tr(obj))}
+              accent={accent}
+              images={{
+                before: caseStudyComparativaImages.before,
+                beforeAlt: tr(study.objectivesComparativa.beforeAlt),
+                after: caseStudyComparativaImages.after,
+                afterAlt: tr(study.objectivesComparativa.afterAlt),
+              }}
+            />
+          ) : (
+            <>
+              <RevealOnScroll>
+                <h2 className="text-center font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.objectivesTitle)}</h2>
               </RevealOnScroll>
-            ))}
-          </div>
-          {study.objectivesPlaceholder && (
-            <RevealOnScroll delay={0.1} className="mt-8">
-              <ImagePlaceholder label={tr(study.objectivesPlaceholder)} />
-            </RevealOnScroll>
+              <div className="mt-14 grid gap-5 sm:grid-cols-3">
+                {study.objectives.map((obj, i) => (
+                  <RevealOnScroll key={i} delay={i * 0.06}>
+                    <div className="h-full rounded-2xl border border-ink/8 bg-card/50 p-6">
+                      <ObjectiveIcon index={i} accent={accent} />
+                      <p className="mt-4 text-sm leading-relaxed text-ink-soft">{tr(obj)}</p>
+                    </div>
+                  </RevealOnScroll>
+                ))}
+              </div>
+              {study.objectivesPlaceholder && (
+                <RevealOnScroll delay={0.1} className="mt-8">
+                  <ImagePlaceholder label={tr(study.objectivesPlaceholder)} />
+                </RevealOnScroll>
+              )}
+            </>
           )}
         </section>
 
@@ -642,20 +668,3 @@ function BrowserMock({ accent }: { accent: string }) {
   );
 }
 
-function ObjectiveIcon({ index, accent }: { index: number; accent: string }) {
-  const icons = [
-    <path key="a" d="M4 12l5 5L20 6" />,
-    <path key="b" d="M12 3v18M3 12h18" />,
-    <path key="c" d="M4 20l6-6M14 4l6 6-8 8-6-6 8-8Z" />,
-  ];
-  return (
-    <span
-      className="flex h-10 w-10 items-center justify-center rounded-xl"
-      style={{ background: `${accent}18`, color: accent }}
-    >
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        {icons[index % icons.length]}
-      </svg>
-    </span>
-  );
-}

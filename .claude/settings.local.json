@@ -51,7 +51,8 @@
       "Bash(/private/tmp/claude-501/-Users-jonalon-Documents-Desig-nare-GoLivePortfolio/31a7f092-acea-4b70-8356-c526c53dc109/scratchpad/node_modules/ffmpeg-static/ffmpeg -y -i '/Users/jonalon/Documents/SANT JOAN DE DEU/Data Wall/Portfolio assets/CompF.gif' -vf 'scale=trunc\\(iw/2\\)*2:trunc\\(ih/2\\)*2' -c:v libx264 -pix_fmt yuv420p -crf 20 -preset slow -movflags +faststart -an /private/tmp/claude-501/-Users-jonalon-Documents-Desig-nare-GoLivePortfolio/31a7f092-acea-4b70-8356-c526c53dc109/scratchpad/CompF-crf20.mp4)",
       "Bash(cp __TRACKED_VAR__/CompF-crf20.mp4 /Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/assets/video/hospital-sjd-kpi-cards.mp4)",
       "Bash(cp __TRACKED_VAR__/CompF-poster.jpg /Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/assets/img/hospital-sjd-kpi-cards-poster.jpg)",
-      "Bash(awk '{print $2}')"
+      "Bash(awk '{print $2}')",
+      "Bash(git commit -m 'Fill Hospital SJD '\\\\''Sistema de diseño'\\\\'' placeholder with real clip *)"
     ]
   }
 }

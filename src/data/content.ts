@@ -195,9 +195,18 @@ export interface CaseStudyContent {
   };
   approachTitle: Bilingual;
   approach: Bilingual;
+  /** Real photo for the Design approach section's decorative square block
+   * (see lib/caseStudyMedia.ts's caseStudyImages), replacing the generic
+   * accent-gradient block. Only set where a real photo exists. */
+  approachImage?: { key: string; alt: Bilingual };
   objectivesTitle: Bilingual;
   objectives: Bilingual[];
   objectivesPlaceholder?: Bilingual;
+  /** Real before/after screen comparison for the Objectives section
+   * (see lib/caseStudyMedia.ts's caseStudyComparativaImages), rendered as
+   * a pinned scroll sequence instead of the plain objectivesPlaceholder
+   * box. Only set where the images actually exist. */
+  objectivesComparativa?: { beforeAlt: Bilingual; afterAlt: Bilingual };
   solvingTitle?: Bilingual;
   solving?: Bilingual;
   scope?: { title: Bilingual; body: Bilingual };
@@ -1175,6 +1184,13 @@ export const caseStudies: Record<string, CaseStudyContent> = {
       "Diseñar para un formato de “lectura a distancia”: no hay cursor, no hay scroll, no hay interacción directa del usuario con la pantalla. Toda la jerarquía tiene que resolverse solo con tipografía, color y composición, legible en segundos desde varios metros.",
       "Designing for a “long-distance reading” format: there's no cursor, no scroll, no direct user interaction with the screen. All hierarchy has to be resolved through typography, color, and composition alone, legible in seconds from several meters away."
     ),
+    approachImage: {
+      key: "hospital-sjd-approach",
+      alt: t(
+        "Sala del Clinical Command Center del Hospital Sant Joan de Déu, con el DataWall de pantallas y los puestos de trabajo del equipo.",
+        "The Hospital Sant Joan de Déu Clinical Command Center room, showing the DataWall screens and the team's workstations."
+      ),
+    },
     objectivesTitle: t("Objetivos", "Objectives"),
     objectives: [
       t(
@@ -1182,8 +1198,8 @@ export const caseStudies: Record<string, CaseStudyContent> = {
         "Elevate reading clarity and accessibility in a high-demand operational context."
       ),
       t(
-        "Establecer un sistema de diseño consistente (tokens de color semánticos, tipografía escalada para distancia, librería de componentes) aplicable a las 18 pantallas.",
-        "Establish a consistent design system (semantic color tokens, distance-scaled typography, component library) applicable across all 18 screens."
+        "Establecer un design system consistente aplicable y escalable a los 18 dashboards.",
+        "Establish a consistent design system, applicable and scalable across all 18 dashboards."
       ),
       t(
         "Diseñar una arquitectura de información clara para el ecosistema Hospital Líquid, construida desde cero junto a los equipos clínicos.",
@@ -1194,6 +1210,16 @@ export const caseStudies: Record<string, CaseStudyContent> = {
       "Comparativa de evolución de una pantalla representativa, con datos ficticios — pendiente de anexar.",
       "Before/after comparison of a representative screen, with illustrative data — pending."
     ),
+    objectivesComparativa: {
+      beforeAlt: t(
+        "Versión original del DataWall: jerarquía tipográfica plana, codificación de color mínima, sin indicadores de tendencia.",
+        "Original DataWall version: flat type hierarchy, minimal color coding, no trend indicators."
+      ),
+      afterAlt: t(
+        "Versión rediseñada del DataWall: jerarquía reforzada, codificación de color semántica (sense risc / risc moderat / risc elevat) y deltas de tendencia por indicador.",
+        "Redesigned DataWall version: reinforced hierarchy, semantic color coding (no risk / moderate risk / elevated risk), and per-indicator trend deltas."
+      ),
+    },
     solvingTitle: t("Punto de partida", "Starting point"),
     solving: t(
       "El sistema de pantallas contaba ya con una primera generación de dashboards, construida en una etapa inicial del proyecto para cubrir necesidades operativas urgentes del CCC. Esta primera versión priorizó la disponibilidad rápida de datos sobre la experiencia de lectura, lo que abrió una oportunidad clara de maduración: optimizar la jerarquía visual, la accesibilidad y la usabilidad del sistema a medida que el proyecto pasaba de una fase funcional a una fase de consolidación como producto.",
