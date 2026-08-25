@@ -2,10 +2,12 @@ import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import ObjectiveIcon from "./ObjectiveIcon";
 
-const HEADER_HEIGHT = 90; // px — site header is itself sticky top-0, z-50; hold below it, not under it
+const HEADER_HEIGHT = 105; // px — site header is itself sticky top-0, z-50; hold below it, not under it
 const SETTLE_MS = 650; // roughly matches the CSS transition below; blocks input mid-transition
 const CAPTURE_MARGIN = 700; // px of scroll distance, on either side of the lock point, where we take manual control
-const MIN_STEP_DELTA = 35; // px — filters out jitter/small drags from counting as a step once engaged
+const MIN_STEP_DELTA = 180; // px — raising this also accentuates the pull preview below, since rubberBand()
+// is evaluated at whatever accumulated distance it commits at — a higher threshold means more room to
+// travel (and see) before that happens
 const APPROACH_GAIN = 1.15; // how eagerly we walk toward lockY per unit of incoming delta while approaching
 const MAX_PULL = 48; // px — how far the rubber-band preview can travel before a step commits
 const PULL_RELEASE_MS = 180; // ms of no input before an uncommitted pull springs back to rest
@@ -22,16 +24,15 @@ function rubberBand(distance: number, max: number) {
  * Objectives section for Hospital SJD (the only case study with
  * `objectivesComparativa` set — see data/content.ts).
  *
- * `sectionRef` wraps the WHOLE thing — title, cards, and images together —
- * and the lock point (see below) is computed from *this* outer wrapper's
- * top, not the images sub-block. That's the whole trick: once locked, the
- * title sits at HEADER_HEIGHT with the cards and the current image laid
- * out normally beneath it, all visible together, because nothing is
- * scrolling — no `position: sticky` needed on the title at all. (An
- * earlier version locked against the images block specifically, which
- * pushed the title and cards off-screen above the fold, then tried to
- * patch that by making the title sticky — a workaround for locking on the
- * wrong element instead of fixing the lock target itself.)
+ * `sectionRef` is on the cards grid specifically (not the title, not the
+ * whole title+cards+images block), and the lock point (see below) is
+ * computed from *that* element's top. Cards + images are the content that
+ * has to look right on every screen size; the title is secondary and may
+ * scroll out of view above the fold on a short viewport rather than
+ * constraining where the cards can land. (Two earlier versions anchored on
+ * the images block, then on the outer title+cards+images wrapper — both
+ * made the wrong element the source of truth for "does this look right,"
+ * rather than the cards themselves.)
  *
  * The before/after comparison images swap one full-width image at a time,
  * 32px below the cards, at their natural aspect ratio (no cropping).
@@ -250,12 +251,21 @@ export default function ObjectivesScrollShowcase({
     };
   }, [prefersReducedMotion, imageCount]);
 
-  // Hug height, not stretched/centered: each card is exactly as tall as its
-  // own content needs, and the icon sits at a fixed top offset in every
-  // card, so icons line up across cards regardless of how much text
-  // follows — no shared max-height measurement needed.
+  // All three cards share one height — CSS Grid's default `align-items:
+  // stretch` does this for free: each card is a grid item, so they all
+  // match the tallest one's hug height, no JS measurement needed. Content
+  // stays flex-col with no vertical centering, so the icon sits at the
+  // same top offset in every card regardless of how much text follows —
+  // that's what keeps icons aligned across cards despite the shared,
+  // stretched height.
+  // sectionRef (the lock target — see the module docstring) points at the
+  // cards specifically, not the title or the whole block: anchoring here
+  // guarantees the cards + images land well regardless of viewport height,
+  // even if that means the title itself scrolls out of view above the
+  // fold on a short screen — cards and images are the content that must
+  // always look right, the title is a nice-to-have on top of that.
   const cardsGrid = (
-    <div className="mt-8 grid items-start gap-5 sm:mt-10 sm:grid-cols-3">
+    <div ref={sectionRef} className="mt-8 grid gap-5 sm:mt-10 sm:grid-cols-3">
       {objectives.map((obj, i) => (
         <div key={i} className="flex flex-col rounded-2xl border border-ink/8 bg-card/50 p-6">
           <ObjectiveIcon index={i} accent={accent} />
@@ -270,7 +280,7 @@ export default function ObjectivesScrollShowcase({
       <div>
         <h2 className="text-center font-display text-4xl font-extrabold text-ink sm:text-5xl">{title}</h2>
         {cardsGrid}
-        <div className="mx-auto mt-8 grid w-full max-w-4xl gap-4 sm:grid-cols-2">
+        <div className="mx-auto mt-6 grid w-full max-w-4xl gap-4 sm:grid-cols-2">
           <img src={images.before} alt={images.beforeAlt} className="h-auto w-full rounded-2xl border border-ink/10" />
           <img src={images.after} alt={images.afterAlt} className="h-auto w-full rounded-2xl border border-ink/10" />
         </div>
@@ -279,12 +289,12 @@ export default function ObjectivesScrollShowcase({
   }
 
   return (
-    <div ref={sectionRef}>
+    <div>
       <h2 className="text-center font-display text-4xl font-extrabold text-ink sm:text-5xl">{title}</h2>
 
       {cardsGrid}
 
-      <div className="mx-auto mt-8 w-full max-w-3xl">
+      <div className="mx-auto mt-6 w-full max-w-3xl">
         <div ref={viewportRef} className="mx-auto w-full overflow-hidden">
           <div
             className="flex"
