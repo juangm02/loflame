@@ -130,9 +130,11 @@ export default function Portfolio() {
             <h2 className="font-display text-5xl font-extrabold text-ink sm:text-6xl">{tr(portfolioPage.projectsTitle)}</h2>
           </RevealOnScroll>
           <div className="mt-14 flex flex-col gap-8">
-            {projects.map((project, i) => (
-              <ProjectCard key={project.slug} project={project} index={i} />
-            ))}
+            {projects
+              .filter((project) => !project.hidden)
+              .map((project, i) => (
+                <ProjectCard key={project.slug} project={project} index={i} />
+              ))}
           </div>
         </section>
       </main>

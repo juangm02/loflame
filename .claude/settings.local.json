@@ -55,7 +55,18 @@
       "Bash(git commit -m 'Fill Hospital SJD '\\\\''Sistema de diseño'\\\\'' placeholder with real clip *)",
       "Bash(git commit -m 'Refine Hospital SJD scroll-jack: gap, card heights, anchor, pull *)",
       "Bash(xargs -I{} echo {})",
-      "Bash(git commit *)"
+      "Bash(git commit *)",
+      "Bash(git remote *)",
+      "Bash(git branch *)",
+      "Bash(git push *)",
+      "Bash(gh auth *)",
+      "Bash(git config *)",
+      "Bash(mkdir -p ~/.ssh)",
+      "Bash(chmod 700 ~/.ssh)",
+      "Bash(ssh-keygen -t ed25519 -C \"juangarciamarques@gmail.com\" -f ~/.ssh/id_ed25519 -N \"\")",
+      "Bash(pbcopy)",
+      "Bash(ssh -o StrictHostKeyChecking=accept-new -T git@github.com)",
+      "Bash(awk 'NR>1342 && /—/' /Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/data/content.ts)"
     ]
   }
 }

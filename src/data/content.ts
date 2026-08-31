@@ -13,6 +13,13 @@ export interface PlaceholderVideo {
   alt: Bilingual;
 }
 
+/** Same idea as PlaceholderVideo, but for a static image (see
+ * lib/caseStudyMedia.ts's caseStudyImages, resolved by `imageKey`). */
+export interface PlaceholderImage {
+  imageKey: string;
+  alt: Bilingual;
+}
+
 const t = (es: string, en: string): Bilingual => ({ es, en });
 
 export const site = {
@@ -171,6 +178,11 @@ export interface ProjectMeta {
   location: Bilingual;
   description: Bilingual;
   disabled?: boolean;
+  /** Hides the project from the Portfolio list and every case study's nav
+   * tabs — unlike `disabled` (still shown, just marked "under
+   * construction"), this removes it from navigation entirely. The case
+   * study page/route and content stay intact, just unlinked. */
+  hidden?: boolean;
   accent: string;
   /** Optional dark-mode override for `accent`, used when the light-mode hex
    * fails contrast against the dark-mode page background (#131316). See the
@@ -221,7 +233,7 @@ export interface CaseStudyContent {
     title: Bilingual;
     body: Bilingual;
     bullets?: Bilingual[];
-    placeholders?: (Bilingual | PlaceholderVideo)[];
+    placeholders?: (Bilingual | PlaceholderVideo | PlaceholderImage)[];
     highlight?: boolean;
   }[];
 
@@ -360,6 +372,7 @@ export const projects: ProjectMeta[] = [
     ),
     accent: "#1B2A6B",
     accentDark: "#5468C6",
+    hidden: true,
   },
   {
     slug: "hospital-sjd",
@@ -529,8 +542,8 @@ export const caseStudies: Record<string, CaseStudyContent> = {
         "The questions were segmented into three main areas that helped guide our empathize stage."
       ),
       placeholder: t(
-        "Plantilla de encuesta y desglose por categorías (general/actitudinal, basado en uso, basado en features) — pendiente de anexar captura.",
-        "Survey template and category breakdown (general/attitudinal, usage-based, feature-based) — screenshot pending."
+        "Plantilla de encuesta y desglose por categorías (general/actitudinal, basado en uso, basado en features), pendiente de anexar captura.",
+        "Survey template and category breakdown (general/attitudinal, usage-based, feature-based), screenshot pending."
       ),
     },
     opportunities: {
@@ -566,11 +579,11 @@ export const caseStudies: Record<string, CaseStudyContent> = {
       title: t("Guía de onboarding", "Onboarding guide"),
       body: t(
         "Diseñamos una experiencia de introducción a la plataforma que guía a los usuarios paso a paso según su rol y nivel técnico. El onboarding se activa de forma contextual al momento de usar funcionalidades críticas como la creación de formularios de inspección, asignación de tareas, el registro de hallazgos y la conexión a integraciones, garantizando que incluso los operarios menos familiarizados con herramientas digitales puedan completar sus procesos sin bloqueos.",
-        "We designed an introductory experience that guides users step by step based on their role and technical level. Onboarding triggers contextually when critical features are used — creating inspection forms, assigning tasks, logging findings, connecting integrations — so that even operators less familiar with digital tools can complete their processes without getting stuck."
+        "We designed an introductory experience that guides users step by step based on their role and technical level. Onboarding triggers contextually when critical features are used (creating inspection forms, assigning tasks, logging findings, connecting integrations), so that even operators less familiar with digital tools can complete their processes without getting stuck."
       ),
       placeholder: t(
-        "Capturas de la guía de onboarding contextual — pendiente de anexar.",
-        "Contextual onboarding guide screenshots — pending."
+        "Capturas de la guía de onboarding contextual, pendiente de anexar.",
+        "Contextual onboarding guide screenshots, pending."
       ),
     },
     featureShowcase: {
@@ -585,18 +598,18 @@ export const caseStudies: Record<string, CaseStudyContent> = {
           ),
           status: t("Arrastra para ver más", "Drag to see more"),
           placeholder: t(
-            "Carrusel de pantallas de Tareas Asignadas (web y mobile) — pendiente de anexar.",
-            "Assigned Tasks screen carousel (web and mobile) — pending."
+            "Carrusel de pantallas de Tareas Asignadas (web y mobile), pendiente de anexar.",
+            "Assigned Tasks screen carousel (web and mobile), pending."
           ),
         },
         {
           title: t("Cronograma de Tareas Asignadas", "Assigned Tasks Timeline"),
           body: t(
             "Actualmente, la programación y visualización de tareas dentro de la plataforma se realiza exclusivamente a través de una tabla que, si bien se ve ordenada, dificulta la comprensión rápida del estado y distribución de las actividades. La implementación de una vista tipo calendario elevará significativamente la accesibilidad y usabilidad de esta funcionalidad, promoviendo su adopción y uso activo entre los equipos operativos y administrativos.",
-            "Right now, scheduling and visualizing tasks on the platform happens exclusively through a table — orderly, but not great for quickly grasping the status and distribution of activities. Adding a calendar-style view will significantly raise the accessibility and usability of this feature, driving adoption among operational and administrative teams."
+            "Right now, scheduling and visualizing tasks on the platform happens exclusively through a table: orderly, but not great for quickly grasping the status and distribution of activities. Adding a calendar-style view will significantly raise the accessibility and usability of this feature, driving adoption among operational and administrative teams."
           ),
           status: t("Otro proyecto destacado (aún no liberado)", "Other project highlight (not yet released)"),
-          placeholder: t("Mockup de vista tipo calendario — pendiente de anexar.", "Calendar-view mockup — pending."),
+          placeholder: t("Mockup de vista tipo calendario, pendiente de anexar.", "Calendar-view mockup, pending."),
         },
         {
           title: t("Firmas", "Signatures"),
@@ -629,7 +642,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
             },
           ],
           status: t("Otro proyecto destacado (aún no liberado)", "Other project highlight (not yet released)"),
-          placeholder: t("Flujo de firmas rediseñado — pendiente de anexar.", "Redesigned signature flow — pending."),
+          placeholder: t("Flujo de firmas rediseñado, pendiente de anexar.", "Redesigned signature flow, pending."),
         },
         {
           title: t("Integraciones", "Integrations"),
@@ -655,7 +668,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
             },
           ],
           status: t("Otro proyecto destacado (aún no liberado)", "Other project highlight (not yet released)"),
-          placeholder: t("Diagrama de integraciones — pendiente de anexar.", "Integrations diagram — pending."),
+          placeholder: t("Diagrama de integraciones, pendiente de anexar.", "Integrations diagram, pending."),
         },
       ],
     },
@@ -720,7 +733,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
     approachTitle: t("Design approach", "Design approach"),
     approach: t(
       "Este proyecto adoptó un enfoque híbrido entre design thinking y exploración creativa. En vez de imponer una estructura predefinida desde el inicio, el proceso partió de entender a profundidad los hábitos reales de trabajo de los creativos. La naturaleza caótica del pensamiento creativo guió las decisiones de producto, resultando en ciclos rápidos de boceto → prototipo → validación → iteración. A lo largo del proceso, alterné entre una visión macro del ecosistema al que pertenece Corigin y un foco micro en interacciones clave: cómo capturar una idea en 3 segundos, cómo se mueve una tarjeta en el canvas, cómo se etiquetan conceptos sin fricción.",
-      "This project adopted a hybrid design approach, blending design thinking and creative exploration. Instead of imposing a predefined structure from the start, the process began by understanding the real working habits of creatives in depth. The chaotic nature of creative thinking guided the product decisions, resulting in rapid cycles of sketch → prototype → validation → iteration. Throughout the process, I alternated between a macro vision of the ecosystem Corigin belongs to, and a micro-focus on key interactions — how to capture an idea in 3 seconds, how a card moves on the canvas, how concepts can be tagged without friction."
+      "This project adopted a hybrid design approach, blending design thinking and creative exploration. Instead of imposing a predefined structure from the start, the process began by understanding the real working habits of creatives in depth. The chaotic nature of creative thinking guided the product decisions, resulting in rapid cycles of sketch → prototype → validation → iteration. Throughout the process, I alternated between a macro vision of the ecosystem Corigin belongs to, and a micro-focus on key interactions: how to capture an idea in 3 seconds, how a card moves on the canvas, how concepts can be tagged without friction."
     ),
     objectivesTitle: t("Objetivos", "Objectives"),
     objectives: [
@@ -751,7 +764,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
     needs: [
       t(
         "Capturar rápidamente ideas sueltas, imágenes, frases o referencias antes de que desaparezcan.",
-        "Capture ideas quickly — loose notes, images, phrases, or references — before they disappear."
+        "Capture ideas quickly (loose notes, images, phrases, or references) before they disappear."
       ),
       t("Organizar por proyecto o cliente, pero sin verse forzado a un sistema rígido.", "Organize by project or client, but without being forced into a rigid system."),
       t(
@@ -1054,8 +1067,8 @@ export const caseStudies: Record<string, CaseStudyContent> = {
     reflection: {
       title: t("Lo que queda y lo que sigue", "What there is and what comes next"),
       body: t(
-        "Corigin se consolidó como una propuesta que respeta la naturaleza no lineal del pensamiento creativo, ofreciendo un espacio donde las ideas pueden capturarse, moverse y evolucionar sin fricción. El proceso de investigación permitió entender cómo trabajan realmente los creativos y diseñar una experiencia que acompaña su flujo en lugar de restringirlo. Funcionalidades como Origin —concebida como un espacio dedicado al origen de las ideas— y la sección de perfil formaban parte de la visión inicial, pero ambas se movieron a etapas futuras para priorizar un producto más enfocado, ligero y testeable. Este proyecto sienta las bases de una herramienta que puede crecer en múltiples direcciones manteniendo su esencia: habilitar que las ideas nazcan, se conecten y encuentren su forma.",
-        "Corigin was solidified as a proposal that respects the non-linear nature of creative thinking, offering a space where ideas can be captured, moved, and evolved without friction. The research process made it possible to understand how creatives actually work and design an experience that supports their flow rather than restricting it. While features like Origin — conceived as a dedicated space for the origin of ideas — and the profile section were part of the initial vision, both were moved to later stages to prioritize a more focused, lightweight, and testable product. This project lays the foundation for a tool that can grow in multiple directions while maintaining its core essence: enabling ideas to emerge, connect, and find their form."
+        "Corigin se consolidó como una propuesta que respeta la naturaleza no lineal del pensamiento creativo, ofreciendo un espacio donde las ideas pueden capturarse, moverse y evolucionar sin fricción. El proceso de investigación permitió entender cómo trabajan realmente los creativos y diseñar una experiencia que acompaña su flujo en lugar de restringirlo. Funcionalidades como Origin (concebida como un espacio dedicado al origen de las ideas) y la sección de perfil formaban parte de la visión inicial, pero ambas se movieron a etapas futuras para priorizar un producto más enfocado, ligero y testeable. Este proyecto sienta las bases de una herramienta que puede crecer en múltiples direcciones manteniendo su esencia: habilitar que las ideas nazcan, se conecten y encuentren su forma.",
+        "Corigin was solidified as a proposal that respects the non-linear nature of creative thinking, offering a space where ideas can be captured, moved, and evolved without friction. The research process made it possible to understand how creatives actually work and design an experience that supports their flow rather than restricting it. While features like Origin (conceived as a dedicated space for the origin of ideas) and the profile section were part of the initial vision, both were moved to later stages to prioritize a more focused, lightweight, and testable product. This project lays the foundation for a tool that can grow in multiple directions while maintaining its core essence: enabling ideas to emerge, connect, and find their form."
       ),
     },
   },
@@ -1093,7 +1106,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
     approachTitle: t("Design approach", "Design approach"),
     approach: t(
       "Mi enfoque trató de resolver el caos operativo que enfrentaba el negocio. Antes de pensar en pantallas, analicé el flujo real de trabajo de la dueña: cocinar, despachar, revisar inventario, pagar nómina, todo a la vez. Con esa comprensión, propuse una solución centrada en tres frentes clave: pedidos, trabajadores e inventario. Cada módulo fue pensado para ser útil desde el primer clic, con una interfaz que prioriza lo inmediato.",
-      "My approach aimed to resolve the operational chaos the business faced. Before designing any screens, I analyzed the owner's actual workflow: cooking, dispatching, checking inventory, running payroll — all at once. With that understanding, I proposed a solution focused on three key areas: orders, workers, and inventory. Each module was designed to be useful from the very first click, with an interface that prioritizes what's immediate."
+      "My approach aimed to resolve the operational chaos the business faced. Before designing any screens, I analyzed the owner's actual workflow: cooking, dispatching, checking inventory, running payroll, all at once. With that understanding, I proposed a solution focused on three key areas: orders, workers, and inventory. Each module was designed to be useful from the very first click, with an interface that prioritizes what's immediate."
     ),
     objectivesTitle: t("Objetivos", "Objectives"),
     objectives: [
@@ -1159,7 +1172,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
         "Hospital Sant Joan de Déu Barcelona, Direcció d'Estratègia Digital i Dades (D3)",
         "Hospital Sant Joan de Déu Barcelona, Digital Strategy & Data Division (D3)"
       ),
-      period: t("[Completar fechas]", "[Fill in dates]"),
+      period: t("2026", "2026"),
       role: t("Product Designer (UX/UI)", "Product Designer (UX/UI)"),
       roleDetail: t(
         "A cargo de investigación, diseño del sistema visual, documentación de lógica de pantallas, prototipado y colaboración con equipos técnicos y clínicos para el diseño e implementación del sistema.",
@@ -1207,8 +1220,8 @@ export const caseStudies: Record<string, CaseStudyContent> = {
       ),
     ],
     objectivesPlaceholder: t(
-      "Comparativa de evolución de una pantalla representativa, con datos ficticios — pendiente de anexar.",
-      "Before/after comparison of a representative screen, with illustrative data — pending."
+      "Comparativa de evolución de una pantalla representativa, con datos ficticios, pendiente de anexar.",
+      "Before/after comparison of a representative screen, with illustrative data, pending."
     ),
     objectivesComparativa: {
       beforeAlt: t(
@@ -1267,8 +1280,8 @@ export const caseStudies: Record<string, CaseStudyContent> = {
       {
         title: t("Qué es Hospital Líquid", "What is Hospital Líquid"),
         body: t(
-          "Hospital Líquid es el conjunto de programas de atención remota del hospital: la extensión de la atención clínica más allá de las paredes del centro, mediante seguimiento y monitorización de pacientes a distancia. Dentro de este ecosistema, la información que necesitaba visualizarse en el CCC se organizaba en tres capas de naturaleza distinta, cada una con su propia lógica y audiencia. Diferenciar estas tres capas fue clave para el diseño: cada una tiene una audiencia y un nivel de urgencia distintos — un fallo de conectividad no se lee ni se prioriza igual que un score de riesgo clínico — por lo que no podían tratarse con el mismo lenguaje visual dentro del sistema.",
-          "Hospital Líquid is the hospital's set of remote-care programs: extending clinical care beyond the walls of the center through remote patient tracking and monitoring. Within this ecosystem, the information that needed to be visualized in the CCC was organized into three layers of a different nature, each with its own logic and audience. Differentiating these three layers was key to the design: each has a distinct audience and urgency level — a connectivity failure isn't read or prioritized the same way as a clinical risk score — so they couldn't be treated with the same visual language within the system."
+          "Hospital Líquid es el conjunto de programas de atención remota del hospital: la extensión de la atención clínica más allá de las paredes del centro, mediante seguimiento y monitorización de pacientes a distancia. Dentro de este ecosistema, la información que necesitaba visualizarse en el CCC se organizaba en tres capas de naturaleza distinta, cada una con su propia lógica y audiencia. Diferenciar estas tres capas fue clave para el diseño: cada una tiene una audiencia y un nivel de urgencia distintos (un fallo de conectividad no se lee ni se prioriza igual que un score de riesgo clínico), por lo que no podían tratarse con el mismo lenguaje visual dentro del sistema.",
+          "Hospital Líquid is the hospital's set of remote-care programs: extending clinical care beyond the walls of the center through remote patient tracking and monitoring. Within this ecosystem, the information that needed to be visualized in the CCC was organized into three layers of a different nature, each with its own logic and audience. Differentiating these three layers was key to the design: each has a distinct audience and urgency level (a connectivity failure isn't read or prioritized the same way as a clinical risk score), so they couldn't be treated with the same visual language within the system."
         ),
         bullets: [
           t(
@@ -1285,32 +1298,38 @@ export const caseStudies: Record<string, CaseStudyContent> = {
           ),
         ],
         placeholders: [
-          t("Diagrama de las tres capas de Hospital Líquid — pendiente de anexar.", "Diagram of Hospital Líquid's three layers — pending."),
+          {
+            imageKey: "hospital-sjd-hliquid",
+            alt: t(
+              "Panel del DataWall de Hospital Líquid: mapa de atención remota, pacientes en seguimiento y alertas activas.",
+              "Hospital Líquid's DataWall panel: remote-care map, patients being tracked, and active alerts."
+            ),
+          },
         ],
       },
       {
         title: t("Workshop de definición de contenido", "Content definition workshop"),
         body: t(
-          "Para las 7 pantallas del ecosistema Hospital Líquid, al no partir de una versión previa, se organizó un workshop de definición de contenido junto a los equipos clínico y técnico responsables. El objetivo fue decidir colaborativamente qué mostrar (contenido e indicadores) antes de pasar a cómo mostrarlo (diseño). Definición de entidades/secciones: se acordaron colaborativamente las secciones clave a representar (Pacients, Alertes, Dispositius i connectivitat, Mapa) y qué datos era pertinente mostrar de cada una. Matriz de priorización: se usó un cuadrante de dos ejes para decidir qué indicadores entraban en el MVP inmediato y cuáles quedaban para una fase posterior — relevancia clínico-operativa en el eje vertical, y factibilidad de tenerlo disponible en el plazo del MVP en el eje horizontal. Este ejercicio permitió acotar el alcance del MVP de forma objetiva, asegurando que cada indicador incluido aportara valor real a la toma de decisiones del equipo asistencial.",
-          "For the 7 screens in the Hospital Líquid ecosystem, since there was no prior version to build on, a content definition workshop was organized together with the responsible clinical and technical teams. The goal was to collaboratively decide what to show (content and indicators) before moving on to how to show it (design). Entity/section definition: the key sections to represent were agreed on collaboratively (Patients, Alerts, Devices & connectivity, Map) along with what data was relevant to show for each. Prioritization matrix: a two-axis quadrant was used to decide which indicators would enter the immediate MVP and which would be left for a later phase — clinical-operational relevance on the vertical axis, and feasibility of having it ready within the MVP timeline on the horizontal axis. This exercise made it possible to scope the MVP objectively, ensuring every indicator included brought real value to the care team's decision-making."
+          "Para las 7 pantallas del ecosistema Hospital Líquid, al no partir de una versión previa, se organizó un workshop de definición de contenido junto a los equipos clínico y técnico responsables. El objetivo fue decidir colaborativamente qué mostrar (contenido e indicadores) antes de pasar a cómo mostrarlo (diseño). Definición de entidades/secciones: se acordaron colaborativamente las secciones clave a representar (Pacients, Alertes, Dispositius i connectivitat, Mapa) y qué datos era pertinente mostrar de cada una. Matriz de priorización: se usó un cuadrante de dos ejes para decidir qué indicadores entraban en el MVP inmediato y cuáles quedaban para una fase posterior: relevancia clínico-operativa en el eje vertical, y factibilidad de tenerlo disponible en el plazo del MVP en el eje horizontal. Este ejercicio permitió acotar el alcance del MVP de forma objetiva, asegurando que cada indicador incluido aportara valor real a la toma de decisiones del equipo asistencial.",
+          "For the 7 screens in the Hospital Líquid ecosystem, since there was no prior version to build on, a content definition workshop was organized together with the responsible clinical and technical teams. The goal was to collaboratively decide what to show (content and indicators) before moving on to how to show it (design). Entity/section definition: the key sections to represent were agreed on collaboratively (Patients, Alerts, Devices & connectivity, Map) along with what data was relevant to show for each. Prioritization matrix: a two-axis quadrant was used to decide which indicators would enter the immediate MVP and which would be left for a later phase: clinical-operational relevance on the vertical axis, and feasibility of having it ready within the MVP timeline on the horizontal axis. This exercise made it possible to scope the MVP objectively, ensuring every indicator included brought real value to the care team's decision-making."
         ),
         placeholders: [
           t(
-            "Matriz de priorización relevancia/factibilidad, adaptada y traducida — pendiente de anexar.",
-            "Relevance/feasibility prioritization matrix, adapted and translated — pending."
+            "Matriz de priorización relevancia/factibilidad, adaptada y traducida, pendiente de anexar.",
+            "Relevance/feasibility prioritization matrix, adapted and translated, pending."
           ),
-          t("Diagrama de entidades definidas colaborativamente — pendiente de anexar.", "Diagram of collaboratively defined entities — pending."),
+          t("Diagrama de entidades definidas colaborativamente, pendiente de anexar.", "Diagram of collaboratively defined entities, pending."),
         ],
       },
       {
         title: t("Sistema de marcadores: Mapa d'Atenció Remota", "Marker system: Mapa d'Atenció Remota"),
         body: t(
           "Para el mapa de pacientes en seguimiento remoto, se co-diseñó un sistema de marcadores basado en las variables visuales de Jacques Bertin (teórico de semiología gráfica): el tipo de icono y el color del anillo que lo rodea funcionan como canales visuales independientes. El icono comunica el tipo de caso/dispositivo, y el color del anillo comunica el estado o nivel de alerta, sin que ambas dimensiones se contaminen entre sí. Esto permite leer dos variables distintas de información en un único marcador, de forma rápida y sin ambigüedad, algo clave en un contexto de lectura a distancia.",
-          "For the map of patients under remote monitoring, a marker system was co-designed based on Jacques Bertin's visual variables (graphic semiology theorist): the icon type and the color of the ring surrounding it function as independent visual channels. The icon communicates the case/device type, and the ring color communicates status or alert level, without the two dimensions interfering with each other. This makes it possible to read two distinct variables of information in a single marker, quickly and unambiguously — key in a long-distance reading context."
+          "For the map of patients under remote monitoring, a marker system was co-designed based on Jacques Bertin's visual variables (graphic semiology theorist): the icon type and the color of the ring surrounding it function as independent visual channels. The icon communicates the case/device type, and the ring color communicates status or alert level, without the two dimensions interfering with each other. This makes it possible to read two distinct variables of information in a single marker, quickly and unambiguously, key in a long-distance reading context."
         ),
         highlight: true,
         placeholders: [
-          t("Sistema de marcadores del mapa, con datos ficticios — pendiente de anexar.", "Map marker system, with illustrative data — pending."),
+          t("Sistema de marcadores del mapa, con datos ficticios, pendiente de anexar.", "Map marker system, with illustrative data, pending."),
         ],
       },
       {
@@ -1320,7 +1339,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
           "The behavior and logic of every screen in the system was documented (including screens such as EVAT, Urgències, Hospitalització Infantil, Minerva, Mapa del Dolor, among others), establishing clear rules for what data is shown, how it updates, and under what conditions it changes visual state."
         ),
         placeholders: [
-          t("Extracto de documentación de lógica de una pantalla — pendiente de anexar.", "Excerpt of a screen's logic documentation — pending."),
+          t("Extracto de documentación de lógica de una pantalla, pendiente de anexar.", "Excerpt of a screen's logic documentation, pending."),
         ],
       },
     ],

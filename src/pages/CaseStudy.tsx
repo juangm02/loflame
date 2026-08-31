@@ -12,16 +12,34 @@ import CaseStudyTabs from "../components/CaseStudyTabs";
 import CaseStudyVideo from "../components/CaseStudyVideo";
 import ObjectiveIcon from "../components/ObjectiveIcon";
 import ObjectivesScrollShowcase from "../components/ObjectivesScrollShowcase";
-import { caseStudies, caseStudyNav, projects, nav, cta, type Bilingual, type PlaceholderVideo } from "../data/content";
+import {
+  caseStudies,
+  caseStudyNav,
+  projects,
+  nav,
+  cta,
+  type Bilingual,
+  type PlaceholderVideo,
+  type PlaceholderImage,
+} from "../data/content";
 import { useLanguage } from "../context/LanguageContext";
 import { resolveAccent, useIsDarkTheme } from "../lib/useIsDarkTheme";
 import { caseStudyVideos, caseStudyComparativaImages, caseStudyImages } from "../lib/caseStudyMedia";
 
-function isPlaceholderVideo(ph: Bilingual | PlaceholderVideo): ph is PlaceholderVideo {
+function isPlaceholderVideo(ph: Bilingual | PlaceholderVideo | PlaceholderImage): ph is PlaceholderVideo {
   return "videoKey" in ph;
 }
 
+function isPlaceholderImage(ph: Bilingual | PlaceholderVideo | PlaceholderImage): ph is PlaceholderImage {
+  return "imageKey" in ph;
+}
+
 const NAV_SLUGS = ["datascope", "juicio", "corigin", "hospital-sjd", "arrelat"];
+
+// Temporary: hide the "explore the rest of my process" closing CTA block on
+// every case study. Flip back to true to restore it — this is the only
+// line that needs to change.
+const SHOW_EXPLORE_PROCESS = false;
 
 export default function CaseStudy() {
   const { slug = "" } = useParams();
@@ -53,16 +71,20 @@ export default function CaseStudy() {
 
         <RevealOnScroll delay={0.05}>
           <CaseStudyTabs
-            items={caseStudyNav.map((label, i) => {
-              const targetSlug = NAV_SLUGS[i];
-              return {
-                key: targetSlug,
-                label: tr(label),
-                to: `/proyectos/${targetSlug}`,
-                active: targetSlug === slug,
-                disabled: !!projects.find((p) => p.slug === targetSlug)?.disabled,
-              };
-            })}
+            items={caseStudyNav
+              .map((label, i) => {
+                const targetSlug = NAV_SLUGS[i];
+                const targetProject = projects.find((p) => p.slug === targetSlug);
+                return {
+                  key: targetSlug,
+                  label: tr(label),
+                  to: `/proyectos/${targetSlug}`,
+                  active: targetSlug === slug,
+                  disabled: !!targetProject?.disabled,
+                  hidden: !!targetProject?.hidden,
+                };
+              })
+              .filter((item) => !item.hidden)}
           />
         </RevealOnScroll>
 
@@ -309,6 +331,15 @@ export default function CaseStudy() {
                           <ImagePlaceholder label={tr(ph.alt)} className="aspect-[4/3]" />
                         );
                       })()
+                    ) : isPlaceholderImage(ph) ? (
+                      (() => {
+                        const src = caseStudyImages[ph.imageKey];
+                        return src ? (
+                          <img src={src} alt={tr(ph.alt)} className="w-full rounded-2xl border border-ink/10" />
+                        ) : (
+                          <ImagePlaceholder label={tr(ph.alt)} className="aspect-[4/3]" />
+                        );
+                      })()
                     ) : (
                       <ImagePlaceholder label={tr(ph)} className="aspect-[4/3]" />
                     )}
@@ -443,8 +474,8 @@ export default function CaseStudy() {
                 <FigmaEmbed url={study.prototype.embedUrl} title={tr(study.prototype.title)} />
                 <p className="mt-3 text-center text-xs text-ink/40">
                   {tr({
-                    es: "Prototipo interactivo — hacé clic y navegá por las pantallas.",
-                    en: "Interactive prototype — click through the screens.",
+                    es: "Prototipo interactivo: hacé clic y navegá por las pantallas.",
+                    en: "Interactive prototype: click through the screens.",
                   })}
                 </p>
               </RevealOnScroll>
@@ -609,26 +640,28 @@ export default function CaseStudy() {
           </section>
         )}
 
-        <RevealOnScroll className="mt-36 flex flex-col items-center gap-6 rounded-3xl border border-ink/8 bg-card/50 px-6 py-16 text-center">
-          <motion.span
-            animate={{ y: [0, -6, 0] }}
-            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-            className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-on-accent"
-          >
-            ✦
-          </motion.span>
-          <h2 className="max-w-md font-display text-3xl font-extrabold text-ink">{tr(cta.exploreProcess)}</h2>
-          <p className="max-w-sm text-sm text-ink-soft">{tr(cta.exploreProcessSub)}</p>
-          <CTAButton href="#" variant="dark">
-            {tr(cta.goToFigma)}
-          </CTAButton>
-          <a
-            href="#top"
-            className="underline-draw mt-2 text-sm font-semibold text-ink/50"
-          >
-            {tr(nav.backToTop)}
-          </a>
-        </RevealOnScroll>
+        {SHOW_EXPLORE_PROCESS && (
+          <RevealOnScroll className="mt-36 flex flex-col items-center gap-6 rounded-3xl border border-ink/8 bg-card/50 px-6 py-16 text-center">
+            <motion.span
+              animate={{ y: [0, -6, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-on-accent"
+            >
+              ✦
+            </motion.span>
+            <h2 className="max-w-md font-display text-3xl font-extrabold text-ink">{tr(cta.exploreProcess)}</h2>
+            <p className="max-w-sm text-sm text-ink-soft">{tr(cta.exploreProcessSub)}</p>
+            <CTAButton href="#" variant="dark">
+              {tr(cta.goToFigma)}
+            </CTAButton>
+            <a
+              href="#top"
+              className="underline-draw mt-2 text-sm font-semibold text-ink/50"
+            >
+              {tr(nav.backToTop)}
+            </a>
+          </RevealOnScroll>
+        )}
       </main>
 
       <Footer />

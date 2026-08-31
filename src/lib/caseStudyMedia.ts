@@ -3,6 +3,7 @@ import hospitalKpiCardsPoster from "../assets/img/hospital-sjd-kpi-cards-poster.
 import hospitalComparativa01 from "../assets/img/hospital-sjd-comparativa-01.webp";
 import hospitalComparativa02 from "../assets/img/hospital-sjd-comparativa-02.webp";
 import hospitalApproach from "../assets/img/hospital-sjd-approach.webp";
+import hospitalHLiquid from "../assets/img/hospital-sjd-hliquid.webp";
 
 /**
  * Real media (video clips, images) referenced by key from content.ts,
@@ -23,6 +24,11 @@ import hospitalApproach from "../assets/img/hospital-sjd-approach.webp";
  * ("SANT JOAN DE DEU/Data Wall/Portfolio assets/Approach.jpg", 1280x1920),
  * bottom-aligned square crop (keeps the DataWall + desks, drops the plain
  * ceiling) resized to 900x900 and converted JPG -> WebP: 348KB -> 96KB.
+ *
+ * caseStudyImages["hospital-sjd-hliquid"]: Hospital Líquid's three-screen
+ * DataWall panel ("SANT JOAN DE DEU/Data Wall/Portfolio assets/HLiquid.png",
+ * 1672x941), shown at its natural aspect ratio (no crop), downsized to
+ * 1400px wide and converted PNG -> WebP: 1.6MB -> 98KB.
  */
 export const caseStudyVideos: Record<string, { src: string; poster: string }> = {
   "hospital-kpi-cards": { src: hospitalKpiCards, poster: hospitalKpiCardsPoster },
@@ -35,4 +41,5 @@ export const caseStudyComparativaImages = {
 
 export const caseStudyImages: Record<string, string> = {
   "hospital-sjd-approach": hospitalApproach,
+  "hospital-sjd-hliquid": hospitalHLiquid,
 };
