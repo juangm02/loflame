@@ -52,7 +52,10 @@
       "Bash(cp __TRACKED_VAR__/CompF-crf20.mp4 /Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/assets/video/hospital-sjd-kpi-cards.mp4)",
       "Bash(cp __TRACKED_VAR__/CompF-poster.jpg /Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/assets/img/hospital-sjd-kpi-cards-poster.jpg)",
       "Bash(awk '{print $2}')",
-      "Bash(git commit -m 'Fill Hospital SJD '\\\\''Sistema de diseño'\\\\'' placeholder with real clip *)"
+      "Bash(git commit -m 'Fill Hospital SJD '\\\\''Sistema de diseño'\\\\'' placeholder with real clip *)",
+      "Bash(git commit -m 'Refine Hospital SJD scroll-jack: gap, card heights, anchor, pull *)",
+      "Bash(xargs -I{} echo {})",
+      "Bash(git commit *)"
     ]
   }
 }

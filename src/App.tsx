@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import Portfolio from "./pages/Portfolio";
 import Curriculum from "./pages/Curriculum";
 import CaseStudy from "./pages/CaseStudy";
+import BottomVignette from "./components/BottomVignette";
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -32,6 +33,7 @@ export default function App() {
   return (
     <div id="top">
       <ScrollToTop />
+      <BottomVignette />
       <AnimatePresence mode="wait" initial={false}>
         <Routes location={location} key={location.pathname}>
           <Route

@@ -10,7 +10,9 @@ const MIN_STEP_DELTA = 180; // px — raising this also accentuates the pull pre
 // travel (and see) before that happens
 const APPROACH_GAIN = 1.15; // how eagerly we walk toward lockY per unit of incoming delta while approaching
 const MAX_PULL = 48; // px — how far the rubber-band preview can travel before a step commits
-const PULL_RELEASE_MS = 180; // ms of no input before an uncommitted pull springs back to rest
+const IMAGE_GAP = 40; // px between image 1 and image 2 in the row, visible as they slide past each other
+const PULL_RELEASE_MS = 40; // ms of no input before an uncommitted pull springs back — kept low so lifting
+// off feels immediate, just enough to not release between two wheel ticks of the same continuous gesture
 const SETTLE_TRANSITION = "transform 0.6s cubic-bezier(0.22, 1, 0.36, 1)"; // committing a real step
 const RELEASE_TRANSITION = "transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)"; // springing back, slight overshoot
 
@@ -297,9 +299,9 @@ export default function ObjectivesScrollShowcase({
       <div className="mx-auto mt-6 w-full max-w-3xl">
         <div ref={viewportRef} className="mx-auto w-full overflow-hidden">
           <div
-            className="flex"
+            className="flex gap-x-10"
             style={{
-              transform: `translateX(${-(index * containerWidth) + pull}px)`,
+              transform: `translateX(${-(index * (containerWidth + IMAGE_GAP)) + pull}px)`,
               transition,
             }}
           >
