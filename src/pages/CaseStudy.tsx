@@ -51,6 +51,10 @@ export default function CaseStudy() {
   if (!study || !meta) return <Navigate to="/" replace />;
 
   const accent = resolveAccent(meta.accent, meta.accentDark, isDark);
+  // Hospital SJD's body copy runs notably longer than the other case
+  // studies — at full section width the lines get long enough to feel
+  // dense, so its descriptive paragraphs flow into two columns instead.
+  const twoColumnBody = slug === "hospital-sjd";
 
   return (
     <div>
@@ -123,9 +127,9 @@ export default function CaseStudy() {
         )}
 
         <section className="mt-20 grid gap-10 lg:grid-cols-[1fr_320px]">
-          <RevealOnScroll className="space-y-5">
+          <RevealOnScroll className={`space-y-5 ${twoColumnBody ? "sm:columns-2 sm:gap-x-10 sm:space-y-0" : ""}`}>
             {study.briefParagraphs.map((p, i) => (
-              <p key={i} className="text-[15px] leading-relaxed text-ink-soft">
+              <p key={i} className={`text-[15px] leading-relaxed text-ink-soft ${twoColumnBody ? "sm:mb-5" : ""}`}>
                 {tr(p)}
               </p>
             ))}
@@ -287,7 +291,7 @@ export default function CaseStudy() {
                 {tr(proc.title)}
               </h2>
               <p
-                className={`mt-5 max-w-2xl text-[15px] leading-relaxed ${
+                className={`mt-5 text-[15px] leading-relaxed ${twoColumnBody ? "max-w-4xl sm:columns-2 sm:gap-x-10" : "max-w-2xl"} ${
                   proc.highlight ? "text-on-accent/70 dark:text-ink-soft" : "text-ink-soft"
                 }`}
               >
