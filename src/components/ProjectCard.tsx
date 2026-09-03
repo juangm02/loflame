@@ -7,6 +7,8 @@ import { logos, covers } from "../lib/projectAssets";
 import { resolveAccent, useIsDarkTheme } from "../lib/useIsDarkTheme";
 import RevealOnScroll from "./RevealOnScroll";
 
+const MotionLink = motion.create(Link);
+
 export default function ProjectCard({ project, index }: { project: ProjectMeta; index: number }) {
   const { tr } = useLanguage();
   const cover = covers[project.cover];
@@ -14,12 +16,16 @@ export default function ProjectCard({ project, index }: { project: ProjectMeta; 
   const initial = project.name.trim().charAt(0).toUpperCase();
   const accent = resolveAccent(project.accent, project.accentDark, useIsDarkTheme());
 
+  const Wrapper = project.disabled ? motion.div : MotionLink;
+  const wrapperProps = project.disabled ? {} : { to: `/proyectos/${project.slug}` };
+
   return (
     <RevealOnScroll delay={index * 0.05}>
-      <motion.div
+      <Wrapper
+        {...wrapperProps}
         whileHover={project.disabled ? undefined : { y: -4 }}
         transition={{ type: "spring", stiffness: 260, damping: 22 }}
-        className="group overflow-hidden rounded-3xl border border-ink/8 bg-card/60 shadow-sm transition-shadow duration-300 hover:shadow-xl hover:shadow-black/5"
+        className="group block overflow-hidden rounded-3xl border border-ink/8 bg-card/60 shadow-sm transition-shadow duration-300 hover:shadow-xl hover:shadow-black/5"
       >
         <div className="flex flex-col sm:flex-row">
           <div className="relative aspect-[4/3] w-full overflow-hidden sm:aspect-auto sm:w-64 sm:shrink-0">
@@ -83,17 +89,14 @@ export default function ProjectCard({ project, index }: { project: ProjectMeta; 
             <p className="text-[15px] leading-relaxed text-ink-soft">{tr(project.description)}</p>
 
             {!project.disabled && (
-              <Link
-                to={`/proyectos/${project.slug}`}
-                className="mt-auto inline-flex w-fit items-center gap-2 pt-2 text-sm font-bold text-ink"
-              >
+              <span className="mt-auto inline-flex w-fit items-center gap-2 pt-2 text-sm font-bold text-ink">
                 <span className="underline-draw">{tr(cta.goToProject)}</span>
                 <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
-              </Link>
+              </span>
             )}
           </div>
         </div>
-      </motion.div>
+      </Wrapper>
     </RevealOnScroll>
   );
 }

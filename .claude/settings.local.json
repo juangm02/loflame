@@ -69,7 +69,9 @@
       "Bash(awk 'NR>1342 && /—/' /Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/data/content.ts)",
       "Bash(ls -lh '/Users/jonalon/Downloads/matriz_priorizacion \\(1\\).svg')",
       "Bash(echo \"---peso del bloque de metadata c2pa---\")",
-      "Bash(cp \"/Users/jonalon/Downloads/matriz_priorizacion \\(1\\).svg\" \"/Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/assets/img/hospital-sjd-matriz-priorizacion.svg\" *)"
+      "Bash(cp \"/Users/jonalon/Downloads/matriz_priorizacion \\(1\\).svg\" \"/Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/assets/img/hospital-sjd-matriz-priorizacion.svg\" *)",
+      "Bash(awk 'NR==414{print NR\": \"$0} NR==707{print NR\": \"$0} NR==1076{print NR\": \"$0} NR==1157{print NR\": \"$0} NR==1367{print NR\": \"$0}' content.ts)",
+      "Bash(git fetch *)"
     ]
   }
 }

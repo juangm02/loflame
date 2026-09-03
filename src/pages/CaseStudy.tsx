@@ -51,10 +51,12 @@ export default function CaseStudy() {
   if (!study || !meta) return <Navigate to="/" replace />;
 
   const accent = resolveAccent(meta.accent, meta.accentDark, isDark);
-  // Hospital SJD's body copy runs notably longer than the other case
-  // studies — at full section width the lines get long enough to feel
-  // dense, so its descriptive paragraphs flow into two columns instead.
-  const twoColumnBody = slug === "hospital-sjd";
+  // Hospital SJD and Arrelat's body copy runs notably longer than the
+  // other case studies — at full section width the lines get long enough
+  // to feel dense, so their descriptive paragraphs flow into two columns
+  // instead. Datascope, Corigin and Juicio don't use processSections and
+  // stay untouched.
+  const twoColumnBody = slug === "hospital-sjd" || slug === "arrelat";
 
   return (
     <div>
@@ -290,13 +292,15 @@ export default function CaseStudy() {
               >
                 {tr(proc.title)}
               </h2>
-              <p
-                className={`mt-5 text-[15px] leading-relaxed ${twoColumnBody ? "max-w-4xl sm:columns-2 sm:gap-x-10" : "max-w-2xl"} ${
-                  proc.highlight ? "text-on-accent/70 dark:text-ink-soft" : "text-ink-soft"
-                }`}
-              >
-                {tr(proc.body)}
-              </p>
+              <div className={twoColumnBody ? "mt-5 grid gap-10 sm:grid-cols-2 lg:grid-cols-3" : undefined}>
+                <p
+                  className={`text-[15px] leading-relaxed ${
+                    twoColumnBody ? "sm:col-span-2 lg:columns-2 lg:gap-x-10" : "mt-5 max-w-2xl"
+                  } ${proc.highlight ? "text-on-accent/70 dark:text-ink-soft" : "text-ink-soft"}`}
+                >
+                  {tr(proc.body)}
+                </p>
+              </div>
               {proc.bullets && (
                 <ul className="mt-5 max-w-2xl space-y-2">
                   {proc.bullets.map((b, j) => (

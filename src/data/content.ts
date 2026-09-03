@@ -35,7 +35,7 @@ export const nav = {
   portfolio: t("Portafolio", "Portfolio"),
   curriculum: t("Currículum", "Curriculum"),
   aboutMe: t("Sobre mí", "About me"),
-  myProjects: t("Mis Proyectos", "My projects"),
+  myProjects: t("Mis proyectos", "My projects"),
   back: t("Volver", "Back"),
   backToTop: t("Volver arriba", "Back to top"),
 };
@@ -165,7 +165,7 @@ export const portfolioPage = {
     { name: "Illustrator", mono: "Ai", color: "#FF9A00" },
     { name: "After Effects", mono: "Ae", color: "#9999FF" },
   ],
-  projectsTitle: t("Mis Proyectos", "My projects"),
+  projectsTitle: t("Mis proyectos", "My projects"),
 };
 
 export interface ProjectMeta {
