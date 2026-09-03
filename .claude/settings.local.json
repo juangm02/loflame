@@ -66,7 +66,10 @@
       "Bash(ssh-keygen -t ed25519 -C \"juangarciamarques@gmail.com\" -f ~/.ssh/id_ed25519 -N \"\")",
       "Bash(pbcopy)",
       "Bash(ssh -o StrictHostKeyChecking=accept-new -T git@github.com)",
-      "Bash(awk 'NR>1342 && /—/' /Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/data/content.ts)"
+      "Bash(awk 'NR>1342 && /—/' /Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/data/content.ts)",
+      "Bash(ls -lh '/Users/jonalon/Downloads/matriz_priorizacion \\(1\\).svg')",
+      "Bash(echo \"---peso del bloque de metadata c2pa---\")",
+      "Bash(cp \"/Users/jonalon/Downloads/matriz_priorizacion \\(1\\).svg\" \"/Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/assets/img/hospital-sjd-matriz-priorizacion.svg\" *)"
     ]
   }
 }

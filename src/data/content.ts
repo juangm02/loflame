@@ -1299,10 +1299,10 @@ export const caseStudies: Record<string, CaseStudyContent> = {
         ],
         placeholders: [
           {
-            imageKey: "hospital-sjd-hliquid",
+            imageKey: "hospital-sjd-lobby",
             alt: t(
-              "Panel del DataWall de Hospital Líquid: mapa de atención remota, pacientes en seguimiento y alertas activas.",
-              "Hospital Líquid's DataWall panel: remote-care map, patients being tracked, and active alerts."
+              "Pantalla de gran formato en el acceso al hospital, con una visualización de datos de la actividad asistencial y la leyenda de servicios (URG, HOSP, CEX, HOSP DIA, BQ, PCCB, entre otros).",
+              "Large-format display at the hospital entrance, showing a data visualization of care activity alongside the service legend (URG, HOSP, CEX, HOSP DIA, BQ, PCCB, among others)."
             ),
           },
         ],
@@ -1314,11 +1314,13 @@ export const caseStudies: Record<string, CaseStudyContent> = {
           "For the 7 screens in the Hospital Líquid ecosystem, since there was no prior version to build on, a content definition workshop was organized together with the responsible clinical and technical teams. The goal was to collaboratively decide what to show (content and indicators) before moving on to how to show it (design). Entity/section definition: the key sections to represent were agreed on collaboratively (Patients, Alerts, Devices & connectivity, Map) along with what data was relevant to show for each. Prioritization matrix: a two-axis quadrant was used to decide which indicators would enter the immediate MVP and which would be left for a later phase: clinical-operational relevance on the vertical axis, and feasibility of having it ready within the MVP timeline on the horizontal axis. This exercise made it possible to scope the MVP objectively, ensuring every indicator included brought real value to the care team's decision-making."
         ),
         placeholders: [
-          t(
-            "Matriz de priorización relevancia/factibilidad, adaptada y traducida, pendiente de anexar.",
-            "Relevance/feasibility prioritization matrix, adapted and translated, pending."
-          ),
-          t("Diagrama de entidades definidas colaborativamente, pendiente de anexar.", "Diagram of collaboratively defined entities, pending."),
+          {
+            imageKey: "hospital-sjd-matriz-priorizacion",
+            alt: t(
+              "Matriz de priorización del workshop: indicadores agrupados en prioridad alta (van al MVP), media (fase posterior) y baja (descartada), con la entidad de cada uno codificada por color (pacientes, alertas, dispositivos y conectividad, mapa).",
+              "The workshop's prioritization matrix: indicators grouped into high priority (going into the MVP), medium (later phase), and low (dropped), each color-coded by entity (patients, alerts, devices and connectivity, map)."
+            ),
+          },
         ],
       },
       {
@@ -1329,7 +1331,13 @@ export const caseStudies: Record<string, CaseStudyContent> = {
         ),
         highlight: true,
         placeholders: [
-          t("Sistema de marcadores del mapa, con datos ficticios, pendiente de anexar.", "Map marker system, with illustrative data, pending."),
+          {
+            imageKey: "hospital-sjd-hliquid",
+            alt: t(
+              "Mapa d'Atenció Remota en el DataWall: cada paciente en seguimiento aparece como un marcador donde el icono indica el tipo de caso y el color del anillo el nivel de alerta, junto a los paneles de pacientes y alertas.",
+              "The Mapa d'Atenció Remota on the DataWall: each tracked patient appears as a marker whose icon carries the case type and whose ring color carries the alert level, next to the patients and alerts panels."
+            ),
+          },
         ],
       },
       {
