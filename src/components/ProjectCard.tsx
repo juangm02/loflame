@@ -89,7 +89,7 @@ export default function ProjectCard({ project, index }: { project: ProjectMeta; 
             <p className="text-[15px] leading-relaxed text-ink-soft">{tr(project.description)}</p>
 
             {!project.disabled && (
-              <span className="mt-auto inline-flex w-fit items-center gap-2 pt-2 text-sm font-bold text-ink">
+              <span className="mt-auto inline-flex w-fit items-center gap-2 pt-2 text-sm font-bold text-ink-action">
                 <span className="underline-draw">{tr(cta.goToProject)}</span>
                 <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
               </span>

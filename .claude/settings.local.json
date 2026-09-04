@@ -71,7 +71,16 @@
       "Bash(echo \"---peso del bloque de metadata c2pa---\")",
       "Bash(cp \"/Users/jonalon/Downloads/matriz_priorizacion \\(1\\).svg\" \"/Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/assets/img/hospital-sjd-matriz-priorizacion.svg\" *)",
       "Bash(awk 'NR==414{print NR\": \"$0} NR==707{print NR\": \"$0} NR==1076{print NR\": \"$0} NR==1157{print NR\": \"$0} NR==1367{print NR\": \"$0}' content.ts)",
-      "Bash(git fetch *)"
+      "Bash(git fetch *)",
+      "WebSearch",
+      "WebFetch(domain:forum.figma.com)",
+      "WebFetch(domain:www.figma.com)",
+      "WebFetch(domain:developers.figma.com)",
+      "Bash(python3 -m pip install --quiet numpy)",
+      "Bash(cp /private/tmp/claude-501/-Users-jonalon-Documents-Desig-nare-GoLivePortfolio/31a7f092-acea-4b70-8356-c526c53dc109/scratchpad/datascope_out/*.webp /Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/assets/img/ *)",
+      "Bash(grep -n \"study.reideate &&\\\\|study.onboarding &&\\\\|study.featureShowcase &&\\\\|^        \\)}$\" /Users/jonalon/Documents/Desig-nare/GoLivePortfolio/src/pages/CaseStudy.tsx)",
+      "Bash(grep -iE \"\\\\.\\(png|jpg|jpeg|webp\\)$\")",
+      "Bash(git reset *)"
     ]
   }
 }

@@ -34,12 +34,12 @@ export default function Header({ right }: { right?: ReactNode }) {
           <Logo />
           <button
             onClick={toggle}
-            className="flex items-center gap-1 rounded-full border border-ink/15 px-3 py-1.5 text-xs font-semibold tracking-wide text-ink/80 transition hover:border-ink/40 hover:text-ink cursor-pointer"
+            className="flex items-center gap-1 rounded-full border border-ink/15 px-3 py-1.5 text-xs font-semibold tracking-wide text-ink-action/80 transition hover:border-ink/40 hover:text-ink-action cursor-pointer"
             aria-label="Toggle language"
           >
-            <span className={lang === "es" ? "text-ink" : "text-ink/35"}>ES</span>
-            <span className="text-ink/25">/</span>
-            <span className={lang === "en" ? "text-ink" : "text-ink/35"}>EN</span>
+            <span className={lang === "es" ? "text-ink-action" : "text-ink-action/35"}>ES</span>
+            <span className="text-ink-action/25">/</span>
+            <span className={lang === "en" ? "text-ink-action" : "text-ink-action/35"}>EN</span>
           </button>
         </div>
 
@@ -58,7 +58,7 @@ export default function Header({ right }: { right?: ReactNode }) {
                     transition={{ type: "spring", stiffness: 400, damping: 32 }}
                   />
                 )}
-                <span className={`relative z-10 ${tabItem.active ? "text-on-accent" : "text-ink/70"}`}>
+                <span className={`relative z-10 ${tabItem.active ? "text-on-accent" : "text-ink-action/70"}`}>
                   {tabItem.label}
                 </span>
               </Link>

@@ -53,13 +53,13 @@ export default function Portfolio() {
           <>
             <button
               onClick={() => scrollTo(aboutRef)}
-              className={`underline-draw hidden transition-colors sm:inline ${active === "about" ? "text-ink" : "text-ink/45"}`}
+              className={`underline-draw hidden transition-colors sm:inline ${active === "about" ? "text-ink-action" : "text-ink-action/45"}`}
             >
               {tr(nav.aboutMe)}
             </button>
             <button
               onClick={() => scrollTo(projectsRef)}
-              className={`underline-draw hidden transition-colors sm:inline ${active === "projects" ? "text-ink" : "text-ink/45"}`}
+              className={`underline-draw hidden transition-colors sm:inline ${active === "projects" ? "text-ink-action" : "text-ink-action/45"}`}
             >
               {tr(nav.myProjects)}
             </button>

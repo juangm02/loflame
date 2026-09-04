@@ -20,10 +20,10 @@ export default function Curriculum() {
       <Header
         right={
           <>
-            <a href="#" className="underline-draw hidden sm:inline">
+            <a href="#" className="underline-draw hidden text-ink-action sm:inline">
               Behance
             </a>
-            <a href="#" className="underline-draw hidden sm:inline">
+            <a href="#" className="underline-draw hidden text-ink-action sm:inline">
               LinkedIn
             </a>
           </>
@@ -81,10 +81,10 @@ export default function Curriculum() {
           </RevealOnScroll>
           <RevealOnScroll delay={0.1} className="flex flex-col justify-center gap-1.5">
             <p className="font-display text-2xl italic font-semibold text-ink">{tr(site.location)}</p>
-            <a href={`mailto:${site.email}`} className="underline-draw inline-block w-fit text-lg text-ink-soft">
+            <a href={`mailto:${site.email}`} className="underline-draw inline-block w-fit text-lg text-ink-action">
               {site.email}
             </a>
-            <a href="tel:+34610902771" className="underline-draw inline-block w-fit text-lg text-ink-soft">
+            <a href="tel:+34610902771" className="underline-draw inline-block w-fit text-lg text-ink-action">
               {site.phone}
             </a>
           </RevealOnScroll>

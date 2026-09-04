@@ -21,6 +21,12 @@
   --color-paper-dim: #e8e7e3;
   --color-ink: #14161f;
   --color-ink-soft: #4a4b57;
+  /* Interactive text (nav links, tab bars, buttons, "back to top"-style
+     links) — kept as its own branch, separate from --color-ink, so a
+     titles/subtitles color tweak never bleeds into actionable elements
+     again. Same value as --color-ink in light mode; diverges in dark mode
+     below. */
+  --color-ink-action: #14161f;
   --color-ghost: #d8d7d2;
 
   /* Card/surface token: replaces literal "white" so cards invert in dark mode. */
@@ -72,8 +78,16 @@
 :root[data-theme="dark"] {
   --color-paper: #131316;
   --color-paper-dim: #1c1c22;
-  --color-ink: #f1f0ee;
-  --color-ink-soft: #a3a2ab;
+  /* Test: inverted from the original (ink #f1f0ee / ink-soft #a3a2ab) so
+     titles/subtitles (text-ink) read as a gray and body copy (text-ink-soft)
+     reads pure white — flips which layer feels "loud" without touching
+     every component's classes. Ink darkened twice more from the original
+     swap's #a3a2ab per feedback (#86858d, then this). */
+  --color-ink: #6f6e76;
+  --color-ink-soft: #ffffff;
+  /* Actionables (nav, tabs, buttons, links) stay white — independent of
+     the darker titles/subtitles gray above. */
+  --color-ink-action: #ffffff;
   --color-ghost: #35353c;
   --color-card: #1c1c22;
 

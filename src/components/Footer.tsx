@@ -8,8 +8,8 @@ export default function Footer() {
   const { lang, tr } = useLanguage();
 
   return (
-    <footer className="relative overflow-hidden bg-surface-feature text-on-accent dark:border-t-[0.5px] dark:border-ghost dark:text-ink">
-      <div className="mx-auto max-w-6xl px-6 py-24 sm:px-8 sm:py-32">
+    <footer className="relative z-50 overflow-hidden bg-surface-feature text-on-accent dark:border-t-[0.5px] dark:border-ghost dark:text-ink">
+      <div className="mx-auto max-w-6xl px-6 py-8 sm:px-8">
         <RevealOnScroll>
           <p className="font-display text-lg italic text-on-accent/70 dark:text-ink-soft">
             {lang === "es" ? "Gracias por tu atención" : "Thanks for your attention"} 🙂👋
@@ -17,7 +17,7 @@ export default function Footer() {
         </RevealOnScroll>
 
         <RevealOnScroll delay={0.05}>
-          <h2 className="mt-4 max-w-xl font-display text-5xl font-bold leading-[1.05] sm:text-6xl">
+          <h2 className="mt-1 max-w-xl font-display text-5xl font-bold leading-[1.05] sm:text-6xl">
             {lang === "es" ? (
               <>
                 ¿Interesad@ en
@@ -52,7 +52,7 @@ export default function Footer() {
                   </>
                 )}
               </p>
-              <ul className="mt-5 space-y-2 text-sm text-on-accent/80 dark:text-ink-soft">
+              <ul className="mt-5 space-y-2 text-sm text-on-accent/80 dark:text-ink-action">
                 <li>
                   <FooterLink href="#">Be&nbsp;&nbsp;{site.behance}</FooterLink>
                 </li>

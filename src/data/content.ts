@@ -242,7 +242,10 @@ export interface CaseStudyContent {
     subtitle: Bilingual;
     body: Bilingual;
     segmentationNote?: Bilingual;
-    placeholder?: Bilingual;
+    placeholder?: Bilingual | PlaceholderImage;
+    /** Second image slot, right after segmentationNote — Datascope only
+     * (see the inlineResearchImage flag in CaseStudy.tsx). */
+    extraImage?: PlaceholderImage;
     categories?: { title: Bilingual; questions: Bilingual[] }[];
     quotes?: Bilingual[];
   };
@@ -257,6 +260,9 @@ export interface CaseStudyContent {
     title: Bilingual;
     body: Bilingual;
     placeholder?: Bilingual;
+    /** Real screenshot shown alongside the title/body — only used by the
+     * `tree` branch, next to the ArchitectureTree diagram below it. */
+    image?: PlaceholderImage;
     tree?: {
       root: Bilingual;
       branches: { title: Bilingual; groups: { title: Bilingual; items: Bilingual[] }[] }[];
@@ -300,18 +306,23 @@ export interface CaseStudyContent {
   onboarding?: {
     title: Bilingual;
     body: Bilingual;
-    placeholder?: Bilingual;
+    placeholder?: Bilingual | PlaceholderImage;
   };
   featureShowcase?: {
     title: Bilingual;
     subtitle: Bilingual;
+    body?: Bilingual;
     features: {
       title: Bilingual;
       subtitle?: Bilingual;
       body: Bilingual;
       bullets?: { title: Bilingual; body: Bilingual }[];
       status?: Bilingual;
-      placeholder: Bilingual;
+      placeholder: Bilingual | PlaceholderImage;
+      /** Skip rendering the media slot for this feature entirely (image
+       * not ready yet) — text runs full width instead of the usual
+       * two-column layout. */
+      hideMedia?: boolean;
     }[];
   };
   testimonials?: {
@@ -447,6 +458,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
       "Mi enfoque de diseño en esta empresa parte de entender los flujos operativos que atraviesan los usuarios y sus equipos en terreno y en oficina, para luego traducirlos en experiencias digitales claras y alineadas con los objetivos del negocio. Así, encuentro los puntos de fricción en la interacción con herramientas como formularios digitales, asignación de tareas, órdenes de trabajo y reportes automatizados, para luego rediseñar esas experiencias centrándome en usabilidad y escalabilidad para implementación en web y mobile.",
       "My design approach here starts by understanding the operational flows users and teams go through, in the field and in the office, then translating them into clear digital experiences aligned with business goals. I locate friction points in tools such as digital forms, task assignment, work orders and automated reports, then redesign those experiences focusing on usability and scalability across web and mobile."
     ),
+    approachImage: { key: "datascope-approach", alt: t("Captura del proceso de diseño de Datascope.", "Screenshot of the Datascope design process.") },
     objectivesTitle: t("Objetivos", "Objectives"),
     objectives: [
       t(
@@ -541,10 +553,20 @@ export const caseStudies: Record<string, CaseStudyContent> = {
         "Las preguntas fueron segmentadas según tres aspectos principales que nos ayudaron a orientar nuestra etapa de empatización.",
         "The questions were segmented into three main areas that helped guide our empathize stage."
       ),
-      placeholder: t(
-        "Plantilla de encuesta y desglose por categorías (general/actitudinal, basado en uso, basado en features), pendiente de anexar captura.",
-        "Survey template and category breakdown (general/attitudinal, usage-based, feature-based), screenshot pending."
-      ),
+      placeholder: {
+        imageKey: "datascope-research-survey",
+        alt: t(
+          "Plantilla de encuesta y desglose por categorías (general/actitudinal, basado en uso, basado en features).",
+          "Survey template and category breakdown (general/attitudinal, usage-based, feature-based)."
+        ),
+      },
+      extraImage: {
+        imageKey: "datascope-research-survey-2",
+        alt: t(
+          "Detalle adicional de la encuesta y sus resultados.",
+          "Additional detail of the survey and its results."
+        ),
+      },
     },
     opportunities: {
       title: t("Definiendo nuestras oportunidades", "Defining our opportunities"),
@@ -581,14 +603,21 @@ export const caseStudies: Record<string, CaseStudyContent> = {
         "Diseñamos una experiencia de introducción a la plataforma que guía a los usuarios paso a paso según su rol y nivel técnico. El onboarding se activa de forma contextual al momento de usar funcionalidades críticas como la creación de formularios de inspección, asignación de tareas, el registro de hallazgos y la conexión a integraciones, garantizando que incluso los operarios menos familiarizados con herramientas digitales puedan completar sus procesos sin bloqueos.",
         "We designed an introductory experience that guides users step by step based on their role and technical level. Onboarding triggers contextually when critical features are used (creating inspection forms, assigning tasks, logging findings, connecting integrations), so that even operators less familiar with digital tools can complete their processes without getting stuck."
       ),
-      placeholder: t(
-        "Capturas de la guía de onboarding contextual, pendiente de anexar.",
-        "Contextual onboarding guide screenshots, pending."
-      ),
+      placeholder: {
+        imageKey: "datascope-onboarding",
+        alt: t(
+          "Capturas de la guía de onboarding contextual.",
+          "Contextual onboarding guide screenshots."
+        ),
+      },
     },
     featureShowcase: {
       title: t("Diseño lo-fi", "Lo-fi design"),
       subtitle: t("Rediseño web y mobile", "Web and mobile redesign"),
+      body: t(
+        "Para cada mejora y feature priorizada, primero definíamos una arquitectura de la solución que sirviera de base para bocetar distintas propuestas, las cuales se validaban con líderes y stakeholders antes de avanzar a una etapa de mayor fidelidad.",
+        "For each prioritized improvement and feature, we first defined a solution architecture that served as the foundation for sketching different proposals, which were then validated with users and stakeholders before moving into a higher-fidelity stage."
+      ),
       features: [
         {
           title: t("Tareas Asignadas", "Assigned Tasks"),
@@ -596,11 +625,13 @@ export const caseStudies: Record<string, CaseStudyContent> = {
             "La feature de Tareas Asignadas permite distribuir responsabilidades de manera clara y trazable dentro de la operación. Los supervisores pueden asignar formularios de inspección a distintos usuarios, asegurando que cada reporte registrado en terreno tenga seguimiento, resolución y evidencia documentada. Esto no solo mejora la eficiencia, sino que también activa el uso de la plataforma como centro de coordinación.",
             "The Assigned Tasks feature distributes responsibilities clearly and traceably across the operation. Supervisors can assign inspection forms to different users, making sure every report logged in the field has follow-up, resolution and documented evidence. This not only improves efficiency but also drives adoption of the platform as a coordination hub."
           ),
-          status: t("Arrastra para ver más", "Drag to see more"),
-          placeholder: t(
-            "Carrusel de pantallas de Tareas Asignadas (web y mobile), pendiente de anexar.",
-            "Assigned Tasks screen carousel (web and mobile), pending."
-          ),
+          placeholder: {
+            imageKey: "datascope-tasks-carousel",
+            alt: t(
+              "Carrusel de pantallas de Tareas Asignadas (web y mobile).",
+              "Assigned Tasks screen carousel (web and mobile)."
+            ),
+          },
         },
         {
           title: t("Cronograma de Tareas Asignadas", "Assigned Tasks Timeline"),
@@ -609,7 +640,10 @@ export const caseStudies: Record<string, CaseStudyContent> = {
             "Right now, scheduling and visualizing tasks on the platform happens exclusively through a table: orderly, but not great for quickly grasping the status and distribution of activities. Adding a calendar-style view will significantly raise the accessibility and usability of this feature, driving adoption among operational and administrative teams."
           ),
           status: t("Otro proyecto destacado (aún no liberado)", "Other project highlight (not yet released)"),
-          placeholder: t("Mockup de vista tipo calendario, pendiente de anexar.", "Calendar-view mockup, pending."),
+          placeholder: {
+            imageKey: "datascope-tasks-calendar",
+            alt: t("Mockup de vista tipo calendario.", "Calendar-view mockup."),
+          },
         },
         {
           title: t("Firmas", "Signatures"),
@@ -643,6 +677,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
           ],
           status: t("Otro proyecto destacado (aún no liberado)", "Other project highlight (not yet released)"),
           placeholder: t("Flujo de firmas rediseñado, pendiente de anexar.", "Redesigned signature flow, pending."),
+          hideMedia: true,
         },
         {
           title: t("Integraciones", "Integrations"),
@@ -669,6 +704,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
           ],
           status: t("Otro proyecto destacado (aún no liberado)", "Other project highlight (not yet released)"),
           placeholder: t("Diagrama de integraciones, pendiente de anexar.", "Integrations diagram, pending."),
+          hideMedia: true,
         },
       ],
     },
@@ -941,6 +977,13 @@ export const caseStudies: Record<string, CaseStudyContent> = {
     },
     architecture: {
       title: t("Arquitectura en acción", "Architecture in action"),
+      image: {
+        imageKey: "corigin-architecture",
+        alt: t(
+          "Captura de la arquitectura de Corigin en funcionamiento.",
+          "Screenshot of Corigin's architecture in action."
+        ),
+      },
       body: t(
         "La arquitectura y los primeros wireframes se desarrollaron para equilibrar claridad y libertad. Un menú lateral estable organiza proyectos y herramientas, mientras que un canvas central flexible permite capturar y reorganizar ideas. Los wireframes lo-fi validaron ese flujo, mostrando cómo los usuarios crean tarjetas rápidamente, mezclan texto e imágenes, y alternan entre una vista estructurada y un canvas libre. Esta fase se centró en asegurar que la experiencia se sintiera ligera, intuitiva y adaptable desde la primera interacción.",
         "The architecture and early wireframes were developed to balance clarity and freedom. A stable left-side menu organizes projects and tools, while a flexible central canvas allows users to capture and reorganize ideas. The low-fi wireframes validated this flow, showing how users create cards quickly, mix text and images, and switch between a structured view and a free canvas. This phase focused on ensuring the experience felt light, intuitive, and adaptable from the very first interaction."
@@ -1024,7 +1067,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
         "After exploring multiple directions, the process converged on a clear proposal: a platform that balances speed, flexibility, and optional structure. With the architecture and key interactions validated, the next step was to materialize these decisions into a prototype that would allow visualization of the real user experience and test the essence of the product."
       ),
       embedUrl:
-        "https://www.figma.com/proto/LiOkALKdwhBI53DmtqJczD/UX-UI_PruebaTecnica_Flare?node-id=37-20763&viewport=-2432%2C-2880%2C0.11&t=wg0wKuhLkW327HQW-1&scaling=min-zoom&content-scaling=fixed&starting-point-node-id=37%3A20763&page-id=0%3A1",
+        "https://www.figma.com/proto/LiOkALKdwhBI53DmtqJczD/UX-UI_PruebaTecnica_Flare?node-id=37-20763&viewport=-2432%2C-2880%2C0.11&t=wg0wKuhLkW327HQW-1&scaling=min-zoom&content-scaling=responsive&starting-point-node-id=37%3A20763&page-id=0%3A1&footer=false",
       mockup: {
         appName: "Corigin",
         tabs: ["Core", "Origin", "Profile"],
@@ -1347,7 +1390,13 @@ export const caseStudies: Record<string, CaseStudyContent> = {
           "The behavior and logic of every screen in the system was documented (including screens such as EVAT, Urgències, Hospitalització Infantil, Minerva, Mapa del Dolor, among others), establishing clear rules for what data is shown, how it updates, and under what conditions it changes visual state."
         ),
         placeholders: [
-          t("Extracto de documentación de lógica de una pantalla, pendiente de anexar.", "Excerpt of a screen's logic documentation, pending."),
+          {
+            imageKey: "hospital-sjd-documentation",
+            alt: t(
+              "Extracto ilustrativo de la documentación de lógica de pantallas del DataWall.",
+              "Illustrative excerpt of the DataWall's screen logic documentation."
+            ),
+          },
         ],
       },
     ],

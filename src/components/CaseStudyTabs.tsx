@@ -50,7 +50,7 @@ export default function CaseStudyTabs({ items }: { items: TabItem[] }) {
           aria-label="Scroll left"
           className="absolute left-0 top-0 z-10 hidden h-full items-center bg-gradient-to-r from-paper via-paper/95 to-transparent py-1 pl-0.5 pr-6 sm:flex"
         >
-          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-ink/10 bg-card/90 text-ink/60 shadow-sm transition-transform hover:scale-105">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-ink/10 bg-card/90 text-ink-action/60 shadow-sm transition-transform hover:scale-105">
             <ArrowIcon direction="left" />
           </span>
         </button>
@@ -62,10 +62,10 @@ export default function CaseStudyTabs({ items }: { items: TabItem[] }) {
             <span
               className={`relative inline-block whitespace-nowrap pb-3 pt-1 text-sm transition-colors duration-200 ${
                 item.active
-                  ? "font-bold text-ink"
+                  ? "font-bold text-ink-action"
                   : item.disabled
-                  ? "font-semibold text-ink/30"
-                  : "font-semibold text-ink/55 hover:text-ink"
+                  ? "font-semibold text-ink-action/30"
+                  : "font-semibold text-ink-action/55 hover:text-ink-action"
               }`}
             >
               {item.label}
@@ -94,7 +94,7 @@ export default function CaseStudyTabs({ items }: { items: TabItem[] }) {
           aria-label="Scroll right"
           className="absolute right-0 top-0 z-10 hidden h-full items-center bg-gradient-to-l from-paper via-paper/95 to-transparent py-1 pl-6 pr-0.5 sm:flex"
         >
-          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-ink/10 bg-card/90 text-ink/60 shadow-sm transition-transform hover:scale-105">
+          <span className="flex h-6 w-6 items-center justify-center rounded-full border border-ink/10 bg-card/90 text-ink-action/60 shadow-sm transition-transform hover:scale-105">
             <ArrowIcon direction="right" />
           </span>
         </button>

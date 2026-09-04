@@ -34,7 +34,7 @@ export default function CTAButton({
   const styles =
     variant === "dark"
       ? "bg-accent text-on-accent hover:bg-accent-hover"
-      : "bg-paper text-ink hover:bg-card";
+      : "bg-paper text-ink-action hover:bg-card";
 
   return (
     <motion.a

@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CTAButton from "../components/CTAButton";
 import RevealOnScroll from "../components/RevealOnScroll";
-import ImagePlaceholder from "../components/ImagePlaceholder";
+import ImagePlaceholder, { PlaceholderNumberBadge } from "../components/ImagePlaceholder";
 import ArchitectureTree from "../components/ArchitectureTree";
 import IdeaBoardMockup from "../components/IdeaBoardMockup";
 import FigmaEmbed from "../components/FigmaEmbed";
@@ -21,6 +21,7 @@ import {
   type Bilingual,
   type PlaceholderVideo,
   type PlaceholderImage,
+  type CaseStudyContent,
 } from "../data/content";
 import { useLanguage } from "../context/LanguageContext";
 import { resolveAccent, useIsDarkTheme } from "../lib/useIsDarkTheme";
@@ -51,6 +52,64 @@ export default function CaseStudy() {
   if (!study || !meta) return <Navigate to="/" replace />;
 
   const accent = resolveAccent(meta.accent, meta.accentDark, isDark);
+  // Numbers every still-pending ImagePlaceholder in top-to-bottom render
+  // order, restarting at 1 for each case study. Lets Juan drop numbered
+  // asset folders per project and tell us "03 -> this file" instead of
+  // describing which dashed box he means.
+  let placeholderCount = 0;
+  const nextPlaceholderNumber = () => ++placeholderCount;
+  // Resolves a media slot to a real <img> when its imageKey is wired up in
+  // caseStudyMedia.ts, falling back to the numbered dashed placeholder
+  // otherwise. Shared by the research/onboarding/featureShowcase sections.
+  function renderMediaSlot(ph: Bilingual | PlaceholderImage | undefined, placeholderClassName?: string) {
+    if (!ph) return null;
+    if (isPlaceholderImage(ph)) {
+      const src = caseStudyImages[ph.imageKey];
+      if (src) {
+        return <img src={src} alt={tr(ph.alt)} className="w-full rounded-2xl border border-ink/10" />;
+      }
+      return <ImagePlaceholder label={tr(ph.alt)} number={nextPlaceholderNumber()} className={placeholderClassName} />;
+    }
+    return <ImagePlaceholder label={tr(ph)} number={nextPlaceholderNumber()} className={placeholderClassName} />;
+  }
+  // Datascope's research section interleaves a real image between its two
+  // paragraphs instead of stacking them together — scoped to this one case
+  // study since it's the only one with images wired up for that slot.
+  const inlineResearchImage = slug === "datascope";
+  // Renders a feature's title/subtitle/body/bullets/status — factored out
+  // so Datascope's restructured featureShowcase (see below) can reuse it
+  // outside the normal per-feature image+text pairing.
+  type FeatureShowcaseItem = NonNullable<CaseStudyContent["featureShowcase"]>["features"][number];
+  function renderFeatureText(f: FeatureShowcaseItem) {
+    return (
+      <>
+        {f.status && (
+          <span className="inline-block rounded-full bg-accent/5 px-3 py-1 text-xs font-semibold text-ink/50">
+            {tr(f.status)}
+          </span>
+        )}
+        <h3 className="mt-3 font-display text-2xl font-extrabold text-ink">{tr(f.title)}</h3>
+        {f.subtitle && <p className="mt-1 text-sm font-semibold text-ink-soft">{tr(f.subtitle)}</p>}
+        <p className="mt-3 text-[15px] leading-relaxed text-ink-soft">{tr(f.body)}</p>
+        {f.bullets && (
+          <ul className="mt-5 space-y-4">
+            {f.bullets.map((b, j) => (
+              <li key={j}>
+                <p className="text-sm font-bold text-ink">{tr(b.title)}</p>
+                <p className="mt-0.5 text-sm leading-relaxed text-ink-soft">{tr(b.body)}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </>
+    );
+  }
+  // Datascope only: the first feature's image (Tareas Asignadas carousel)
+  // runs full width instead of sharing a row with its own text, that text
+  // drops down to share a row with the second feature's image (Cronograma
+  // calendar) instead, and the second feature's own text then continues
+  // below on its own, same as the untouched "aún no liberado" ones after it.
+  const restructureFeatureShowcase = slug === "datascope";
   // Hospital SJD and Arrelat's body copy runs notably longer than the
   // other case studies — at full section width the lines get long enough
   // to feel dense, so their descriptive paragraphs flow into two columns
@@ -62,7 +121,7 @@ export default function CaseStudy() {
     <div>
       <Header
         right={
-          <Link to="/#projects" className="underline-draw inline-flex items-center gap-1.5">
+          <Link to="/#projects" className="underline-draw inline-flex items-center gap-1.5 text-ink-action">
             <span className="transition-transform group-hover:-translate-x-1">←</span> {tr(nav.back)}
           </Link>
         }
@@ -114,6 +173,12 @@ export default function CaseStudy() {
             style={{ background: `linear-gradient(135deg, ${accent}, #0b0f22)` }}
           >
             <BrowserMock accent={accent} />
+            <PlaceholderNumberBadge number={nextPlaceholderNumber()} />
+            {slug === "arrelat" && (
+              <span className="absolute right-4 top-4 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-on-accent">
+                {tr(cta.underConstruction)}
+              </span>
+            )}
             <span className="relative font-display text-3xl font-extrabold text-white sm:text-4xl">
               {tr(study.briefTitle)}
             </span>
@@ -123,7 +188,7 @@ export default function CaseStudy() {
         {study.heroImages && study.heroImages.length > 0 && (
           <RevealOnScroll delay={0.18} className="mt-6 grid gap-5 sm:grid-cols-2">
             {study.heroImages.map((img, i) => (
-              <ImagePlaceholder key={i} label={tr(img)} className="aspect-[4/3]" />
+              <ImagePlaceholder key={i} label={tr(img)} number={nextPlaceholderNumber()} className="aspect-[4/3]" />
             ))}
           </RevealOnScroll>
         )}
@@ -160,9 +225,11 @@ export default function CaseStudy() {
               />
             ) : (
               <div
-                className="aspect-square w-full max-w-sm rounded-3xl"
+                className="relative aspect-square w-full max-w-sm rounded-3xl"
                 style={{ background: `linear-gradient(160deg, ${accent}22, ${accent}55)` }}
-              />
+              >
+                <PlaceholderNumberBadge number={nextPlaceholderNumber()} />
+              </div>
             )}
           </RevealOnScroll>
           <RevealOnScroll delay={0.08}>
@@ -201,7 +268,7 @@ export default function CaseStudy() {
               </div>
               {study.objectivesPlaceholder && (
                 <RevealOnScroll delay={0.1} className="mt-8">
-                  <ImagePlaceholder label={tr(study.objectivesPlaceholder)} />
+                  <ImagePlaceholder label={tr(study.objectivesPlaceholder)} number={nextPlaceholderNumber()} />
                 </RevealOnScroll>
               )}
             </>
@@ -336,7 +403,7 @@ export default function CaseStudy() {
                             className="aspect-[1000/242]"
                           />
                         ) : (
-                          <ImagePlaceholder label={tr(ph.alt)} className="aspect-[4/3]" />
+                          <ImagePlaceholder label={tr(ph.alt)} number={nextPlaceholderNumber()} className="aspect-[4/3]" />
                         );
                       })()
                     ) : isPlaceholderImage(ph) ? (
@@ -345,11 +412,11 @@ export default function CaseStudy() {
                         return src ? (
                           <img src={src} alt={tr(ph.alt)} className="w-full rounded-2xl border border-ink/10" />
                         ) : (
-                          <ImagePlaceholder label={tr(ph.alt)} className="aspect-[4/3]" />
+                          <ImagePlaceholder label={tr(ph.alt)} number={nextPlaceholderNumber()} className="aspect-[4/3]" />
                         );
                       })()
                     ) : (
-                      <ImagePlaceholder label={tr(ph)} className="aspect-[4/3]" />
+                      <ImagePlaceholder label={tr(ph)} number={nextPlaceholderNumber()} className="aspect-[4/3]" />
                     )}
                   </RevealOnScroll>
                 ))}
@@ -364,12 +431,35 @@ export default function CaseStudy() {
               <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.research.title)}</h2>
               <p className="mt-2 text-lg font-semibold text-ink-soft">{tr(study.research.subtitle)}</p>
             </RevealOnScroll>
-            <RevealOnScroll delay={0.06} className="mt-6 max-w-3xl space-y-4">
-              <p className="text-[15px] leading-relaxed text-ink-soft">{tr(study.research.body)}</p>
-              {study.research.segmentationNote && (
-                <p className="text-[15px] leading-relaxed text-ink-soft">{tr(study.research.segmentationNote)}</p>
-              )}
-            </RevealOnScroll>
+            {inlineResearchImage ? (
+              <>
+                <RevealOnScroll delay={0.06} className="mt-6 max-w-3xl">
+                  <p className="text-[15px] leading-relaxed text-ink-soft">{tr(study.research.body)}</p>
+                </RevealOnScroll>
+                {study.research.placeholder && (
+                  <RevealOnScroll delay={0.08} className="mt-8 max-w-3xl">
+                    {renderMediaSlot(study.research.placeholder)}
+                  </RevealOnScroll>
+                )}
+                {study.research.segmentationNote && (
+                  <RevealOnScroll delay={0.1} className="mt-12 max-w-3xl">
+                    <p className="text-lg font-semibold text-ink-soft">{tr(study.research.segmentationNote)}</p>
+                  </RevealOnScroll>
+                )}
+                {study.research.extraImage && (
+                  <RevealOnScroll delay={0.12} className="mt-8 max-w-3xl">
+                    {renderMediaSlot(study.research.extraImage)}
+                  </RevealOnScroll>
+                )}
+              </>
+            ) : (
+              <RevealOnScroll delay={0.06} className="mt-6 max-w-3xl space-y-4">
+                <p className="text-[15px] leading-relaxed text-ink-soft">{tr(study.research.body)}</p>
+                {study.research.segmentationNote && (
+                  <p className="text-[15px] leading-relaxed text-ink-soft">{tr(study.research.segmentationNote)}</p>
+                )}
+              </RevealOnScroll>
+            )}
             {study.research.categories && (
               <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 {study.research.categories.map((cat, i) => (
@@ -400,9 +490,9 @@ export default function CaseStudy() {
                 ))}
               </div>
             )}
-            {study.research.placeholder && (
+            {!inlineResearchImage && study.research.placeholder && (
               <RevealOnScroll delay={0.1} className="mt-8">
-                <ImagePlaceholder label={tr(study.research.placeholder)} />
+                {renderMediaSlot(study.research.placeholder)}
               </RevealOnScroll>
             )}
           </section>
@@ -445,6 +535,7 @@ export default function CaseStudy() {
               <RevealOnScroll className="max-w-2xl">
                 <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.architecture.title)}</h2>
                 <p className="mt-5 text-[15px] leading-relaxed text-ink-soft">{tr(study.architecture.body)}</p>
+                {study.architecture.image && <div className="mt-8">{renderMediaSlot(study.architecture.image)}</div>}
               </RevealOnScroll>
               <RevealOnScroll delay={0.1} className="mt-12">
                 <ArchitectureTree
@@ -464,7 +555,7 @@ export default function CaseStudy() {
               </RevealOnScroll>
               {study.architecture.placeholder && (
                 <RevealOnScroll delay={0.08}>
-                  <ImagePlaceholder label={tr(study.architecture.placeholder)} className="aspect-[4/3]" />
+                  <ImagePlaceholder label={tr(study.architecture.placeholder)} number={nextPlaceholderNumber()} className="aspect-[4/3]" />
                 </RevealOnScroll>
               )}
             </section>
@@ -478,7 +569,12 @@ export default function CaseStudy() {
             </RevealOnScroll>
 
             {study.prototype.embedUrl ? (
-              <RevealOnScroll delay={0.1} className="mt-12">
+              // Full-bleed: the prototype benefits from as much width as
+              // possible, so it breaks out of the max-w-6xl page column
+              // and hugs the viewport edges with a flat 32px margin
+              // instead of staying boxed to the article's reading width.
+              // Aspect ratio itself is untouched (still set on FigmaEmbed).
+              <RevealOnScroll delay={0.1} className="relative left-1/2 mt-12 w-screen -translate-x-1/2 px-20">
                 <FigmaEmbed url={study.prototype.embedUrl} title={tr(study.prototype.title)} />
                 <p className="mt-3 text-center text-xs text-ink/40">
                   {tr({
@@ -504,7 +600,7 @@ export default function CaseStudy() {
             ) : (
               study.prototype.placeholder && (
                 <RevealOnScroll delay={0.1} className="mt-12">
-                  <ImagePlaceholder label={tr(study.prototype.placeholder)} className="aspect-[4/3]" />
+                  <ImagePlaceholder label={tr(study.prototype.placeholder)} number={nextPlaceholderNumber()} className="aspect-[4/3]" />
                 </RevealOnScroll>
               )
             )}
@@ -545,57 +641,86 @@ export default function CaseStudy() {
           </section>
         )}
 
-        {study.onboarding && (
+        {study.featureShowcase && (
+          <section className="mt-32">
+            <RevealOnScroll>
+              <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.featureShowcase.title)}</h2>
+              <p className="mt-2 text-lg font-semibold text-ink-soft">{tr(study.featureShowcase.subtitle)}</p>
+              {study.featureShowcase.body && (
+                <p className="mt-5 max-w-3xl text-[15px] leading-relaxed text-ink-soft">{tr(study.featureShowcase.body)}</p>
+              )}
+              {restructureFeatureShowcase && study.featureShowcase.features.length >= 2 && (
+                <div className="mt-8">{renderMediaSlot(study.featureShowcase.features[0].placeholder)}</div>
+              )}
+            </RevealOnScroll>
+            <div className="mt-24 flex flex-col gap-32">
+              {restructureFeatureShowcase && study.featureShowcase.features.length >= 2 ? (
+                <>
+                  {/* Guía de onboarding sits between the Diseño lo-fi header (title,
+                      body and feature 0's image, all one block above) and Tareas
+                      Asignadas — its standalone <section> below is skipped for
+                      this case study since it renders here instead. */}
+                  {study.onboarding && (
+                    <RevealOnScroll className="grid items-center gap-10 lg:grid-cols-2">
+                      <div>
+                        <h3 className="font-display text-2xl font-extrabold text-ink">{tr(study.onboarding.title)}</h3>
+                        <p className="mt-3 text-[15px] leading-relaxed text-ink-soft">{tr(study.onboarding.body)}</p>
+                      </div>
+                      {study.onboarding.placeholder && renderMediaSlot(study.onboarding.placeholder, "aspect-[4/3]")}
+                    </RevealOnScroll>
+                  )}
+
+                  {/* Feature 0's text shares this row with feature 1's image instead. */}
+                  <RevealOnScroll delay={0.05}>
+                    <div className="grid gap-8 lg:grid-cols-2 lg:items-start lg:gap-14">
+                      <div>{renderFeatureText(study.featureShowcase.features[0])}</div>
+                      <div>{renderMediaSlot(study.featureShowcase.features[1].placeholder, "aspect-[4/3]")}</div>
+                    </div>
+                  </RevealOnScroll>
+
+                  {/* Feature 1's own text continues below, image-less (its image moved up above). */}
+                  <RevealOnScroll delay={0.1}>{renderFeatureText(study.featureShowcase.features[1])}</RevealOnScroll>
+
+                  {/* The rest ("aún no liberado") render normally, unaffected. */}
+                  {study.featureShowcase.features.slice(2).map((f, i) => {
+                    const idx = i + 2;
+                    return (
+                      <RevealOnScroll key={idx} delay={idx * 0.05}>
+                        <div className={f.hideMedia ? "" : "grid gap-8 lg:grid-cols-2 lg:items-start lg:gap-14"}>
+                          {!f.hideMedia && (
+                            <div className={idx % 2 === 1 ? "lg:order-2" : ""}>{renderMediaSlot(f.placeholder, "aspect-[4/3]")}</div>
+                          )}
+                          <div>{renderFeatureText(f)}</div>
+                        </div>
+                      </RevealOnScroll>
+                    );
+                  })}
+                </>
+              ) : (
+                study.featureShowcase.features.map((f, i) => (
+                  <RevealOnScroll key={i} delay={i * 0.05}>
+                    <div className={f.hideMedia ? "" : "grid gap-8 lg:grid-cols-2 lg:items-start lg:gap-14"}>
+                      {!f.hideMedia && (
+                        <div className={i % 2 === 1 ? "lg:order-2" : ""}>{renderMediaSlot(f.placeholder, "aspect-[4/3]")}</div>
+                      )}
+                      <div>{renderFeatureText(f)}</div>
+                    </div>
+                  </RevealOnScroll>
+                ))
+              )}
+            </div>
+          </section>
+        )}
+
+        {!restructureFeatureShowcase && study.onboarding && (
           <section className="mt-32 grid items-center gap-10 lg:grid-cols-2">
             <RevealOnScroll>
               <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.onboarding.title)}</h2>
               <p className="mt-5 text-[15px] leading-relaxed text-ink-soft">{tr(study.onboarding.body)}</p>
             </RevealOnScroll>
             {study.onboarding.placeholder && (
-              <RevealOnScroll delay={0.08}>
-                <ImagePlaceholder label={tr(study.onboarding.placeholder)} className="aspect-[4/3]" />
-              </RevealOnScroll>
+              <RevealOnScroll delay={0.08}>{renderMediaSlot(study.onboarding.placeholder, "aspect-[4/3]")}</RevealOnScroll>
             )}
-          </section>
-        )}
-
-        {study.featureShowcase && (
-          <section className="mt-32">
-            <RevealOnScroll>
-              <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.featureShowcase.title)}</h2>
-              <p className="mt-2 text-lg font-semibold text-ink-soft">{tr(study.featureShowcase.subtitle)}</p>
-            </RevealOnScroll>
-            <div className="mt-14 flex flex-col gap-24">
-              {study.featureShowcase.features.map((f, i) => (
-                <RevealOnScroll key={i} delay={i * 0.05}>
-                  <div className="grid gap-8 lg:grid-cols-2 lg:items-start lg:gap-14">
-                    <div className={i % 2 === 1 ? "lg:order-2" : ""}>
-                      <ImagePlaceholder label={tr(f.placeholder)} className="aspect-[4/3]" />
-                    </div>
-                    <div>
-                      {f.status && (
-                        <span className="inline-block rounded-full bg-accent/5 px-3 py-1 text-xs font-semibold text-ink/50">
-                          {tr(f.status)}
-                        </span>
-                      )}
-                      <h3 className="mt-3 font-display text-2xl font-extrabold text-ink">{tr(f.title)}</h3>
-                      {f.subtitle && <p className="mt-1 text-sm font-semibold text-ink-soft">{tr(f.subtitle)}</p>}
-                      <p className="mt-3 text-[15px] leading-relaxed text-ink-soft">{tr(f.body)}</p>
-                      {f.bullets && (
-                        <ul className="mt-5 space-y-4">
-                          {f.bullets.map((b, j) => (
-                            <li key={j}>
-                              <p className="text-sm font-bold text-ink">{tr(b.title)}</p>
-                              <p className="mt-0.5 text-sm leading-relaxed text-ink-soft">{tr(b.body)}</p>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  </div>
-                </RevealOnScroll>
-              ))}
-            </div>
           </section>
         )}
 
@@ -635,7 +760,7 @@ export default function CaseStudy() {
             </RevealOnScroll>
             {study.reflection.placeholder && (
               <RevealOnScroll delay={0.08} className="mt-8 max-w-3xl">
-                <ImagePlaceholder label={tr(study.reflection.placeholder)} className="aspect-[16/7]" />
+                <ImagePlaceholder label={tr(study.reflection.placeholder)} number={nextPlaceholderNumber()} className="aspect-[16/7]" />
               </RevealOnScroll>
             )}
             {study.reflection.pullQuote && (
@@ -664,16 +789,39 @@ export default function CaseStudy() {
             </CTAButton>
             <a
               href="#top"
-              className="underline-draw mt-2 text-sm font-semibold text-ink/50"
+              className="underline-draw mt-2 text-sm font-semibold text-ink-action/50"
             >
               {tr(nav.backToTop)}
             </a>
           </RevealOnScroll>
         )}
+
       </main>
+
+      {/* Sits outside <main> so its bottom margin (not main's own pb-32)
+          is what sets the gap to the footer — pins it to a flat 48px above
+          the footer's top edge no matter how tall the page content is. */}
+      <div className="mx-auto mb-12 flex max-w-6xl justify-end px-5 sm:px-8">
+        <a
+          href="#top"
+          className="underline-draw inline-flex items-center gap-2 text-sm font-semibold text-ink-action/50 transition-colors hover:text-ink-action"
+        >
+          {tr(nav.backToTop)}
+          <ArrowUpIcon />
+        </a>
+      </div>
 
       <Footer />
     </div>
+  );
+}
+
+function ArrowUpIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 19V5" />
+      <path d="M5 12l7-7 7 7" />
+    </svg>
   );
 }
 
