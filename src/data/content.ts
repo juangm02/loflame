@@ -196,8 +196,13 @@ export interface CaseStudyContent {
   tagline?: string;
   headline: Bilingual;
   briefTitle: Bilingual;
+  /** Real photo for the brief/hero card's background (see
+   * lib/caseStudyMedia.ts's caseStudyImages) — replaces the decorative
+   * BrowserMock + accent gradient, but the card itself keeps its usual
+   * fixed h-64/sm:h-80 size either way. */
+  briefImage?: PlaceholderImage;
   briefParagraphs: Bilingual[];
-  heroImages?: Bilingual[];
+  heroImages?: (Bilingual | PlaceholderImage)[];
   meta: {
     company: Bilingual;
     period?: Bilingual;
@@ -214,6 +219,10 @@ export interface CaseStudyContent {
   objectivesTitle: Bilingual;
   objectives: Bilingual[];
   objectivesPlaceholder?: Bilingual;
+  /** Real image(s) between the objectives cards and whatever section
+   * follows (see lib/caseStudyMedia.ts's caseStudyImages) — a grid, unlike
+   * objectivesPlaceholder above which is always a single dashed box. */
+  objectivesImages?: PlaceholderImage[];
   /** Real before/after screen comparison for the Objectives section
    * (see lib/caseStudyMedia.ts's caseStudyComparativaImages), rendered as
    * a pinned scroll sequence instead of the plain objectivesPlaceholder
@@ -221,8 +230,12 @@ export interface CaseStudyContent {
   objectivesComparativa?: { beforeAlt: Bilingual; afterAlt: Bilingual };
   solvingTitle?: Bilingual;
   solving?: Bilingual;
-  scope?: { title: Bilingual; body: Bilingual };
-  designChallenge?: { title: Bilingual; body: Bilingual };
+  /** Bold lead sentence shown above `solving`'s body, in the "La
+   * situación"/three-column block — the sharpest single line of the
+   * tension, pulled out of the body copy instead of buried inside it. */
+  solvingLead?: Bilingual;
+  scope?: { title: Bilingual; body: Bilingual; lead?: Bilingual };
+  designChallenge?: { title: Bilingual; body: Bilingual; lead?: Bilingual };
   whoTitle?: Bilingual;
   who?: Bilingual;
   needsTitle?: Bilingual;
@@ -231,10 +244,26 @@ export interface CaseStudyContent {
   designThinking?: { phase: Bilingual; items: Bilingual[] }[];
   processSections?: {
     title: Bilingual;
+    /** Full-width image right under the title, ahead of body/bullets —
+     * for a placeholder that reads better as the section's own banner
+     * than as one tile among the placeholders grid below. */
+    leadImage?: PlaceholderImage;
     body: Bilingual;
     bullets?: Bilingual[];
     placeholders?: (Bilingual | PlaceholderVideo | PlaceholderImage)[];
+    /** A set of images shown as a carousel (one at a time, with
+     * prev/next + dots) instead of sitting in the placeholders grid
+     * above — for a slot that's really several frames of the same idea. */
+    carousel?: PlaceholderImage[];
+    /** A short interpretive progression (e.g. "I see photographs" -> "I am
+     * a witness" -> "I construct meaning"), shown as a StepsChain pill bar
+     * instead of a dashed image placeholder — for a quote that's really a
+     * sequence, not a picture. */
+    stepsChain?: Bilingual[];
     highlight?: boolean;
+    /** Kept in the data (not deleted) but skipped entirely at render —
+     * for a section still being decided on, without losing the copy. */
+    hidden?: boolean;
   }[];
 
   research?: {
@@ -1417,24 +1446,30 @@ export const caseStudies: Record<string, CaseStudyContent> = {
     navLabel: caseStudyNav[4],
     tagline: "Bringing absence to light",
     headline: t(
-      "Una experiencia inmersiva de archivo para fotografías que no pueden mostrarse físicamente, que construye significado a través del contexto y la interpretación.",
-      "An immersive archival experience for photographs that cannot be shown physically, building meaning through context and interpretation."
+      "Diseño de un espacio interactivo en realidad virtual: una experiencia de archivo para fotografías que no pueden mostrarse físicamente, que construye significado a través del contexto y la interpretación.",
+      "Designing an interactive virtual-reality space: an archival experience for photographs that cannot be shown physically, building meaning through context and interpretation."
     ),
     briefTitle: t("Brief de diseño", "Design Brief"),
-    heroImages: [
-      t(
-        "Frame de título, \"Arrelat, Bringing absence to light\" (pendiente de anexar).",
-        "Title frame, \"Arrelat, Bringing absence to light\" (pending)."
+    // The Fundación Foto Colectania intro (gallery + title + tags). This
+    // box is short and wide, and the whole point is to show the photo
+    // uncropped, so it renders via object-contain, not cover — see the
+    // brief card in CaseStudy.tsx. (This used to also repeat as its own
+    // full-width banner further down before "Design approach"; removed as
+    // redundant once the brief card itself carried the same photo.)
+    briefImage: {
+      imageKey: "arrelat-foundation",
+      alt: t(
+        "Fundación Foto Colectania: sala de exposición, \"Private non-profit\", \"Barcelona, est. 2002\".",
+        "Fundación Foto Colectania: exhibition room, \"Private non-profit\", \"Barcelona, est. 2002\"."
       ),
-      t(
-        "Render del bosque: raíces e hilos-árbol con la semilla al centro (pendiente de anexar).",
-        "Forest render: roots and thread-trees with the seed at the center (pending)."
-      ),
-    ],
+    },
+    // The image that used to sit right below the hero card (forest render)
+    // was removed per Juan's ask, now that the hero card itself shows the
+    // foundation photo — nothing left to show there.
     briefParagraphs: [
       t(
-        "Arrelat es un proyecto de tesis de máster desarrollado en colaboración con la Fundación Foto Colectania, una fundación de fotografía privada y sin ánimo de lucro con sede en Barcelona, fundada en 2002, dedicada a preservar y difundir la fotografía española, catalana y portuguesa. La fundación planteó el reto de activar su archivo fotográfico mediante una experiencia híbrida física y digital, sin perder el valor interpretativo de la colección a la vez que se amplía el acceso a ella.",
-        "Arrelat is a master's thesis project developed in collaboration with Fundación Foto Colectania, a private, non-profit photography foundation based in Barcelona, founded in 2002, dedicated to preserving and promoting Spanish, Catalan and Portuguese photography. The foundation set the challenge of activating its photographic archive through a hybrid physical and digital experience, without losing the collection's interpretive value while expanding access to it."
+        "Arrelat es un proyecto de tesis de máster desarrollado en colaboración con la Fundación Foto Colectania, una fundación de fotografía privada y sin ánimo de lucro con sede en Barcelona, fundada en 2002, dedicada a preservar y difundir la fotografía española, catalana y portuguesa. La fundación planteó el reto de activar su archivo fotográfico mediante una experiencia híbrida física y digital: un espacio interactivo diseñado en realidad virtual, sin perder el valor interpretativo de la colección a la vez que se amplía el acceso a ella.",
+        "Arrelat is a master's thesis project developed in collaboration with Fundación Foto Colectania, a private, non-profit photography foundation based in Barcelona, founded in 2002, dedicated to preserving and promoting Spanish, Catalan and Portuguese photography. The foundation set the challenge of activating its photographic archive through a hybrid physical and digital experience: an interactive space designed in virtual reality, without losing the collection's interpretive value while expanding access to it."
       ),
       t(
         "El proyecto replantea el archivo como un bosque vivo. Cada fotografía se convierte en un nodo conectado por hilos a una estructura de raíces compartida. El visitante se mueve por el espacio a su propio ritmo, encuentra la fotografía antes que el contexto, y deja una huella que persiste para futuros visitantes. El concepto traduce la lógica relacional de un archivo en algo navegable en el espacio en lugar de leído en una pantalla.",
@@ -1463,6 +1498,13 @@ export const caseStudies: Record<string, CaseStudyContent> = {
       "La pregunta que guió todo el proyecto: ¿cómo pueden los entornos inmersivos reconstruir las condiciones interpretativas a través de las cuales emerge el significado del archivo, en lugar de reducir las fotografías a espectáculo?",
       "The question that guided the whole project: how can immersive environments reconstruct the interpretive conditions through which the archive's meaning emerges, rather than reducing photographs to spectacle?"
     ),
+    approachImage: {
+      key: "arrelat-approach",
+      alt: t(
+        "Visitantes con visores de realidad virtual, mirando hacia arriba dentro del bosque de archivo.",
+        "Visitors wearing VR headsets, looking up inside the archive forest."
+      ),
+    },
     objectivesTitle: t("Objetivos", "Objectives"),
     objectives: [
       t(
@@ -1478,16 +1520,43 @@ export const caseStudies: Record<string, CaseStudyContent> = {
         "Prototype and test an immersive experience using the foundation's existing web interface as a point of comparison."
       ),
     ],
+    // Sit between the objectives cards and "La situación / La pregunta de
+    // framing / Pain points del research" right below — new images, no
+    // dashed placeholder existed for this spot before.
+    objectivesImages: [
+      {
+        imageKey: "arrelat-preservation",
+        alt: t(
+          "Impresiones fotográficas manipuladas con guantes: \"preservadas hasta la invisibilidad\".",
+          "Photographic prints being handled with gloves: \"preserved to the point of invisibility\"."
+        ),
+      },
+      {
+        imageKey: "arrelat-framing-question",
+        alt: t(
+          "\"Si una fotografía se preserva pero nunca se encuentra, ¿se preserva de verdad su patrimonio?\"",
+          "\"If a photograph is preserved but never encountered, is its heritage truly preserved?\""
+        ),
+      },
+    ],
     solvingTitle: t("La situación", "The situation"),
+    solvingLead: t(
+      "Fotografías cuidadosamente preservadas pueden acabar, de hecho, preservadas hasta la invisibilidad.",
+      "Carefully preserved photographs can end up, in effect, preserved into invisibility."
+    ),
     solving: t(
-      "El archivo de la Fundación Foto Colectania guarda fotografías cuyo significado no depende solo de cada imagen, sino de los marcos relacionales, institucionales y narrativos que la rodean. Las dos vías por las que un visitante puede llegar hoy a ese archivo debilitan esos marcos. El archivo físico impone restricciones de espacio y de ritmo que dejan poco margen para una interacción lenta y autodirigida. La interfaz web existente prioriza el acceso por encima del contexto, y en el proceso fragmenta la lógica del archivo. Fotografías cuidadosamente preservadas pueden acabar, de hecho, preservadas hasta la invisibilidad.",
-      "Fundación Foto Colectania's archive holds photographs whose meaning depends not only on each image, but on the relational, institutional and narrative frameworks that surround it. The two paths through which a visitor can reach that archive today weaken those frameworks. The physical archive imposes space and pacing constraints that leave little room for slow, self-directed interaction. The existing web interface prioritizes access over context, fragmenting the archive's logic in the process. Carefully preserved photographs can end up, in effect, preserved into invisibility."
+      "Desde las primeras conversaciones con la Fundación Foto Colectania quedó claro que el archivo guarda una gran cantidad de obras de gran valor cultural que podrían no exhibirse nunca, porque son demasiado frágiles para salir del archivo hacia el espacio de exhibición. Las dos vías por las que un visitante puede llegar hoy a esas fotografías debilitan aún más su significado: el archivo físico impone restricciones de espacio y de ritmo que dejan poco margen para una interacción lenta y autodirigida, y la interfaz web existente prioriza el acceso por encima del contexto, fragmentando en el proceso la lógica del archivo. Esa tensión afianzó la idea que guiaría el resto del research: la preservación cultural no ocurre al cuidar una obra en el archivo, sino que sucede en el espacio de exhibición, en el encuentro entre fotografía y visitante.",
+      "From our first conversations with Fundación Foto Colectania it became clear that the archive holds a large number of culturally valuable works that might never be exhibited, because they are too fragile to leave the archive for the exhibition space. The two paths through which a visitor can reach those photographs today weaken their meaning further: the physical archive imposes space and pacing constraints that leave little room for slow, self-directed interaction, and the existing web interface prioritizes access over context, fragmenting the archive's logic in the process. That tension anchored the idea that would guide the rest of the research: cultural preservation does not happen by safeguarding a work in the archive, but happens in the exhibition space, in the encounter between photograph and visitor."
     ),
     designChallenge: {
       title: t("La pregunta de framing", "The framing question"),
+      lead: t(
+        "Si una fotografía se preserva pero nunca se encuentra, ¿se preserva de verdad su patrimonio?",
+        "If a photograph is preserved but never encountered, is its heritage truly preserved?"
+      ),
       body: t(
-        "Si una fotografía se preserva pero nunca se encuentra, ¿se preserva de verdad su patrimonio? Esto se apoya en la metáfora que guía el proyecto: si un árbol cae en un bosque y no hay nadie para oírlo, ¿hizo algún sonido? El archivo sostiene el árbol. La experiencia es el bosque. El visitante es quien lo oye.",
-        "If a photograph is preserved but never found, is its heritage truly preserved? This rests on the metaphor that guides the project: if a tree falls in a forest and no one is there to hear it, did it make a sound? The archive holds up the tree. The experience is the forest. The visitor is the one who hears it."
+        "Esto se apoya en la metáfora que guía el proyecto: si un árbol cae en un bosque y no hay nadie para oírlo, ¿hizo algún sonido? El archivo sostiene el árbol. La experiencia es el bosque. El visitante es quien lo oye.",
+        "This rests on the metaphor that guides the project: if a tree falls in a forest and no one is there to hear it, did it make a sound? The archive holds up the tree. The experience is the forest. The visitor is the one who hears it."
       ),
     },
     needsTitle: t("Pain points del research", "Research pain points"),
@@ -1525,11 +1594,20 @@ export const caseStudies: Record<string, CaseStudyContent> = {
           "The research combined a theoretical base in archival logic, cultural value and visual literacy with fieldwork: semi-structured interviews with two visitor groups, general cultural-exhibition audiences and sector professionals, plus a benchmark of the foundation's current web interface. The synthesis surfaced the six pain points above and a map of visitor needs and goals: building a connection with the photograph beyond the digital scroll, having slow and reflective viewing modes, receiving accessible interpretive support, and understanding the story behind each image. The gap the research named: no existing format preserved archival logic while offering genuine immersive engagement. Technological novelty and engagement are not the same as analytical reflection. (Number of research participants not specified, kept anonymous.)"
         ),
         placeholders: [
-          t(
-            "Diagrama del proceso de research: Research / Define / Ideate / Prototype / Final documentation (pendiente de anexar).",
-            "Research process diagram: Research / Define / Ideate / Prototype / Final documentation (pending)."
-          ),
-          t("Mapa de necesidades y objetivos del visitante (pendiente de anexar).", "Visitor needs and goals map (pending)."),
+          {
+            imageKey: "arrelat-research-diagram",
+            alt: t(
+              "Diagrama del proceso de research: Research / Define / Ideate / Prototype & Test / Final documentation.",
+              "Research process diagram: Research / Define / Ideate / Prototype & Test / Final documentation."
+            ),
+          },
+          {
+            imageKey: "arrelat-needs-map",
+            alt: t(
+              "Infografía de los seis pain points identificados en el research (mapa de necesidades del visitante).",
+              "Infographic of the six pain points identified in research (visitor needs map)."
+            ),
+          },
         ],
       },
       {
@@ -1539,18 +1617,51 @@ export const caseStudies: Record<string, CaseStudyContent> = {
           "The design problem was reframed from how do we show a collection to how do we reconstruct the conditions under which meaning emerges. The concept that resolved it was the archive transformed into a living ecosystem. The name Arrelat comes from the Catalan word for rooted. The metaphor maps directly onto the archive: the forest is the archive, the threads are its vascular system connecting the images, and the seed at the center is the heart of memory. Beneath the visitor are the roots, around them the thread-trees, and at the core the seed. It was a deliberate pivot from an earlier, harder concept called Null, whose industrial, brutalist visual language was replaced with an organic, spatial one, more aligned with the idea of an archive that grows through human presence."
         ),
         placeholders: [
-          t(
-            "\"El archivo transformado en un ecosistema vivo\" (pendiente de anexar).",
-            "\"The archive transformed into a living ecosystem\" (pending)."
-          ),
-          t(
-            "Renders de la metáfora del bosque: raíces, hilos-árbol y semilla (pendiente de anexar).",
-            "Forest metaphor renders: roots, thread-trees and seed (pending)."
-          ),
+          // Number-matched to this slot per Juan's badge numbering; shows
+          // the project's other guiding quote (tree falls in a forest) —
+          // "el archivo transformado en un ecosistema vivo" itself is
+          // still pending a matching image.
+          {
+            imageKey: "arrelat-concept-quote",
+            alt: t(
+              "Render del bosque con la pregunta que guía el proyecto: \"¿hizo algún sonido?\".",
+              "Forest render with the project's guiding question: \"did it make a sound?\"."
+            ),
+          },
+        ],
+        // Three frames of the same reveal (roots -> thread-trees -> seed)
+        // rather than three distinct images — shown as a carousel instead
+        // of sitting in the placeholders grid above.
+        carousel: [
+          {
+            imageKey: "arrelat-forest-metaphor-1",
+            alt: t("Raíces bajo el visitante: \"el archivo es el bosque\".", "Roots beneath the visitor: \"the archive is the forest\"."),
+          },
+          {
+            imageKey: "arrelat-forest-metaphor-2",
+            alt: t(
+              "Hilos-árbol alrededor del visitante: \"los hilos son el sistema vascular\".",
+              "Thread-trees around the visitor: \"threads are the vascular system\"."
+            ),
+          },
+          {
+            imageKey: "arrelat-forest-metaphor-3",
+            alt: t("La semilla, corazón del bosque: \"la semilla es el corazón de la memoria\".", "The seed, heart of the forest: \"the seed is the heart of memory\"."),
+          },
         ],
       },
       {
         title: t("Sistema de interacción y arco narrativo", "Interaction system & narrative arc"),
+        // Number-matched to badge 09 per Juan's numbering; shows the
+        // node-interaction walkthrough rather than the three roles/arc —
+        // full width right under the title, ahead of the body copy.
+        leadImage: {
+          imageKey: "arrelat-interaction-arc",
+          alt: t(
+            "Secuencia de interacción con un nodo: acercarse, activar el hilo por proximidad, revelar metadatos, participar.",
+            "Node interaction sequence: approach, proximity-triggered thread, metadata reveal, participation."
+          ),
+        },
         body: t(
           "La experiencia se estructuró como un arco narrativo de siete etapas que mueve al visitante a través de tres roles: Observer, Navigator, Participant. El arco va Awakening, The Forest, Discovery, Connection, The Seed, y luego Breath and Exit. Lleva una única progresión interpretativa: veo fotografías, soy testigo, construyo significado. Un sistema de hilos codificado por color comunicaba el estado del archivo de forma espacial en lugar de mediante texto. La interacción pasó a formar parte del entorno mismo en lugar de ser una capa de interfaz aparte.",
           "The experience was structured as a seven-stage narrative arc that moves the visitor through three roles: Observer, Navigator, Participant. The arc runs Awakening, The Forest, Discovery, Connection, The Seed, and then Breath and Exit. It carries a single interpretive progression: I see photographs, I am a witness, I construct meaning. A color-coded thread system communicated the archive's state spatially rather than through text. Interaction became part of the environment itself rather than a separate interface layer."
@@ -1561,12 +1672,19 @@ export const caseStudies: Record<string, CaseStudyContent> = {
           t("Hilo lavanda: marca un camino ya recorrido.", "Lavender thread: marks a path already walked."),
         ],
         placeholders: [
-          t("Los tres roles y el arco de siete etapas (pendiente de anexar).", "The three roles and seven-stage arc (pending)."),
-          t("Sistema de color de los hilos: dorado, blanco, lavanda (pendiente de anexar).", "Thread color system: gold, white, lavender (pending)."),
-          t(
-            "\"I see photographs / I am a witness / I construct meaning\" (pendiente de anexar).",
-            "\"I see photographs / I am a witness / I construct meaning\" (pending)."
-          ),
+          {
+            imageKey: "arrelat-thread-colors",
+            alt: t("Sistema de color de los hilos: dorado, blanco, lavanda.", "Thread color system: gold, white, lavender."),
+          },
+        ],
+        // The interpretive progression quoted in the body above, as its
+        // own StepsChain component instead of a dashed image placeholder —
+        // content kept verbatim (it's quoted in-environment UI text, not
+        // translated prose, hence identical es/en).
+        stepsChain: [
+          t("I see photographs", "I see photographs"),
+          t("I am a witness", "I am a witness"),
+          t("I construct meaning", "I construct meaning"),
         ],
       },
       {
@@ -1577,10 +1695,35 @@ export const caseStudies: Record<string, CaseStudyContent> = {
         ),
         placeholders: [
           t("Prototipo Processing / Java, animado (pendiente de anexar).", "Processing / Java prototype, animated (pending)."),
-          t("Pantallas del concepto de app complementaria (pendiente de anexar).", "Companion app concept screens (pending)."),
+          {
+            imageKey: "arrelat-app-1",
+            alt: t(
+              "Pantallas de bienvenida y navegación de la app complementaria.",
+              "Companion app welcome and navigation screens."
+            ),
+          },
+          // Number-matched to this slot per Juan's badge numbering; these
+          // two are brand/marketing extensions (billboard, Instagram),
+          // not app screens — flagged for a later content pass.
+          {
+            imageKey: "arrelat-app-2",
+            alt: t(
+              "Extensión de marca: valla publicitaria de la exposición \"Step into the living archive\".",
+              "Brand extension: exhibition billboard \"Step into the living archive\"."
+            ),
+          },
+          {
+            imageKey: "arrelat-app-3",
+            alt: t("Extensión de marca: perfil de Instagram del proyecto.", "Brand extension: project's Instagram profile mockup."),
+          },
         ],
       },
       {
+        // Hidden per Juan's ask — this section (and its placeholders
+        // below) was "in evaluation" and has now been decided against for
+        // the time being. Kept in the data, not deleted, in case it comes
+        // back.
+        hidden: true,
         title: t("Sistema de diseño y lenguaje visual", "Design system & visual language"),
         body: t(
           "El lenguaje visual se reconstruyó en torno a la metáfora orgánica. Se mantuvieron el negro y el blanco como colores primarios para conservar la armonía con el medio fotográfico y con la identidad de Foto Colectania, con tonos secundarios que se desplazaron a dorado, marfil cálido y lila. El color no era decoración: funcionaba también como sistema de navegación y de estado de interacción dentro del espacio. La tipografía se simplificó a Archivo únicamente, para un lenguaje unificado entre la interfaz VR, la app móvil y el texto dentro del entorno. La iconografía se movió hacia formas biomórficas que referencian hilos, semillas y raíces. Los elementos de interfaz se diseñaron como parte de la narrativa espacial en lugar de una capa gráfica por encima de ella.",
@@ -1614,7 +1757,16 @@ export const caseStudies: Record<string, CaseStudyContent> = {
             "La decisión de sistema más fuerte que tomamos fue hacer que el color cargara significado. Diseñamos la paleta de hilos como una máquina de estados viva que el visitante lee espacialmente: dorado para intacto, blanco para un mensaje dejado atrás, lavanda para un camino ya recorrido. Esto nos permitió que la experiencia comunicara la estructura y la historia del archivo sin paneles de texto, respondiendo directamente a los pain points de sobrecarga de información y falta de guía interpretativa. Mantener el negro y el blanco como primarios mantuvo el sistema honesto con el medio fotográfico en lugar de decorar por encima de él.",
             "The strongest system-level decision we made was making color carry meaning. We designed the thread palette as a living state machine that the visitor reads spatially: gold for intact, white for a message left behind, lavender for a path already walked. This let the experience communicate the archive's structure and history without text panels, directly answering the pain points of information overload and lack of interpretive guidance. Keeping black and white as primaries kept the system honest to the photographic medium instead of decorating over it."
           ),
-          placeholder: t("Sistema de color de hilos en contexto (pendiente de anexar).", "Thread color system in context (pending)."),
+          // Number-matched to this slot per Juan's badge numbering; shows
+          // the Observer stage (Awakening/The Forest) rather than the
+          // thread color system in context — flagged for a later pass.
+          placeholder: {
+            imageKey: "arrelat-role-observer",
+            alt: t(
+              "Etapa Observer del arco narrativo: Awakening y The Forest.",
+              "Observer stage of the narrative arc: Awakening and The Forest."
+            ),
+          },
         },
         {
           title: t("La fotografía antes que el contexto", "The photograph before the context"),
@@ -1622,10 +1774,13 @@ export const caseStudies: Record<string, CaseStudyContent> = {
             "En el testing encontramos un hallazgo que apareció de forma idéntica en todos los participantes, tanto en la sesión de web como en la del prototipo: la fotografía debe preceder al contexto. Ningún participante interactuó con la información contextual antes de ser atraído por una imagen. Esto validó nuestra decisión central de secuenciación, donde la capa de metadatos aparece solo tras la proximidad y el gesto, haciendo de la fotografía el encuentro y del contexto su desarrollo. En la web existente de la fundación, el contexto suele ir primero y la fotografía se convierte en ilustración de un pie de foto.",
             "In testing we found a result that appeared identically across every participant, in both the web session and the prototype session: the photograph must precede the context. No participant engaged with contextual information before being drawn in by an image. This validated our central sequencing decision, where the metadata layer only appears after proximity and gesture, making the photograph the encounter and the context its unfolding. On the foundation's existing website, context usually comes first, and the photograph becomes an illustration of a caption."
           ),
-          placeholder: t(
-            "Interacción con el nodo: primero la fotografía, luego el reveal de metadatos (pendiente de anexar).",
-            "Node interaction: photograph first, then the metadata reveal (pending)."
-          ),
+          // Number-matched to this slot per Juan's badge numbering; shows
+          // the Navigator stage (Discovery/Connection) rather than the
+          // node interaction sequence — flagged for a later pass.
+          placeholder: {
+            imageKey: "arrelat-role-navigator",
+            alt: t("Etapa Navigator del arco narrativo: Discovery y Connection.", "Navigator stage of the narrative arc: Discovery and Connection."),
+          },
         },
         {
           title: t("El hilo blanco: la participación como acumulación de archivo", "The white thread: participation as archival accumulation"),
@@ -1633,7 +1788,13 @@ export const caseStudies: Record<string, CaseStudyContent> = {
             "Diseñamos el mecanismo del hilo blanco para que el mensaje de un visitante pasara a formar parte del archivo vivo para futuros visitantes. En el testing esto produjo una sensación de responsabilidad de archivo que no tiene equivalente en la web, e instancia el argumento central del proyecto: que la preservación cultural no ocurre al salvaguardar una obra sino en el momento en que un visitante construye significado a partir de ella. Un año después de la visita, la app complementaria puede notificar a la persona que dejó un mensaje en la semilla, cerrando un bucle temporal.",
             "We designed the white thread mechanism so a visitor's message becomes part of the living archive for future visitors. In testing this produced a sense of archival responsibility with no equivalent on the website, and it instances the project's central argument: that cultural preservation does not happen by safeguarding a work, but in the moment a visitor constructs meaning from it. A year after the visit, the companion app can notify the person who left a message in the seed, closing a temporal loop."
           ),
-          placeholder: t("Concepto de hilo blanco / mensaje en la semilla (pendiente de anexar).", "White thread concept / message in the seed (pending)."),
+          // Number-matched to this slot per Juan's badge numbering; shows
+          // the Participant stage (The Seed/Breath & Exit) rather than the
+          // white thread concept — flagged for a later pass.
+          placeholder: {
+            imageKey: "arrelat-role-participant",
+            alt: t("Etapa Participant del arco narrativo: The Seed y Breath & Exit.", "Participant stage of the narrative arc: The Seed and Breath & Exit."),
+          },
         },
       ],
     },

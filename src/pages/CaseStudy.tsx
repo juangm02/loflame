@@ -10,6 +10,8 @@ import IdeaBoardMockup from "../components/IdeaBoardMockup";
 import FigmaEmbed from "../components/FigmaEmbed";
 import CaseStudyTabs from "../components/CaseStudyTabs";
 import CaseStudyVideo from "../components/CaseStudyVideo";
+import ImageCarousel from "../components/ImageCarousel";
+import StepsChain from "../components/StepsChain";
 import ObjectiveIcon from "../components/ObjectiveIcon";
 import ObjectivesScrollShowcase from "../components/ObjectivesScrollShowcase";
 import {
@@ -61,16 +63,35 @@ export default function CaseStudy() {
   // Resolves a media slot to a real <img> when its imageKey is wired up in
   // caseStudyMedia.ts, falling back to the numbered dashed placeholder
   // otherwise. Shared by the research/onboarding/featureShowcase sections.
-  function renderMediaSlot(ph: Bilingual | PlaceholderImage | undefined, placeholderClassName?: string) {
+  //
+  // `rowBox`, when given, letterboxes the resolved image instead of
+  // rendering it at natural size: a fixed-aspect box (bg-paper-dim) with
+  // the image inside sized via object-contain, so it's never cropped, and
+  // every sibling in the same grid row still shares the same box height —
+  // an image narrower/wider than the box's own aspect just gets a plain
+  // background margin on the sides it doesn't fill, rather than losing any
+  // of itself to a crop. (Object-cover + a shared aspect was tried first
+  // per an earlier ask to keep rows visually aligned, but that meant
+  // cropping almost every photo to fit — letterboxing is the version of
+  // "aligned" that never cuts anything off.) Leave it unset for a lone
+  // image with no row siblings, where natural aspect with no box is fine.
+  function renderMediaSlot(ph: Bilingual | PlaceholderImage | undefined, placeholderClassName?: string, rowBox?: string) {
     if (!ph) return null;
     if (isPlaceholderImage(ph)) {
       const src = caseStudyImages[ph.imageKey];
       if (src) {
-        return <img src={src} alt={tr(ph.alt)} className="w-full rounded-2xl border border-ink/10" />;
+        const img = <img src={src} alt={tr(ph.alt)} className={rowBox ? "max-h-full max-w-full object-contain" : "w-full rounded-2xl border border-ink/10"} />;
+        return rowBox ? (
+          <div className={`flex items-center justify-center overflow-hidden rounded-2xl border border-ink/10 bg-paper-dim ${rowBox}`}>
+            {img}
+          </div>
+        ) : (
+          img
+        );
       }
-      return <ImagePlaceholder label={tr(ph.alt)} number={nextPlaceholderNumber()} className={placeholderClassName} />;
+      return <ImagePlaceholder label={tr(ph.alt)} number={nextPlaceholderNumber()} className={placeholderClassName ?? rowBox} />;
     }
-    return <ImagePlaceholder label={tr(ph)} number={nextPlaceholderNumber()} className={placeholderClassName} />;
+    return <ImagePlaceholder label={tr(ph)} number={nextPlaceholderNumber()} className={placeholderClassName ?? rowBox} />;
   }
   // Datascope's research section interleaves a real image between its two
   // paragraphs instead of stacking them together — scoped to this one case
@@ -134,7 +155,7 @@ export default function CaseStudy() {
           </h1>
         </RevealOnScroll>
 
-        <RevealOnScroll delay={0.05}>
+        <RevealOnScroll delay={0.05} className="mt-32">
           <CaseStudyTabs
             items={caseStudyNav
               .map((label, i) => {
@@ -168,27 +189,47 @@ export default function CaseStudy() {
         </RevealOnScroll>
 
         <RevealOnScroll delay={0.15}>
-          <div
-            className="relative mt-14 flex h-64 items-end overflow-hidden rounded-3xl p-8 sm:h-80"
-            style={{ background: `linear-gradient(135deg, ${accent}, #0b0f22)` }}
-          >
-            <BrowserMock accent={accent} />
-            <PlaceholderNumberBadge number={nextPlaceholderNumber()} />
-            {slug === "arrelat" && (
-              <span className="absolute right-4 top-4 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-on-accent">
-                {tr(cta.underConstruction)}
-              </span>
-            )}
-            <span className="relative font-display text-3xl font-extrabold text-white sm:text-4xl">
-              {tr(study.briefTitle)}
-            </span>
-          </div>
+          {(() => {
+            const briefPhoto = study.briefImage && caseStudyImages[study.briefImage.imageKey];
+            return (
+              <div
+                className={`relative mt-14 flex h-64 items-end overflow-hidden rounded-3xl p-8 sm:h-80 ${briefPhoto ? "justify-end" : ""}`}
+                style={briefPhoto ? undefined : { background: `linear-gradient(135deg, ${accent}, #0b0f22)` }}
+              >
+                {briefPhoto ? (
+                  <>
+                    {/* object-cover, filling the box edge to edge — the
+                        source (see caseStudyMedia.ts) is pre-cropped to
+                        this box's own aspect, so cover barely trims
+                        anything beyond that. object-contain was tried
+                        first but left ugly bars on the sides. */}
+                    <img
+                      src={briefPhoto}
+                      alt={tr(study.briefImage!.alt)}
+                      className="absolute inset-0 h-full w-full object-cover"
+                    />
+                    {/* Vignette so the bottom edge (where the title sits)
+                        fades in a bit more gently than a hard photo cutoff. */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent" />
+                  </>
+                ) : (
+                  <BrowserMock accent={accent} />
+                )}
+                {!briefPhoto && <PlaceholderNumberBadge number={nextPlaceholderNumber()} />}
+                <span className="relative font-display text-3xl font-extrabold text-white sm:text-4xl">
+                  {tr(study.briefTitle)}
+                </span>
+              </div>
+            );
+          })()}
         </RevealOnScroll>
 
         {study.heroImages && study.heroImages.length > 0 && (
-          <RevealOnScroll delay={0.18} className="mt-6 grid gap-5 sm:grid-cols-2">
+          <RevealOnScroll delay={0.18} className={`mt-6 grid gap-5 ${study.heroImages.length > 1 ? "sm:grid-cols-2" : ""}`}>
             {study.heroImages.map((img, i) => (
-              <ImagePlaceholder key={i} label={tr(img)} number={nextPlaceholderNumber()} className="aspect-[4/3]" />
+              <div key={i}>
+                {renderMediaSlot(img, "aspect-[4/3]", study.heroImages!.length > 1 ? "aspect-video" : undefined)}
+              </div>
             ))}
           </RevealOnScroll>
         )}
@@ -271,15 +312,26 @@ export default function CaseStudy() {
                   <ImagePlaceholder label={tr(study.objectivesPlaceholder)} number={nextPlaceholderNumber()} />
                 </RevealOnScroll>
               )}
+              {study.objectivesImages && study.objectivesImages.length > 0 && (
+                <div className={`mt-8 grid gap-5 ${study.objectivesImages.length > 1 ? "sm:grid-cols-2" : ""}`}>
+                  {study.objectivesImages.map((img, i) => (
+                    <RevealOnScroll key={i} delay={0.06 + i * 0.05}>
+                      {renderMediaSlot(img, undefined, "aspect-video")}
+                    </RevealOnScroll>
+                  ))}
+                </div>
+              )}
             </>
           )}
         </section>
 
         {(() => {
-          const blocks: { title: Bilingual; body?: Bilingual; list?: Bilingual[] }[] = [];
-          if (study.solvingTitle && study.solving) blocks.push({ title: study.solvingTitle, body: study.solving });
-          if (study.scope) blocks.push({ title: study.scope.title, body: study.scope.body });
-          if (study.designChallenge) blocks.push({ title: study.designChallenge.title, body: study.designChallenge.body });
+          const blocks: { title: Bilingual; lead?: Bilingual; body?: Bilingual; list?: Bilingual[] }[] = [];
+          if (study.solvingTitle && study.solving)
+            blocks.push({ title: study.solvingTitle, lead: study.solvingLead, body: study.solving });
+          if (study.scope) blocks.push({ title: study.scope.title, lead: study.scope.lead, body: study.scope.body });
+          if (study.designChallenge)
+            blocks.push({ title: study.designChallenge.title, lead: study.designChallenge.lead, body: study.designChallenge.body });
           if (study.whoTitle && study.who) blocks.push({ title: study.whoTitle, body: study.who });
           if (study.needsTitle && study.needs) blocks.push({ title: study.needsTitle, list: study.needs });
           if (blocks.length === 0) return null;
@@ -288,7 +340,10 @@ export default function CaseStudy() {
               {blocks.map((block, i) => (
                 <RevealOnScroll key={i} delay={i * 0.06}>
                   <h3 className="font-display text-2xl font-extrabold text-ink">{tr(block.title)}</h3>
-                  {block.body && <p className="mt-3 text-sm leading-relaxed text-ink-soft">{tr(block.body)}</p>}
+                  {block.lead && <p className="mt-3 text-sm font-bold leading-relaxed text-ink">{tr(block.lead)}</p>}
+                  {block.body && (
+                    <p className={`text-sm leading-relaxed text-ink-soft ${block.lead ? "mt-2" : "mt-3"}`}>{tr(block.body)}</p>
+                  )}
                   {block.list && (
                     <ul className="mt-3 space-y-2">
                       {block.list.map((n, j) => (
@@ -343,7 +398,9 @@ export default function CaseStudy() {
           </section>
         )}
 
-        {study.processSections?.map((proc, i) => (
+        {study.processSections
+          ?.filter((proc) => !proc.hidden)
+          .map((proc, i) => (
           <section key={i} className="mt-32">
             <RevealOnScroll
               className={
@@ -359,6 +416,7 @@ export default function CaseStudy() {
               >
                 {tr(proc.title)}
               </h2>
+              {proc.leadImage && <div className="mt-5">{renderMediaSlot(proc.leadImage)}</div>}
               <div className={twoColumnBody ? "mt-5 grid gap-10 sm:grid-cols-2 lg:grid-cols-3" : undefined}>
                 <p
                   className={`text-[15px] leading-relaxed ${
@@ -406,21 +464,33 @@ export default function CaseStudy() {
                           <ImagePlaceholder label={tr(ph.alt)} number={nextPlaceholderNumber()} className="aspect-[4/3]" />
                         );
                       })()
-                    ) : isPlaceholderImage(ph) ? (
-                      (() => {
-                        const src = caseStudyImages[ph.imageKey];
-                        return src ? (
-                          <img src={src} alt={tr(ph.alt)} className="w-full rounded-2xl border border-ink/10" />
-                        ) : (
-                          <ImagePlaceholder label={tr(ph.alt)} number={nextPlaceholderNumber()} className="aspect-[4/3]" />
-                        );
-                      })()
                     ) : (
-                      <ImagePlaceholder label={tr(ph)} number={nextPlaceholderNumber()} className="aspect-[4/3]" />
+                      // Same letterbox box for both branches (real image or
+                      // still-dashed placeholder) — every slot in this
+                      // section's grid shares one box height (aspect-video,
+                      // close to most of these renders' own ~16:9 aspect)
+                      // so a row of them lines up, without cropping any of
+                      // them: object-contain inside, not object-cover.
+                      renderMediaSlot(ph, "aspect-[4/3]", "aspect-video")
                     )}
                   </RevealOnScroll>
                 ))}
               </div>
+            )}
+            {proc.carousel && proc.carousel.length > 0 && (
+              <div className="mt-8">
+                <ImageCarousel
+                  images={proc.carousel.map((img) => ({
+                    src: caseStudyImages[img.imageKey],
+                    alt: tr(img.alt),
+                  }))}
+                />
+              </div>
+            )}
+            {proc.stepsChain && proc.stepsChain.length > 0 && (
+              <RevealOnScroll delay={0.1} className="mt-8">
+                <StepsChain steps={proc.stepsChain.map((s) => tr(s))} />
+              </RevealOnScroll>
             )}
           </section>
         ))}
