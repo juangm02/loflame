@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import Logo from "./Logo";
 import { nav } from "../data/content";
 import { useLanguage } from "../context/LanguageContext";
+import { Button } from "./ui/button";
 
 export default function Header({ right }: { right?: ReactNode }) {
   const { pathname } = useLocation();
@@ -32,15 +33,16 @@ export default function Header({ right }: { right?: ReactNode }) {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-6 sm:px-8 sm:py-7">
         <div className="flex items-center gap-3">
           <Logo />
-          <button
+          <Button
+            variant="ghost"
             onClick={toggle}
-            className="flex items-center gap-1 rounded-full border border-ink/15 px-3 py-1.5 text-xs font-semibold tracking-wide text-ink-action/80 transition hover:border-ink/40 hover:text-ink-action cursor-pointer"
+            className="h-auto gap-1 rounded-full border border-ink/15 px-3 py-1.5 text-xs font-semibold tracking-wide text-ink-action/80 hover:border-ink/40 hover:bg-transparent hover:text-ink-action"
             aria-label="Toggle language"
           >
             <span className={lang === "es" ? "text-ink-action" : "text-ink-action/35"}>ES</span>
             <span className="text-ink-action/25">/</span>
             <span className={lang === "en" ? "text-ink-action" : "text-ink-action/35"}>EN</span>
-          </button>
+          </Button>
         </div>
 
         {showTabs && (

@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import ObjectiveIcon from "./ObjectiveIcon";
+import SectionHeading from "./ui/SectionHeading";
+import Card from "./ui/Card";
 
 const HEADER_HEIGHT = 105; // px — site header is itself sticky top-0, z-50; hold below it, not under it
 const SETTLE_MS = 650; // roughly matches the CSS transition below; blocks input mid-transition
@@ -269,10 +271,10 @@ export default function ObjectivesScrollShowcase({
   const cardsGrid = (
     <div ref={sectionRef} className="mt-8 grid gap-5 sm:mt-10 sm:grid-cols-3">
       {objectives.map((obj, i) => (
-        <div key={i} className="flex flex-col rounded-2xl border border-ink/8 bg-card/50 p-6">
+        <Card key={i} className="flex flex-col p-6">
           <ObjectiveIcon index={i} accent={accent} />
           <p className="mt-4 text-sm leading-relaxed text-ink-soft">{obj}</p>
-        </div>
+        </Card>
       ))}
     </div>
   );
@@ -280,7 +282,7 @@ export default function ObjectivesScrollShowcase({
   if (prefersReducedMotion) {
     return (
       <div>
-        <h2 className="text-center font-display text-4xl font-extrabold text-ink sm:text-5xl">{title}</h2>
+        <SectionHeading center>{title}</SectionHeading>
         {cardsGrid}
         <div className="mx-auto mt-6 grid w-full max-w-4xl gap-4 sm:grid-cols-2">
           <img src={images.before} alt={images.beforeAlt} className="h-auto w-full rounded-2xl border border-ink/10" />
@@ -292,7 +294,7 @@ export default function ObjectivesScrollShowcase({
 
   return (
     <div>
-      <h2 className="text-center font-display text-4xl font-extrabold text-ink sm:text-5xl">{title}</h2>
+      <SectionHeading center>{title}</SectionHeading>
 
       {cardsGrid}
 

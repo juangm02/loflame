@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Button } from "./ui/button";
 
 export interface TabItem {
   key: string;
@@ -45,15 +46,16 @@ export default function CaseStudyTabs({ items }: { items: TabItem[] }) {
   return (
     <div className="relative border-b border-ink/10">
       {canLeft && (
-        <button
+        <Button
+          variant="ghost"
           onClick={() => scrollByAmount(-180)}
           aria-label="Scroll left"
-          className="absolute left-0 top-0 z-10 hidden h-full items-center bg-gradient-to-r from-paper via-paper/95 to-transparent py-1 pl-0.5 pr-6 sm:flex"
+          className="absolute left-0 top-0 z-10 hidden h-full items-center rounded-none bg-gradient-to-r from-paper via-paper/95 to-transparent p-0 py-1 pl-0.5 pr-6 hover:bg-gradient-to-r hover:from-paper hover:via-paper/95 hover:to-transparent sm:flex"
         >
           <span className="flex h-6 w-6 items-center justify-center rounded-full border border-ink/10 bg-card/90 text-ink-action/60 shadow-sm transition-transform hover:scale-105">
             <ArrowIcon direction="left" />
           </span>
-        </button>
+        </Button>
       )}
 
       <div ref={trackRef} className="no-scrollbar flex gap-7 overflow-x-auto scroll-smooth">
@@ -89,15 +91,16 @@ export default function CaseStudyTabs({ items }: { items: TabItem[] }) {
       </div>
 
       {canRight && (
-        <button
+        <Button
+          variant="ghost"
           onClick={() => scrollByAmount(180)}
           aria-label="Scroll right"
-          className="absolute right-0 top-0 z-10 hidden h-full items-center bg-gradient-to-l from-paper via-paper/95 to-transparent py-1 pl-6 pr-0.5 sm:flex"
+          className="absolute right-0 top-0 z-10 hidden h-full items-center rounded-none bg-gradient-to-l from-paper via-paper/95 to-transparent p-0 py-1 pl-6 pr-0.5 hover:bg-gradient-to-l hover:from-paper hover:via-paper/95 hover:to-transparent sm:flex"
         >
           <span className="flex h-6 w-6 items-center justify-center rounded-full border border-ink/10 bg-card/90 text-ink-action/60 shadow-sm transition-transform hover:scale-105">
             <ArrowIcon direction="right" />
           </span>
-        </button>
+        </Button>
       )}
     </div>
   );

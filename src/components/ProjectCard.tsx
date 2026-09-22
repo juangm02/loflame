@@ -25,7 +25,7 @@ export default function ProjectCard({ project, index }: { project: ProjectMeta; 
         {...wrapperProps}
         whileHover={project.disabled ? undefined : { y: -4 }}
         transition={{ type: "spring", stiffness: 260, damping: 22 }}
-        className="group block overflow-hidden rounded-3xl border border-ink/8 bg-card/60 shadow-sm transition-shadow duration-300 hover:shadow-xl hover:shadow-black/5"
+        className="group block overflow-hidden rounded-[10px] border border-ink/8 bg-card/60 shadow-sm transition-shadow duration-300 hover:shadow-xl hover:shadow-black/5"
       >
         <div className="flex flex-col sm:flex-row">
           <div className="relative aspect-[4/3] w-full overflow-hidden sm:aspect-auto sm:w-64 sm:shrink-0">
@@ -104,8 +104,8 @@ export default function ProjectCard({ project, index }: { project: ProjectMeta; 
 function MonogramMark({ letter }: { letter: string }) {
   return (
     <div className="relative flex h-full w-full items-center justify-center">
-      <div className="absolute h-24 w-24 rotate-6 rounded-2xl bg-white/10" />
-      <div className="absolute h-24 w-24 -rotate-6 translate-x-6 translate-y-4 rounded-2xl bg-white/10" />
+      <div className="absolute h-24 w-24 rotate-6 rounded-[10px] bg-white/10" />
+      <div className="absolute h-24 w-24 -rotate-6 translate-x-6 translate-y-4 rounded-[10px] bg-white/10" />
       <span className="relative font-display text-4xl font-extrabold text-white">{letter}</span>
     </div>
   );

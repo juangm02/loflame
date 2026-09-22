@@ -1,14 +1,22 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { useRef, type ReactNode } from "react";
+
+const MotionLink = motion.create(Link);
 
 export default function CTAButton({
   children,
   href = "mailto:juangarmarquez@gmail.com",
+  to,
   variant = "dark",
   className = "",
 }: {
   children: ReactNode;
   href?: string;
+  /** Internal route (e.g. "/proyectos/datascope") — renders a router
+   * <Link> for client-side navigation instead of a plain <a href>. Takes
+   * precedence over `href` when set. */
+  to?: string;
   variant?: "dark" | "light";
   className?: string;
 }) {
@@ -36,10 +44,13 @@ export default function CTAButton({
       ? "bg-accent text-on-accent hover:bg-accent-hover"
       : "bg-paper text-ink-action hover:bg-card";
 
+  const Component = to ? MotionLink : motion.a;
+  const linkProps = to ? { to } : { href };
+
   return (
-    <motion.a
+    <Component
       ref={ref}
-      href={href}
+      {...linkProps}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       whileTap={{ scale: 0.96 }}
@@ -52,6 +63,6 @@ export default function CTAButton({
           <path d="M2 10L10 2M10 2H4M10 2V8" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </span>
-    </motion.a>
+    </Component>
   );
 }

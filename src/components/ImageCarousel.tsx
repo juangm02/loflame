@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { useCallback, useEffect, useState } from "react";
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "./ui/carousel";
+import { Button } from "./ui/button";
 
 /**
  * A small prev/next carousel for a processSection slot that's really
@@ -9,69 +10,76 @@ import { AnimatePresence, motion } from "framer-motion";
  * on a fixed-aspect box, never object-cover) so nothing is ever cropped.
  */
 export default function ImageCarousel({ images }: { images: { src?: string; alt: string }[] }) {
+  const [api, setApi] = useState<CarouselApi>();
   const [index, setIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
   const count = images.length;
 
-  function go(delta: number) {
-    setDirection(delta);
-    setIndex((prev) => (prev + delta + count) % count);
-  }
+  useEffect(() => {
+    if (!api) return;
+    setIndex(api.selectedScrollSnap());
+    const onSelect = () => setIndex(api.selectedScrollSnap());
+    api.on("select", onSelect);
+    return () => {
+      api.off("select", onSelect);
+    };
+  }, [api]);
 
-  const current = images[index];
-  if (!current) return null;
+  const goTo = useCallback((i: number) => api?.scrollTo(i), [api]);
+
+  if (!count) return null;
 
   return (
     <div className="relative">
-      <div className="relative flex aspect-video items-center justify-center overflow-hidden rounded-2xl border border-ink/10 bg-paper-dim">
-        <AnimatePresence initial={false} custom={direction}>
-          <motion.img
-            key={index}
-            src={current.src}
-            alt={current.alt}
-            custom={direction}
-            initial={{ opacity: 0, x: 24 * direction }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -24 * direction }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="max-h-full max-w-full object-contain"
-          />
-        </AnimatePresence>
+      <Carousel setApi={setApi} opts={{ loop: true }}>
+        <CarouselContent className="-ml-0">
+          {images.map((image, i) => (
+            <CarouselItem key={i} className="pl-0">
+              <div className="flex aspect-video items-center justify-center overflow-hidden rounded-2xl border border-ink/10 bg-paper-dim">
+                <img src={image.src} alt={image.alt} className="max-h-full max-w-full object-contain" />
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
 
         {count > 1 && (
           <>
-            <button
+            <Button
               type="button"
-              onClick={() => go(-1)}
+              variant="ghost"
+              size="icon"
+              onClick={() => api?.scrollPrev()}
               aria-label="Anterior"
-              className="absolute left-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-card/90 text-ink shadow-md transition hover:bg-card"
+              className="absolute left-3 top-1/2 h-9 w-9 -translate-y-1/2 rounded-full bg-card/90 text-ink shadow-md hover:bg-card hover:text-ink"
             >
               <ArrowIcon direction="left" />
-            </button>
-            <button
+            </Button>
+            <Button
               type="button"
-              onClick={() => go(1)}
+              variant="ghost"
+              size="icon"
+              onClick={() => api?.scrollNext()}
               aria-label="Siguiente"
-              className="absolute right-3 top-1/2 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-card/90 text-ink shadow-md transition hover:bg-card"
+              className="absolute right-3 top-1/2 h-9 w-9 -translate-y-1/2 rounded-full bg-card/90 text-ink shadow-md hover:bg-card hover:text-ink"
             >
               <ArrowIcon direction="right" />
-            </button>
+            </Button>
           </>
         )}
-      </div>
+      </Carousel>
 
       {count > 1 && (
         <div className="mt-3 flex items-center justify-center gap-2">
           {images.map((_, i) => (
-            <button
+            <Button
               key={i}
               type="button"
+              variant="ghost"
+              size="icon"
               aria-label={`Ir a la imagen ${i + 1}`}
-              onClick={() => {
-                setDirection(i > index ? 1 : -1);
-                setIndex(i);
-              }}
-              className={`h-1.5 rounded-full transition-all ${i === index ? "w-6 bg-ink-action" : "w-1.5 bg-ink/20"}`}
+              onClick={() => goTo(i)}
+              className={`h-1.5 rounded-full p-0 transition-all ${
+                i === index ? "w-6 bg-ink-action hover:bg-ink-action" : "w-1.5 bg-ink/20 hover:bg-ink/20"
+              }`}
             />
           ))}
         </div>

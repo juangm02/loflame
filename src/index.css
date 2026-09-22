@@ -63,6 +63,48 @@
   --color-fixed-dark: #14161f;
 }
 
+/* shadcn/ui token bridge — aliases its semantic names onto the site's own
+   tokens above instead of shipping a second, parallel color system.
+   Since --color-paper/ink/accent/etc. already swap per
+   [data-theme="dark"], these inherit that automatically; no separate
+   dark-mode block needed for any alias below. --color-card and
+   --color-accent already exist above with the exact meaning shadcn wants
+   (card surface, brand fill) so they're deliberately NOT redeclared here
+   — shadcn components fall through to those same tokens directly. That
+   does mean shadcn's usual *subtle gray* hover-highlight role (bg-accent
+   — ghost-button hover, menu-item hover) resolves to the real brand navy
+   here instead of a muted gray — bolder than shadcn's own default. Flagged
+   here so it's a known choice, not a surprise the first time a dropdown
+   or menu item shows up. */
+@theme inline {
+  --color-background: var(--color-paper);
+  --color-foreground: var(--color-ink);
+  --color-card-foreground: var(--color-ink);
+  --color-popover: var(--color-card);
+  --color-popover-foreground: var(--color-ink);
+  --color-primary: var(--color-accent);
+  --color-primary-foreground: var(--color-on-accent);
+  --color-secondary: var(--color-paper-dim);
+  --color-secondary-foreground: var(--color-ink);
+  --color-muted: var(--color-paper-dim);
+  --color-muted-foreground: var(--color-ink-soft);
+  --color-accent-foreground: var(--color-on-accent);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--color-on-accent);
+  --color-border: var(--color-ghost);
+  --color-input: var(--color-ghost);
+  --color-ring: var(--color-accent);
+
+  /* shadcn components (Button, Input, etc.) use rounded-md/lg/xl for
+     control-scale radii — a different, smaller scale than the site's own
+     rounded-2xl/3xl card system (see the design-system doc's "Radios"),
+     appropriate since buttons/inputs aren't cards. */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
 :root {
   /* Layered-shadow tokens (inset highlight / tight shadow / long shadow),
      referenced via var() inside arbitrary shadow-[...] values in TagCloud,
@@ -73,6 +115,13 @@
   --shadow-soft: rgba(20, 22, 31, 0.08);
   --shadow-strong: rgba(20, 22, 31, 0.28);
   --pattern-dot: rgba(20, 22, 31, 0.08);
+
+  /* shadcn/ui base radius (control-scale — see @theme inline above) and
+     the destructive color, the one shadcn token with no existing sibling
+     on this site to alias — kept restrained/desaturated to match the rest
+     of the palette rather than a stock alarm-red. */
+  --radius: 0.625rem;
+  --destructive: #b0453f;
 }
 
 :root[data-theme="dark"] {

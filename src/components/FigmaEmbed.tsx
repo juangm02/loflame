@@ -1,5 +1,7 @@
 import { useRef } from "react";
 import { useLanguage } from "../context/LanguageContext";
+import Card from "./ui/Card";
+import { Button } from "./ui/button";
 
 export default function FigmaEmbed({ url, title = "Prototipo interactivo" }: { url: string; title?: string }) {
   const { tr } = useLanguage();
@@ -11,7 +13,7 @@ export default function FigmaEmbed({ url, title = "Prototipo interactivo" }: { u
   }
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-ink/10 bg-card shadow-[0_1px_2px_var(--shadow-soft),0_24px_48px_-20px_var(--shadow-strong)]">
+    <Card surface="solid" radius="3xl" shadow>
       <div className="relative aspect-[16/10] w-full sm:aspect-[16/9]">
         <iframe
           ref={iframeRef}
@@ -26,19 +28,20 @@ export default function FigmaEmbed({ url, title = "Prototipo interactivo" }: { u
             outside since it's cross-origin content, so instead we cover it
             with a same-height bar carrying our own fullscreen CTA. */}
         <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-14 items-center justify-end border-t border-ink/10 bg-card px-4">
-          <button
+          <Button
             type="button"
+            variant="ghost"
             onClick={goFullscreen}
-            className="pointer-events-auto inline-flex items-center gap-1.5 text-sm font-bold text-ink-action"
+            className="pointer-events-auto h-auto gap-1.5 p-0 text-sm font-bold text-ink-action hover:bg-transparent hover:text-ink-action"
           >
             <span className="underline-draw">
               {tr({ es: "Pantalla completa", en: "Fullscreen" })}
             </span>
             <ExpandIcon />
-          </button>
+          </Button>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }
 

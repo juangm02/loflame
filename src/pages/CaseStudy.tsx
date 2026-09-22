@@ -14,6 +14,8 @@ import ImageCarousel from "../components/ImageCarousel";
 import StepsChain from "../components/StepsChain";
 import ObjectiveIcon from "../components/ObjectiveIcon";
 import ObjectivesScrollShowcase from "../components/ObjectivesScrollShowcase";
+import SectionHeading from "../components/ui/SectionHeading";
+import Card from "../components/ui/Card";
 import {
   caseStudies,
   caseStudyNav,
@@ -109,7 +111,7 @@ export default function CaseStudy() {
             {tr(f.status)}
           </span>
         )}
-        <h3 className="mt-3 font-display text-2xl font-extrabold text-ink">{tr(f.title)}</h3>
+        <SectionHeading level={3} className="mt-3">{tr(f.title)}</SectionHeading>
         {f.subtitle && <p className="mt-1 text-sm font-semibold text-ink-soft">{tr(f.subtitle)}</p>}
         <p className="mt-3 text-[15px] leading-relaxed text-ink-soft">{tr(f.body)}</p>
         {f.bullets && (
@@ -243,16 +245,18 @@ export default function CaseStudy() {
             ))}
           </RevealOnScroll>
 
-          <RevealOnScroll delay={0.08} className="flex flex-col gap-5 rounded-2xl border border-ink/8 bg-card/50 p-6 text-sm">
-            <MetaRow label={tr({ es: "Empresa", en: "Company" })} value={tr(study.meta.company)} />
-            {study.meta.period && (
-              <MetaRow label={tr({ es: "Periodo", en: "Period" })} value={tr(study.meta.period)} />
-            )}
-            <MetaRow label={tr({ es: "Rol", en: "Role" })} value={tr(study.meta.role)} sub={tr(study.meta.roleDetail)} />
-            <MetaRow
-              label={tr({ es: "Equipo (Product)", en: "Team (Product)" })}
-              value={study.meta.team.map((m) => tr(m)).join(", ")}
-            />
+          <RevealOnScroll delay={0.08}>
+            <Card className="flex flex-col gap-5 p-6 text-sm">
+              <MetaRow label={tr({ es: "Empresa", en: "Company" })} value={tr(study.meta.company)} />
+              {study.meta.period && (
+                <MetaRow label={tr({ es: "Periodo", en: "Period" })} value={tr(study.meta.period)} />
+              )}
+              <MetaRow label={tr({ es: "Rol", en: "Role" })} value={tr(study.meta.role)} sub={tr(study.meta.roleDetail)} />
+              <MetaRow
+                label={tr({ es: "Equipo (Product)", en: "Team (Product)" })}
+                value={study.meta.team.map((m) => tr(m)).join(", ")}
+              />
+            </Card>
           </RevealOnScroll>
         </section>
 
@@ -274,7 +278,7 @@ export default function CaseStudy() {
             )}
           </RevealOnScroll>
           <RevealOnScroll delay={0.08}>
-            <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.approachTitle)}</h2>
+            <SectionHeading>{tr(study.approachTitle)}</SectionHeading>
             <p className="mt-5 text-[15px] leading-relaxed text-ink-soft">{tr(study.approach)}</p>
           </RevealOnScroll>
         </section>
@@ -295,15 +299,15 @@ export default function CaseStudy() {
           ) : (
             <>
               <RevealOnScroll>
-                <h2 className="text-center font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.objectivesTitle)}</h2>
+                <SectionHeading center>{tr(study.objectivesTitle)}</SectionHeading>
               </RevealOnScroll>
               <div className="mt-14 grid gap-5 sm:grid-cols-3">
                 {study.objectives.map((obj, i) => (
                   <RevealOnScroll key={i} delay={i * 0.06}>
-                    <div className="h-full rounded-2xl border border-ink/8 bg-card/50 p-6">
+                    <Card fullHeight className="p-6">
                       <ObjectiveIcon index={i} accent={accent} />
                       <p className="mt-4 text-sm leading-relaxed text-ink-soft">{tr(obj)}</p>
-                    </div>
+                    </Card>
                   </RevealOnScroll>
                 ))}
               </div>
@@ -339,7 +343,7 @@ export default function CaseStudy() {
             <section className="mt-32 grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
               {blocks.map((block, i) => (
                 <RevealOnScroll key={i} delay={i * 0.06}>
-                  <h3 className="font-display text-2xl font-extrabold text-ink">{tr(block.title)}</h3>
+                  <SectionHeading level={3}>{tr(block.title)}</SectionHeading>
                   {block.lead && <p className="mt-3 text-sm font-bold leading-relaxed text-ink">{tr(block.lead)}</p>}
                   {block.body && (
                     <p className={`text-sm leading-relaxed text-ink-soft ${block.lead ? "mt-2" : "mt-3"}`}>{tr(block.body)}</p>
@@ -377,12 +381,12 @@ export default function CaseStudy() {
         {study.designThinking && (
           <section className="mt-32">
             <RevealOnScroll>
-              <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">Design Thinking</h2>
+              <SectionHeading>Design Thinking</SectionHeading>
             </RevealOnScroll>
             <div className="mt-14 grid gap-4 no-scrollbar sm:grid-cols-5">
               {study.designThinking.map((phase, i) => (
                 <RevealOnScroll key={i} delay={i * 0.05}>
-                  <div className="h-full rounded-2xl border border-ink/8 bg-card/50 p-5">
+                  <Card fullHeight className="p-5">
                     <p className="text-sm font-extrabold text-ink">{tr(phase.phase)}</p>
                     <ul className="mt-3 space-y-1.5">
                       {phase.items.map((item, j) => (
@@ -391,7 +395,7 @@ export default function CaseStudy() {
                         </li>
                       ))}
                     </ul>
-                  </div>
+                  </Card>
                 </RevealOnScroll>
               ))}
             </div>
@@ -400,50 +404,50 @@ export default function CaseStudy() {
 
         {study.processSections
           ?.filter((proc) => !proc.hidden)
-          .map((proc, i) => (
-          <section key={i} className="mt-32">
-            <RevealOnScroll
-              className={
-                proc.highlight
-                  ? "rounded-3xl bg-surface-feature px-6 py-10 dark:border-[0.5px] dark:border-ghost dark:border-l-[3px] dark:border-l-accent sm:px-12 sm:py-14"
-                  : undefined
-              }
-            >
-              <h2
-                className={`font-display text-4xl font-extrabold sm:text-5xl ${
-                  proc.highlight ? "text-on-accent dark:text-ink" : "text-ink"
-                }`}
-              >
-                {tr(proc.title)}
-              </h2>
-              {proc.leadImage && <div className="mt-5">{renderMediaSlot(proc.leadImage)}</div>}
-              <div className={twoColumnBody ? "mt-5 grid gap-10 sm:grid-cols-2 lg:grid-cols-3" : undefined}>
-                <p
-                  className={`text-[15px] leading-relaxed ${
-                    twoColumnBody ? "sm:col-span-2 lg:columns-2 lg:gap-x-10" : "mt-5 max-w-2xl"
-                  } ${proc.highlight ? "text-on-accent/70 dark:text-ink-soft" : "text-ink-soft"}`}
-                >
-                  {tr(proc.body)}
-                </p>
-              </div>
-              {proc.bullets && (
-                <ul className="mt-5 max-w-2xl space-y-2">
-                  {proc.bullets.map((b, j) => (
-                    <li
-                      key={j}
-                      className={`flex gap-2 text-sm leading-relaxed ${
-                        proc.highlight ? "text-on-accent/80 dark:text-ink-soft" : "text-ink-soft"
-                      }`}
-                    >
-                      <span
-                        className={`mt-1.5 h-1 w-1 shrink-0 rounded-full ${
-                          proc.highlight ? "bg-on-accent/50 dark:bg-ink/40" : "bg-ink/40"
+          .map((proc, i) => {
+            const content = (
+              <>
+                <SectionHeading highlight={proc.highlight}>{tr(proc.title)}</SectionHeading>
+                {proc.leadImage && <div className="mt-5">{renderMediaSlot(proc.leadImage)}</div>}
+                <div className={twoColumnBody ? "mt-5 grid gap-10 sm:grid-cols-2 lg:grid-cols-3" : undefined}>
+                  <p
+                    className={`text-[15px] leading-relaxed ${
+                      twoColumnBody ? "sm:col-span-2 lg:columns-2 lg:gap-x-10" : "mt-5 max-w-2xl"
+                    } ${proc.highlight ? "text-on-accent/70 dark:text-ink-soft" : "text-ink-soft"}`}
+                  >
+                    {tr(proc.body)}
+                  </p>
+                </div>
+                {proc.bullets && (
+                  <ul className="mt-5 max-w-2xl space-y-2">
+                    {proc.bullets.map((b, j) => (
+                      <li
+                        key={j}
+                        className={`flex gap-2 text-sm leading-relaxed ${
+                          proc.highlight ? "text-on-accent/80 dark:text-ink-soft" : "text-ink-soft"
                         }`}
-                      />
-                      {tr(b)}
-                    </li>
-                  ))}
-                </ul>
+                      >
+                        <span
+                          className={`mt-1.5 h-1 w-1 shrink-0 rounded-full ${
+                            proc.highlight ? "bg-on-accent/50 dark:bg-ink/40" : "bg-ink/40"
+                          }`}
+                        />
+                        {tr(b)}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </>
+            );
+            return (
+          <section key={i} className="mt-32">
+            <RevealOnScroll>
+              {proc.highlight ? (
+                <Card surface="feature" className="px-6 py-10 sm:px-12 sm:py-14">
+                  {content}
+                </Card>
+              ) : (
+                content
               )}
             </RevealOnScroll>
             {proc.placeholders && proc.placeholders.length > 0 && (
@@ -493,12 +497,13 @@ export default function CaseStudy() {
               </RevealOnScroll>
             )}
           </section>
-        ))}
+            );
+          })}
 
         {study.research && (
           <section className="mt-32">
             <RevealOnScroll>
-              <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.research.title)}</h2>
+              <SectionHeading>{tr(study.research.title)}</SectionHeading>
               <p className="mt-2 text-lg font-semibold text-ink-soft">{tr(study.research.subtitle)}</p>
             </RevealOnScroll>
             {inlineResearchImage ? (
@@ -534,7 +539,7 @@ export default function CaseStudy() {
               <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                 {study.research.categories.map((cat, i) => (
                   <RevealOnScroll key={i} delay={i * 0.05}>
-                    <div className="h-full rounded-2xl border border-ink/8 bg-card/50 p-5">
+                    <Card fullHeight className="p-5">
                       <p className="text-sm font-extrabold text-ink">{tr(cat.title)}</p>
                       <ol className="mt-3 space-y-2.5">
                         {cat.questions.map((q, j) => (
@@ -543,7 +548,7 @@ export default function CaseStudy() {
                           </li>
                         ))}
                       </ol>
-                    </div>
+                    </Card>
                   </RevealOnScroll>
                 ))}
               </div>
@@ -552,10 +557,10 @@ export default function CaseStudy() {
               <div className="mt-10 grid gap-4 sm:grid-cols-2">
                 {study.research.quotes.map((q, i) => (
                   <RevealOnScroll key={i} delay={i * 0.05}>
-                    <div className="h-full rounded-2xl border border-ink/8 bg-card/50 p-5">
+                    <Card fullHeight className="p-5">
                       <p className="font-display text-2xl leading-none text-ink/15">"</p>
                       <p className="mt-1 text-sm italic leading-relaxed text-ink-soft">{tr(q)}</p>
-                    </div>
+                    </Card>
                   </RevealOnScroll>
                 ))}
               </div>
@@ -571,23 +576,20 @@ export default function CaseStudy() {
         {study.problemStatement && (
           <section className="mt-32">
             <RevealOnScroll>
-              <h2 className="text-center font-display text-4xl font-extrabold text-ink sm:text-5xl">
-                {tr(study.problemStatement.title)}
-              </h2>
+              <SectionHeading center>{tr(study.problemStatement.title)}</SectionHeading>
               <p className="mx-auto mt-3 max-w-xl text-center text-[15px] leading-relaxed text-ink-soft">
                 {tr(study.problemStatement.intro)}
               </p>
             </RevealOnScroll>
-            <RevealOnScroll
-              delay={0.06}
-              className="mt-8 rounded-3xl bg-surface-feature px-8 py-12 text-center dark:border-[0.5px] dark:border-ghost dark:border-l-[3px] dark:border-l-accent sm:px-16"
-            >
-              <p className="mx-auto max-w-2xl font-display text-xl font-bold leading-snug text-on-accent dark:text-ink sm:text-2xl">
-                {tr(study.problemStatement.quote)}
-              </p>
-              <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-on-accent/60 dark:text-ink-soft">
-                {tr(study.problemStatement.detail)}
-              </p>
+            <RevealOnScroll delay={0.06} className="mt-8">
+              <Card surface="feature" className="px-8 py-12 text-center sm:px-16">
+                <p className="mx-auto max-w-2xl font-display text-xl font-bold leading-snug text-on-accent dark:text-ink sm:text-2xl">
+                  {tr(study.problemStatement.quote)}
+                </p>
+                <p className="mx-auto mt-5 max-w-xl text-sm leading-relaxed text-on-accent/60 dark:text-ink-soft">
+                  {tr(study.problemStatement.detail)}
+                </p>
+              </Card>
             </RevealOnScroll>
             <RevealOnScroll delay={0.1} className="mt-6 flex flex-wrap justify-center gap-2">
               {study.problemStatement.tags.map((tag, i) => (
@@ -603,7 +605,7 @@ export default function CaseStudy() {
           (study.architecture.tree ? (
             <section className="mt-32">
               <RevealOnScroll className="max-w-2xl">
-                <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.architecture.title)}</h2>
+                <SectionHeading>{tr(study.architecture.title)}</SectionHeading>
                 <p className="mt-5 text-[15px] leading-relaxed text-ink-soft">{tr(study.architecture.body)}</p>
                 {study.architecture.image && <div className="mt-8">{renderMediaSlot(study.architecture.image)}</div>}
               </RevealOnScroll>
@@ -620,7 +622,7 @@ export default function CaseStudy() {
           ) : (
             <section className="mt-32 grid items-center gap-10 lg:grid-cols-2">
               <RevealOnScroll>
-                <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.architecture.title)}</h2>
+                <SectionHeading>{tr(study.architecture.title)}</SectionHeading>
                 <p className="mt-5 text-[15px] leading-relaxed text-ink-soft">{tr(study.architecture.body)}</p>
               </RevealOnScroll>
               {study.architecture.placeholder && (
@@ -634,7 +636,7 @@ export default function CaseStudy() {
         {study.prototype && (
           <section className="mt-32">
             <RevealOnScroll className="max-w-2xl">
-              <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.prototype.title)}</h2>
+              <SectionHeading>{tr(study.prototype.title)}</SectionHeading>
               <p className="mt-5 text-[15px] leading-relaxed text-ink-soft">{tr(study.prototype.body)}</p>
             </RevealOnScroll>
 
@@ -680,7 +682,7 @@ export default function CaseStudy() {
         {study.opportunities && (
           <section className="mt-32 grid gap-10 lg:grid-cols-2">
             <RevealOnScroll>
-              <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.opportunities.title)}</h2>
+              <SectionHeading>{tr(study.opportunities.title)}</SectionHeading>
               <p className="mt-2 text-lg font-semibold text-ink-soft">{tr(study.opportunities.subtitle)}</p>
             </RevealOnScroll>
             <RevealOnScroll delay={0.08}>
@@ -702,7 +704,7 @@ export default function CaseStudy() {
         {study.reideate && (
           <section className="mt-32">
             <RevealOnScroll>
-              <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.reideate.title)}</h2>
+              <SectionHeading>{tr(study.reideate.title)}</SectionHeading>
               <p className="mt-2 text-lg font-semibold text-ink-soft">{tr(study.reideate.subtitle)}</p>
             </RevealOnScroll>
             <RevealOnScroll delay={0.06} className="mt-6 max-w-3xl">
@@ -714,7 +716,7 @@ export default function CaseStudy() {
         {study.featureShowcase && (
           <section className="mt-32">
             <RevealOnScroll>
-              <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.featureShowcase.title)}</h2>
+              <SectionHeading>{tr(study.featureShowcase.title)}</SectionHeading>
               <p className="mt-2 text-lg font-semibold text-ink-soft">{tr(study.featureShowcase.subtitle)}</p>
               {study.featureShowcase.body && (
                 <p className="mt-5 max-w-3xl text-[15px] leading-relaxed text-ink-soft">{tr(study.featureShowcase.body)}</p>
@@ -733,7 +735,7 @@ export default function CaseStudy() {
                   {study.onboarding && (
                     <RevealOnScroll className="grid items-center gap-10 lg:grid-cols-2">
                       <div>
-                        <h3 className="font-display text-2xl font-extrabold text-ink">{tr(study.onboarding.title)}</h3>
+                        <SectionHeading level={3}>{tr(study.onboarding.title)}</SectionHeading>
                         <p className="mt-3 text-[15px] leading-relaxed text-ink-soft">{tr(study.onboarding.body)}</p>
                       </div>
                       {study.onboarding.placeholder && renderMediaSlot(study.onboarding.placeholder, "aspect-[4/3]")}
@@ -785,7 +787,7 @@ export default function CaseStudy() {
         {!restructureFeatureShowcase && study.onboarding && (
           <section className="mt-32 grid items-center gap-10 lg:grid-cols-2">
             <RevealOnScroll>
-              <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.onboarding.title)}</h2>
+              <SectionHeading>{tr(study.onboarding.title)}</SectionHeading>
               <p className="mt-5 text-[15px] leading-relaxed text-ink-soft">{tr(study.onboarding.body)}</p>
             </RevealOnScroll>
             {study.onboarding.placeholder && (
@@ -797,9 +799,7 @@ export default function CaseStudy() {
         {study.testimonials && (
           <section className="mt-32">
             <RevealOnScroll>
-              <h2 className="text-center font-display text-4xl font-extrabold text-ink sm:text-5xl">
-                {tr(study.testimonials.title)}
-              </h2>
+              <SectionHeading center>{tr(study.testimonials.title)}</SectionHeading>
               <p className="mt-2 text-center text-sm font-semibold uppercase tracking-wide text-ink/40">
                 {tr(study.testimonials.subtitle)}
               </p>
@@ -807,10 +807,10 @@ export default function CaseStudy() {
             <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {study.testimonials.quotes.map((q, i) => (
                 <RevealOnScroll key={i} delay={i * 0.04}>
-                  <div className="h-full rounded-2xl border border-ink/8 bg-card/50 p-6">
+                  <Card fullHeight className="p-6">
                     <p className="font-display text-3xl leading-none text-ink/15">"</p>
                     <p className="mt-1 text-sm leading-relaxed text-ink-soft">{tr(q)}</p>
-                  </div>
+                  </Card>
                 </RevealOnScroll>
               ))}
             </div>
@@ -820,7 +820,7 @@ export default function CaseStudy() {
         {study.reflection && (
           <section className="mt-32">
             <RevealOnScroll className="max-w-3xl space-y-4">
-              <h2 className="font-display text-4xl font-extrabold text-ink sm:text-5xl">{tr(study.reflection.title)}</h2>
+              <SectionHeading>{tr(study.reflection.title)}</SectionHeading>
               <p className="text-[15px] leading-relaxed text-ink-soft">{tr(study.reflection.body)}</p>
               {study.reflection.paragraphs?.map((p, i) => (
                 <p key={i} className="text-[15px] leading-relaxed text-ink-soft">
@@ -844,25 +844,29 @@ export default function CaseStudy() {
         )}
 
         {SHOW_EXPLORE_PROCESS && (
-          <RevealOnScroll className="mt-36 flex flex-col items-center gap-6 rounded-3xl border border-ink/8 bg-card/50 px-6 py-16 text-center">
-            <motion.span
-              animate={{ y: [0, -6, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-on-accent"
-            >
-              ✦
-            </motion.span>
-            <h2 className="max-w-md font-display text-3xl font-extrabold text-ink">{tr(cta.exploreProcess)}</h2>
-            <p className="max-w-sm text-sm text-ink-soft">{tr(cta.exploreProcessSub)}</p>
-            <CTAButton href="#" variant="dark">
-              {tr(cta.goToFigma)}
-            </CTAButton>
-            <a
-              href="#top"
-              className="underline-draw mt-2 text-sm font-semibold text-ink-action/50"
-            >
-              {tr(nav.backToTop)}
-            </a>
+          <RevealOnScroll className="mt-36">
+            <Card radius="3xl" className="flex flex-col items-center gap-6 px-6 py-16 text-center">
+              <motion.span
+                animate={{ y: [0, -6, 0] }}
+                transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                className="flex h-12 w-12 items-center justify-center rounded-full bg-accent text-on-accent"
+              >
+                ✦
+              </motion.span>
+              {/* Not a SectionHeading: this is a CTA-block title (3xl), a
+                  deliberately smaller scale than the 4xl/5xl section titles. */}
+              <h2 className="max-w-md font-display text-3xl font-extrabold text-ink">{tr(cta.exploreProcess)}</h2>
+              <p className="max-w-sm text-sm text-ink-soft">{tr(cta.exploreProcessSub)}</p>
+              <CTAButton href="#" variant="dark">
+                {tr(cta.goToFigma)}
+              </CTAButton>
+              <a
+                href="#top"
+                className="underline-draw mt-2 text-sm font-semibold text-ink-action/50"
+              >
+                {tr(nav.backToTop)}
+              </a>
+            </Card>
           </RevealOnScroll>
         )}
 

@@ -1,3 +1,5 @@
+import Card from "./ui/Card";
+
 export interface MockupCard {
   title: string;
   tags: string[];
@@ -23,7 +25,7 @@ export default function IdeaBoardMockup({
   notes: MockupNote[];
 }) {
   return (
-    <div className="overflow-hidden rounded-3xl border border-ink/10 bg-card shadow-[0_1px_2px_var(--shadow-soft),0_24px_48px_-20px_var(--shadow-strong)]">
+    <Card surface="solid" radius="3xl" shadow>
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink/8 px-5 py-3.5">
         <span className="font-display text-lg font-extrabold text-indigo-600">{appName}</span>
         <div className="flex gap-1 rounded-full bg-paper-dim p-1">
@@ -99,6 +101,6 @@ export default function IdeaBoardMockup({
           )}
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

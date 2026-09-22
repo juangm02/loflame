@@ -7,7 +7,9 @@ import RevealOnScroll from "../components/RevealOnScroll";
 import TagCloud from "../components/TagCloud";
 import ToolIcon from "../components/ToolIcon";
 import ProjectCard from "../components/ProjectCard";
+import ProjectPinTabs from "../components/ProjectPinTabs";
 import ClothBackground from "../components/ClothBackground";
+import { Button } from "../components/ui/button";
 import { portfolioPage, nav, site, projects } from "../data/content";
 import { useLanguage } from "../context/LanguageContext";
 import portraitSide from "../assets/img/portrait-side.jpg";
@@ -51,18 +53,20 @@ export default function Portfolio() {
       <Header
         right={
           <>
-            <button
+            <Button
+              variant="ghost"
               onClick={() => scrollTo(aboutRef)}
-              className={`underline-draw hidden transition-colors sm:inline ${active === "about" ? "text-ink-action" : "text-ink-action/45"}`}
+              className={`underline-draw hidden h-auto p-0 hover:bg-transparent sm:inline ${active === "about" ? "text-ink-action hover:text-ink-action" : "text-ink-action/45 hover:text-ink-action/45"}`}
             >
               {tr(nav.aboutMe)}
-            </button>
-            <button
+            </Button>
+            <Button
+              variant="ghost"
               onClick={() => scrollTo(projectsRef)}
-              className={`underline-draw hidden transition-colors sm:inline ${active === "projects" ? "text-ink-action" : "text-ink-action/45"}`}
+              className={`underline-draw hidden h-auto p-0 hover:bg-transparent sm:inline ${active === "projects" ? "text-ink-action hover:text-ink-action" : "text-ink-action/45 hover:text-ink-action/45"}`}
             >
               {tr(nav.myProjects)}
-            </button>
+            </Button>
           </>
         }
       />
@@ -124,22 +128,55 @@ export default function Portfolio() {
             </div>
           </div>
         </section>
-
-        <section ref={projectsRef} id="projects" className="mt-44 scroll-mt-28 sm:mt-52">
-          <RevealOnScroll>
-            <h2 className="font-display text-5xl font-extrabold text-ink sm:text-6xl">{tr(portfolioPage.projectsTitle)}</h2>
-          </RevealOnScroll>
-          <div className="mt-14 flex flex-col gap-8">
-            {projects
-              .filter((project) => !project.hidden)
-              .map((project, i) => (
-                <ProjectCard key={project.slug} project={project} index={i} />
-              ))}
-          </div>
-        </section>
       </main>
 
-      <Footer />
+      {/* "Mis proyectos" through the footer sits on its own slightly
+          different background (paper-dim vs. the plain paper behind the
+          hero/"Sobre mí") — a full-bleed frame, rounded at the top, so the
+          whole stretch reads as one distinct block instead of continuing
+          the page's base surface. */}
+      <div className="rounded-t-[2.5rem] bg-paper-dim">
+        <div className="mx-auto max-w-6xl px-5 pb-32 sm:px-8">
+          <section ref={projectsRef} id="projects" className="pt-20 scroll-mt-28 sm:pt-24">
+            {/* The title and ProjectPinTabs share this plain wrapper (instead
+                of the title sitting in its own short RevealOnScroll box) so
+                the title's sticky containing block is as tall as the whole
+                pinned section below it — position: sticky only has room to
+                stay pinned while scrolling for as long as its own parent box
+                does, and a wrapper no taller than the title itself would give
+                it nowhere to stick. */}
+            <div className="relative">
+              <RevealOnScroll
+                // top-[96px]: the header's own real rendered height (see
+                // Header.tsx — py-6/py-7 + its content), so the title sits
+                // flush against it with 0px of gap once both are pinned.
+                // py-4: 16px of padding inside this full-bleed-feeling
+                // title band itself (above/below the text) — keep
+                // ProjectPinTabs.tsx's PIN_TOP in sync if this changes,
+                // it's sized to clear this block's real height.
+                className="md:sticky md:top-[96px] md:z-10 md:bg-paper-dim md:py-4"
+              >
+                <h2 className="font-display text-5xl font-extrabold text-ink sm:text-6xl">
+                  {tr(portfolioPage.projectsTitle)}
+                </h2>
+              </RevealOnScroll>
+              {/* Desktop/tablet: scroll-pinned tabs (see ProjectPinTabs). Mobile
+                  keeps the plain card list — the scroll-jacked sticky mechanic
+                  is a poor fit for small viewports and mobile browser chrome. */}
+              <ProjectPinTabs projects={projects.filter((project) => !project.hidden)} />
+            </div>
+            <div className="mt-14 flex flex-col gap-8 md:hidden">
+              {projects
+                .filter((project) => !project.hidden)
+                .map((project, i) => (
+                  <ProjectCard key={project.slug} project={project} index={i} />
+                ))}
+            </div>
+          </section>
+        </div>
+
+        <Footer />
+      </div>
     </div>
   );
 }
