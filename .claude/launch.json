@@ -4,8 +4,30 @@
     {
       "name": "vite-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
       "port": 5173
+    },
+    {
+      "name": "gd-preview",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "--prefix",
+        "/private/tmp/claude-501/-Users-jonalon-Documents-Desig-nare-GoLivePortfolio/31c0067b-381c-44a2-a9f8-d4547e78e231/scratchpad/gd-preview",
+        "run",
+        "dev"
+      ],
+      "port": 5183
+    },
+    {
+      "name": "ficha-static",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "/private/tmp/claude-501/-Users-jonalon-Documents-Desig-nare-GoLivePortfolio/31c0067b-381c-44a2-a9f8-d4547e78e231/scratchpad/serve.py"
+      ],
+      "port": 8077
     }
   ]
 }
