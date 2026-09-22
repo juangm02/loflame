@@ -86,6 +86,11 @@ export default function ClothBackground({ className }: { className?: string }) {
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    // Read the real token instead of re-encoding its light/dark values here
+    // — this effect already re-runs on theme change (see the isDark dep
+    // below), so it's read once per theme flip, not per frame.
+    const bg = getComputedStyle(document.documentElement).getPropertyValue("--color-paper").trim();
+
     let particles: Particle[] = [];
     let springs: Spring[] = [];
     let width = 0;
@@ -243,7 +248,6 @@ export default function ClothBackground({ className }: { className?: string }) {
 
     function drawFrame() {
       const dark = isDark;
-      const bg = dark ? "#131316" : "#f1f0ee";
       const outsideGray = dark ? 55 : 200;
       const waveGray = dark ? 120 : 90;
       const centerGray = dark ? 25 : 235;

@@ -442,7 +442,7 @@ function ProjectTabMedia({
         ) : (
           <div
             className="flex h-full w-full items-center justify-center"
-            style={{ background: `linear-gradient(140deg, ${accent}, #10152a)` }}
+            style={{ background: `linear-gradient(140deg, ${accent}, var(--color-surface-feature))` }}
           >
             <div className="relative flex h-full w-full items-center justify-center">
               <div className="absolute h-32 w-32 rotate-6 rounded-[10px] bg-white/10" />

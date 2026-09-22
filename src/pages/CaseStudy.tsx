@@ -196,7 +196,7 @@ export default function CaseStudy() {
             return (
               <div
                 className={`relative mt-14 flex h-64 items-end overflow-hidden rounded-3xl p-8 sm:h-80 ${briefPhoto ? "justify-end" : ""}`}
-                style={briefPhoto ? undefined : { background: `linear-gradient(135deg, ${accent}, #0b0f22)` }}
+                style={briefPhoto ? undefined : { background: `linear-gradient(135deg, ${accent}, var(--color-surface-feature))` }}
               >
                 {briefPhoto ? (
                   <>

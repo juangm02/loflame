@@ -1,14 +1,14 @@
 import { motion } from "framer-motion";
 
 const shadowLight = "shadow-[inset_0_1px_0_var(--shadow-hi),0_1px_2px_var(--shadow-soft),0_8px_16px_-10px_var(--shadow-strong)]";
+// Deliberately its own tuned recipe, not a duplicate of shadowLight's
+// tokens — a softer inset highlight (0.15 vs. --shadow-hi's 0.9) paired
+// with a stronger drop shadow reads as "lifted" on hover without blowing
+// out, which the resting-state tokens above aren't tuned for.
 const shadowLightHover =
   "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.15),0_2px_6px_rgba(20,22,31,0.12),0_16px_26px_-10px_rgba(20,22,31,0.38)]";
-const shadowDark =
-  "shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_1px_2px_rgba(0,0,0,0.3),0_8px_16px_-10px_rgba(0,0,0,0.5)]";
-const shadowDarkHover =
-  "hover:shadow-[inset_0_1px_0_rgba(255,255,255,0.6),0_2px_6px_rgba(0,0,0,0.18),0_16px_26px_-10px_rgba(0,0,0,0.4)]";
 
-export default function TagCloud({ tags, dark = false }: { tags: string[]; dark?: boolean }) {
+export default function TagCloud({ tags }: { tags: string[] }) {
   return (
     <motion.ul
       initial="hidden"
@@ -27,11 +27,7 @@ export default function TagCloud({ tags, dark = false }: { tags: string[]; dark?
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
         >
           <span
-            className={`inline-block cursor-default select-none rounded-[18px_4px_18px_4px] px-4 py-1.5 text-sm font-semibold transition-all duration-200 ease-out will-change-transform hover:scale-[1.03] ${
-              dark
-                ? `bg-accent-hover text-on-accent/85 ${shadowDark} ${shadowDarkHover} hover:bg-on-accent hover:text-accent-text`
-                : `bg-card text-ink/75 ${shadowLight} ${shadowLightHover} hover:bg-accent hover:text-on-accent`
-            }`}
+            className={`inline-block cursor-default select-none rounded-[18px_4px_18px_4px] bg-card px-4 py-1.5 text-sm font-semibold text-ink/75 transition-all duration-200 ease-out will-change-transform hover:scale-[1.03] hover:bg-accent hover:text-on-accent ${shadowLight} ${shadowLightHover}`}
           >
             {tag}
           </span>

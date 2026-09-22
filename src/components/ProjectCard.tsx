@@ -39,7 +39,7 @@ export default function ProjectCard({ project, index }: { project: ProjectMeta; 
               <div
                 className="flex h-full w-full items-center justify-center"
                 style={{
-                  background: `linear-gradient(140deg, ${accent}, #10152a)`,
+                  background: `linear-gradient(140deg, ${accent}, var(--color-surface-feature))`,
                 }}
               >
                 <MonogramMark letter={initial} />

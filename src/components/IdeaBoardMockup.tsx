@@ -27,7 +27,7 @@ export default function IdeaBoardMockup({
   return (
     <Card surface="solid" radius="3xl" shadow>
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-ink/8 px-5 py-3.5">
-        <span className="font-display text-lg font-extrabold text-indigo-600">{appName}</span>
+        <span className="font-display text-lg font-extrabold text-accent">{appName}</span>
         <div className="flex gap-1 rounded-full bg-paper-dim p-1">
           {tabs.map((tab, i) => (
             <span
