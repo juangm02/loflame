@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { useIsDarkTheme } from "../lib/useIsDarkTheme";
 
 /**
@@ -17,6 +18,14 @@ import { useIsDarkTheme } from "../lib/useIsDarkTheme";
  * the mesh's background and thread grays already lined up almost exactly with
  * the dark-mode paper/ghost tokens, so only the light-mode fallback needed
  * real new numbers.
+ *
+ * Parallax: the sketch drifts down slightly slower than the hero scrolls
+ * past it, via a translateY driven by scroll progress through the outer
+ * (untransformed) wrapper. That wrapper — not the transformed layer — is
+ * what `useScroll` measures: Framer Motion's `useScroll` reads the target's
+ * live (post-transform) bounding box on every scroll tick, so measuring the
+ * element we're ALSO moving would feed its own transform back into the
+ * next measurement. A stable outer target avoids that.
  */
 
 interface Particle {
@@ -68,9 +77,17 @@ function smoothstep(t: number) {
 }
 
 export default function ClothBackground({ className }: { className?: string }) {
+  const scrollTargetRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const isDark = useIsDarkTheme();
+  const prefersReducedMotion = useReducedMotion();
+
+  const { scrollYProgress } = useScroll({
+    target: scrollTargetRef,
+    offset: ["start start", "end start"],
+  });
+  const parallaxY = useTransform(scrollYProgress, [0, 1], [0, prefersReducedMotion ? 0 : 120]);
 
   useEffect(() => {
     const containerEl = containerRef.current;
@@ -334,8 +351,10 @@ export default function ClothBackground({ className }: { className?: string }) {
   }, [isDark]);
 
   return (
-    <div ref={containerRef} className={`pointer-events-none ${className ?? ""}`} aria-hidden="true">
-      <canvas ref={canvasRef} className="block h-full w-full" />
+    <div ref={scrollTargetRef} className={`pointer-events-none overflow-hidden ${className ?? ""}`} aria-hidden="true">
+      <motion.div ref={containerRef} style={{ y: parallaxY }} className="absolute inset-0">
+        <canvas ref={canvasRef} className="block h-full w-full" />
+      </motion.div>
     </div>
   );
 }

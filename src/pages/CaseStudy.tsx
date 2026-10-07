@@ -14,6 +14,7 @@ import ImageCarousel from "../components/ImageCarousel";
 import StepsChain from "../components/StepsChain";
 import ObjectiveIcon from "../components/ObjectiveIcon";
 import ObjectivesScrollShowcase from "../components/ObjectivesScrollShowcase";
+import ImpactBand from "../components/ImpactBand";
 import SectionHeading from "../components/ui/SectionHeading";
 import Card from "../components/ui/Card";
 import {
@@ -190,6 +191,8 @@ export default function CaseStudy() {
           </p>
         </RevealOnScroll>
 
+        {study.impact && <ImpactBand impact={study.impact} />}
+
         <RevealOnScroll delay={0.15}>
           {(() => {
             const briefPhoto = study.briefImage && caseStudyImages[study.briefImage.imageKey];
@@ -288,6 +291,7 @@ export default function CaseStudy() {
             <ObjectivesScrollShowcase
               title={tr(study.objectivesTitle)}
               objectives={study.objectives.map((obj) => tr(obj))}
+              objectiveIcons={study.objectiveIcons}
               accent={accent}
               images={{
                 before: caseStudyComparativaImages.before,
@@ -305,7 +309,7 @@ export default function CaseStudy() {
                 {study.objectives.map((obj, i) => (
                   <RevealOnScroll key={i} delay={i * 0.06}>
                     <Card fullHeight className="p-6">
-                      <ObjectiveIcon index={i} accent={accent} />
+                      <ObjectiveIcon icon={study.objectiveIcons?.[i]} index={i} accent={accent} />
                       <p className="mt-4 text-sm leading-relaxed text-ink-soft">{tr(obj)}</p>
                     </Card>
                   </RevealOnScroll>

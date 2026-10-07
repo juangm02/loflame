@@ -1,3 +1,5 @@
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CTAButton from "../components/CTAButton";
@@ -14,6 +16,18 @@ const SHOW_HERO_IMAGE = false;
 
 export default function Curriculum() {
   const { tr } = useLanguage();
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  // Hero text drifts up, opposite the cloth sketch's downward drift
+  // (ClothBackground.tsx) — same scroll reference, opposing directions, so
+  // the two layers visibly separate instead of just "one thing moves and
+  // the other doesn't."
+  const prefersReducedMotion = useReducedMotion();
+  const { scrollYProgress: heroScrollProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const heroTextY = useTransform(heroScrollProgress, [0, 1], [0, prefersReducedMotion ? 0 : -60]);
 
   return (
     <div>
@@ -30,10 +44,11 @@ export default function Curriculum() {
         }
       />
 
-      <div className="relative pb-[100px]">
+      <div ref={heroRef} className="relative pb-[100px]">
         <ClothBackground className="absolute inset-0" />
 
-        <section
+        <motion.section
+          style={{ y: heroTextY }}
           className={`relative z-10 mx-auto max-w-6xl grid items-center gap-14 px-5 pt-10 sm:px-8 sm:pt-14 ${
             SHOW_HERO_IMAGE ? "lg:grid-cols-[1.05fr_1fr] lg:gap-16" : ""
           }`}
@@ -63,7 +78,7 @@ export default function Curriculum() {
               <TiltImage src={portraitSeated} alt={site.name} className="aspect-[4/3] w-full shadow-2xl shadow-black/10" />
             </RevealOnScroll>
           )}
-        </section>
+        </motion.section>
       </div>
 
       <main className="mx-auto max-w-6xl px-5 pb-32 sm:px-8">

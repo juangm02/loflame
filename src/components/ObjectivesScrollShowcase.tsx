@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "framer-motion";
 import ObjectiveIcon from "./ObjectiveIcon";
+import type { ObjectiveIconKey } from "../lib/objectiveIcons";
 import SectionHeading from "./ui/SectionHeading";
 import Card from "./ui/Card";
 
@@ -68,11 +69,13 @@ function rubberBand(distance: number, max: number) {
 export default function ObjectivesScrollShowcase({
   title,
   objectives,
+  objectiveIcons,
   accent,
   images,
 }: {
   title: string;
   objectives: string[];
+  objectiveIcons?: ObjectiveIconKey[];
   accent: string;
   images: { before: string; beforeAlt: string; after: string; afterAlt: string };
 }) {
@@ -272,7 +275,7 @@ export default function ObjectivesScrollShowcase({
     <div ref={sectionRef} className="mt-8 grid gap-5 sm:mt-10 sm:grid-cols-3">
       {objectives.map((obj, i) => (
         <Card key={i} className="flex flex-col p-6">
-          <ObjectiveIcon index={i} accent={accent} />
+          <ObjectiveIcon icon={objectiveIcons?.[i]} index={i} accent={accent} />
           <p className="mt-4 text-sm leading-relaxed text-ink-soft">{obj}</p>
         </Card>
       ))}

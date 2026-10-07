@@ -1,3 +1,5 @@
+import type { ObjectiveIconKey } from "../lib/objectiveIcons";
+
 export type Lang = "es" | "en";
 
 export interface Bilingual {
@@ -190,11 +192,27 @@ export interface ProjectMeta {
   accentDark?: string;
 }
 
+export interface ImpactStat {
+  value: number;
+  prefix?: string;
+  suffix?: string;
+  label: Bilingual;
+}
+
 export interface CaseStudyContent {
   slug: string;
   navLabel: Bilingual;
   tagline?: string;
   headline: Bilingual;
+  /** Impact band right under the headline. `hero` is the team's own result;
+   * `context` stats sit under their own `contextLabel` so company-wide
+   * figures never read as the same claim as the hero stat. */
+  impact?: {
+    hero: ImpactStat & { note: Bilingual };
+    contextLabel: Bilingual;
+    context: ImpactStat[];
+    sources: { label: Bilingual; url: string }[];
+  };
   briefTitle: Bilingual;
   /** Real photo for the brief/hero card's background (see
    * lib/caseStudyMedia.ts's caseStudyImages) — replaces the decorative
@@ -218,6 +236,8 @@ export interface CaseStudyContent {
   approachImage?: { key: string; alt: Bilingual };
   objectivesTitle: Bilingual;
   objectives: Bilingual[];
+  /** One icon per objective, same order as `objectives`. */
+  objectiveIcons?: ObjectiveIconKey[];
   objectivesPlaceholder?: Bilingual;
   /** Real image(s) between the objectives cards and whatever section
    * follows (see lib/caseStudyMedia.ts's caseStudyImages) — a grid, unlike
@@ -457,6 +477,30 @@ export const caseStudies: Record<string, CaseStudyContent> = {
       "Intervenciones UX que afinan las capacidades del producto y potencian el impacto y la experiencia de las funciones clave en el día a día del usuario",
       "UX interventions that sharpen product capabilities and boost the impact and experience of key features in the user's daily work"
     ),
+    impact: {
+      hero: {
+        value: 15,
+        prefix: "+",
+        suffix: "%",
+        label: t("en el uso de las core features", "in core feature usage"),
+        note: t(
+          "OKR del equipo para el Q1 2024: listas, webforms y tareas asignadas. Alcanzado según el seguimiento de Customer Success y respaldado en entrevistas con usuarios.",
+          "Team OKR for Q1 2024: lists, webforms and assigned tasks. Achieved per Customer Success tracking and backed by user interviews."
+        ),
+      },
+      contextLabel: t("DataScope en 2024", "DataScope in 2024"),
+      context: [
+        { value: 200, suffix: "K", label: t("usuarios, récord de la empresa", "users, a company record") },
+        { value: 17, label: t("países", "countries") },
+        { value: 80, prefix: "+", suffix: "%", label: t("en suscripciones anuales recurrentes", "in recurring annual subscriptions") },
+      ],
+      sources: [
+        {
+          label: t("Diario Estrategia, diciembre 2024", "Diario Estrategia, December 2024"),
+          url: "https://www.diarioestrategia.cl/texto-diario/mostrar/5092482/startup-chilena-datascope-alcanza-record-usuarios-prepara-potenciar-expansion-regional-cierre-2024",
+        },
+      ],
+    },
     briefTitle: t("Brief de diseño", "Design Brief"),
     briefParagraphs: [
       t(
@@ -464,12 +508,12 @@ export const caseStudies: Record<string, CaseStudyContent> = {
         "This B2B platform enables organizations to digitize and manage daily operations such as quality checks, safety monitoring, inventories, and work orders. Within this complex ecosystem, users operate in high-pressure contexts, where time, interface clarity, and usability of their tools are critical factors."
       ),
       t(
-        "Los flujos actuales fueron en gran parte diseñados por perfiles técnicos con conocimientos limitados en UX, por lo que había features que generaban fricciones en la experiencia de usuario, bajo nivel de adopción en ciertas funcionalidades y una percepción de complejidad innecesaria. Como diseñador UX/UI, mi rol ha sido intervenir estratégicamente en estas áreas críticas, rediseñando componentes clave de la experiencia con foco en claridad, eficiencia, y alineación con los objetivos operativos del negocio.",
-        "The existing flows were largely designed by technical profiles with limited UX knowledge, so some features created friction, low adoption, and a perception of unnecessary complexity. As UX/UI designer, my role has been to strategically intervene in these critical areas, redesigning key components of the experience with a focus on clarity, efficiency, and alignment with the business's operational goals."
+        "Había una paradoja en el centro del producto: muchas empresas pagaban por DataScope, pero sus equipos no usaban las funcionalidades que justifican la plataforma, como las listas, los webforms y las tareas asignadas. Parte de la explicación estaba en cómo se habían construido: los flujos fueron diseñados en gran parte por perfiles técnicos con conocimientos limitados en UX, y eso se traducía en fricción y en una percepción de complejidad innecesaria. Por eso el objetivo del equipo para el primer trimestre fue concreto: aumentar en un 15% el uso de esas core features. Mi rol como diseñador UX/UI fue intervenir en esos flujos, rediseñándolos con foco en claridad, eficiencia y en los objetivos del negocio.",
+        "There was a paradox at the heart of the product: many companies were paying for DataScope, but their teams weren't using the features that justify the platform, such as lists, webforms and assigned tasks. Part of the explanation lay in how they had been built: the flows were largely designed by technical profiles with limited UX knowledge, which translated into friction and a perception of unnecessary complexity. That's why the team's goal for the first quarter was concrete: increase usage of those core features by 15%. My role as UX/UI designer was to step into those flows and redesign them with a focus on clarity, efficiency and the business's goals."
       ),
     ],
     meta: {
-      company: t("Anónimo", "Anonymous"),
+      company: t("DataScope", "DataScope"),
       role: t("Product Designer", "Product Designer"),
       roleDetail: t(
         "Responsable de research, conceptualización, diseño, prototipado, tests de usabilidad y colaboración con Desarrollo",
@@ -489,6 +533,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
     ),
     approachImage: { key: "datascope-approach", alt: t("Captura del proceso de diseño de Datascope.", "Screenshot of the Datascope design process.") },
     objectivesTitle: t("Objetivos", "Objectives"),
+    objectiveIcons: ["workflow", "hard-hat", "user-cog"],
     objectives: [
       t(
         "Aumentar la claridad y usabilidad en flujos clave como la gestión de tareas asignadas, la configuración de notificaciones por email, y la integración con hojas de cálculo externas.",
@@ -536,10 +581,6 @@ export const caseStudies: Record<string, CaseStudyContent> = {
         "Automate repetitive operational processes through integrations, rules and custom notifications."
       ),
     ],
-    confidentiality: t(
-      "Debido a un acuerdo de confidencialidad con la empresa, solo puedo compartir información limitada sobre los proyectos en los que he trabajado. El material presentado ha sido cuidadosamente seleccionado para respetar ese acuerdo, sin comprometer detalles sensibles de negocio o implementación.",
-      "Due to a confidentiality agreement with the company, I can only share limited information about the projects I've worked on. The material shown has been carefully selected to respect that agreement, without compromising sensitive business or implementation details."
-    ),
     designThinking: [
       { phase: t("1 | Empatizar", "1 | Empathize"), items: [t("Entrevistas con usuarios", "User interviews")] },
       {
@@ -801,6 +842,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
       "This project adopted a hybrid design approach, blending design thinking and creative exploration. Instead of imposing a predefined structure from the start, the process began by understanding the real working habits of creatives in depth. The chaotic nature of creative thinking guided the product decisions, resulting in rapid cycles of sketch → prototype → validation → iteration. Throughout the process, I alternated between a macro vision of the ecosystem Corigin belongs to, and a micro-focus on key interactions: how to capture an idea in 3 seconds, how a card moves on the canvas, how concepts can be tagged without friction."
     ),
     objectivesTitle: t("Objetivos", "Objectives"),
+    objectiveIcons: ["lightbulb", "folder-kanban", "search"],
     objectives: [
       t(
         "Crear un espacio de captura rápida donde los usuarios puedan guardar ideas, imágenes o referencias con eficiencia, antes de olvidarlas.",
@@ -1181,6 +1223,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
       "My approach aimed to resolve the operational chaos the business faced. Before designing any screens, I analyzed the owner's actual workflow: cooking, dispatching, checking inventory, running payroll, all at once. With that understanding, I proposed a solution focused on three key areas: orders, workers, and inventory. Each module was designed to be useful from the very first click, with an interface that prioritizes what's immediate."
     ),
     objectivesTitle: t("Objetivos", "Objectives"),
+    objectiveIcons: ["trending-up", "activity", "target"],
     objectives: [
       t(
         "Aumentar los ingresos del negocio sin contratar más personal, optimizando los procesos internos existentes.",
@@ -1277,6 +1320,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
       ),
     },
     objectivesTitle: t("Objetivos", "Objectives"),
+    objectiveIcons: ["eye", "layout-dashboard", "network"],
     objectives: [
       t(
         "Elevar la claridad y la accesibilidad de lectura en un contexto de alta exigencia operativa.",
@@ -1506,6 +1550,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
       ),
     },
     objectivesTitle: t("Objetivos", "Objectives"),
+    objectiveIcons: ["scan-search", "archive", "flask-conical"],
     objectives: [
       t(
         "Identificar las condiciones interpretativas que hoy sostienen la construcción de significado y la alfabetización visual en el archivo.",

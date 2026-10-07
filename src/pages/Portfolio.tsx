@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CTAButton from "../components/CTAButton";
@@ -22,7 +23,19 @@ export default function Portfolio() {
   const { lang, tr } = useLanguage();
   const aboutRef = useRef<HTMLDivElement>(null);
   const projectsRef = useRef<HTMLDivElement>(null);
+  const heroRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState<"about" | "projects">("about");
+
+  // Hero text drifts up, opposite the cloth sketch's downward drift
+  // (ClothBackground.tsx) — same scroll reference, opposing directions, so
+  // the two layers visibly separate instead of just "one thing moves and
+  // the other doesn't."
+  const prefersReducedMotion = useReducedMotion();
+  const { scrollYProgress: heroScrollProgress } = useScroll({
+    target: heroRef,
+    offset: ["start start", "end start"],
+  });
+  const heroTextY = useTransform(heroScrollProgress, [0, 1], [0, prefersReducedMotion ? 0 : -60]);
 
   useEffect(() => {
     const sections = [
@@ -71,10 +84,11 @@ export default function Portfolio() {
         }
       />
 
-      <div className="relative pb-[100px]">
+      <div ref={heroRef} className="relative pb-[100px]">
         <ClothBackground className="absolute inset-0" />
 
-        <section
+        <motion.section
+          style={{ y: heroTextY }}
           className={`relative z-10 mx-auto max-w-6xl grid items-center gap-14 px-5 pt-10 sm:px-8 sm:pt-14 ${
             SHOW_HERO_IMAGE ? "lg:grid-cols-[1fr_1fr] lg:gap-16" : ""
           }`}
@@ -106,7 +120,7 @@ export default function Portfolio() {
               <TiltImage src={portraitSide} alt={site.name} className="aspect-[16/10] w-full shadow-2xl shadow-black/10" />
             </RevealOnScroll>
           )}
-        </section>
+        </motion.section>
       </div>
 
       <main className="mx-auto max-w-6xl px-5 pb-32 sm:px-8">
