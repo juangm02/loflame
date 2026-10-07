@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
+import { useLanguage } from "../context/LanguageContext";
 import ObjectiveIcon from "./ObjectiveIcon";
 import type { ObjectiveIconKey } from "../lib/objectiveIcons";
 import SectionHeading from "./ui/SectionHeading";
@@ -82,6 +83,8 @@ export default function ObjectivesScrollShowcase({
   const sectionRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const { tr } = useLanguage();
+  const labels = { before: tr({ es: "Antes", en: "Before" }), after: tr({ es: "Después", en: "After" }) };
   const imageCount = 2;
 
   const [containerWidth, setContainerWidth] = useState(0);
@@ -287,9 +290,9 @@ export default function ObjectivesScrollShowcase({
       <div>
         <SectionHeading center>{title}</SectionHeading>
         {cardsGrid}
-        <div className="mx-auto mt-6 grid w-full max-w-4xl gap-4 sm:grid-cols-2">
-          <img src={images.before} alt={images.beforeAlt} className="h-auto w-full rounded-2xl border border-ink/10" />
-          <img src={images.after} alt={images.afterAlt} className="h-auto w-full rounded-2xl border border-ink/10" />
+        <div className="mx-auto mt-10 grid w-full max-w-4xl gap-x-4 gap-y-8 sm:grid-cols-2">
+          <ComparisonImage src={images.before} alt={images.beforeAlt} label={labels.before} tone="before" active />
+          <ComparisonImage src={images.after} alt={images.afterAlt} label={labels.after} tone="after" active />
         </div>
       </div>
     );
@@ -302,7 +305,8 @@ export default function ObjectivesScrollShowcase({
       {cardsGrid}
 
       <div className="mx-auto mt-6 w-full max-w-3xl">
-        <div ref={viewportRef} className="mx-auto w-full overflow-hidden">
+        {/* pt-4: room for the labels straddling each image's top edge, which overflow-hidden would clip */}
+        <div ref={viewportRef} className="mx-auto w-full overflow-hidden pt-4">
           <div
             className="flex gap-x-10"
             style={{
@@ -310,8 +314,8 @@ export default function ObjectivesScrollShowcase({
               transition,
             }}
           >
-            <ComparisonImage src={images.before} alt={images.beforeAlt} />
-            <ComparisonImage src={images.after} alt={images.afterAlt} />
+            <ComparisonImage src={images.before} alt={images.beforeAlt} label={labels.before} tone="before" active={index === 0} />
+            <ComparisonImage src={images.after} alt={images.afterAlt} label={labels.after} tone="after" active={index === 1} />
           </div>
         </div>
       </div>
@@ -319,6 +323,39 @@ export default function ObjectivesScrollShowcase({
   );
 }
 
-function ComparisonImage({ src, alt }: { src: string; alt: string }) {
-  return <img src={src} alt={alt} className="h-auto w-full shrink-0 rounded-2xl border border-ink/10 shadow-xl shadow-black/10" />;
+/** Before/after image with a corner label. The label only shows while its
+ * image is the active one, and enters after the slide has mostly settled
+ * (delay ≈ the settle curve), so the text confirms the swap at the moment it
+ * lands instead of riding along with it. It straddles the image's top edge
+ * like a tab, so it never covers the screenshot's own header text. */
+function ComparisonImage({
+  src,
+  alt,
+  label,
+  tone,
+  active,
+  className = "",
+}: {
+  src: string;
+  alt: string;
+  label: string;
+  tone: "before" | "after";
+  active: boolean;
+  className?: string;
+}) {
+  const chip = tone === "after" ? "border border-accent bg-accent text-on-accent" : "border border-ink/15 bg-card text-ink-soft";
+  return (
+    <div className={`relative w-full shrink-0 ${className}`}>
+      <img src={src} alt={alt} className="h-auto w-full rounded-2xl border border-ink/10 shadow-xl shadow-black/10" />
+      <motion.span
+        aria-hidden="true"
+        className={`absolute -top-3.5 left-5 z-10 rounded-full px-3.5 py-1 text-xs font-bold tracking-wide shadow-md ${chip}`}
+        initial={false}
+        animate={active ? { opacity: 1, y: 0, filter: "blur(0px)" } : { opacity: 0, y: -8, filter: "blur(4px)" }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1], delay: active ? 0.35 : 0 }}
+      >
+        {label}
+      </motion.span>
+    </div>
+  );
 }

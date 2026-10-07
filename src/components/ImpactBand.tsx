@@ -76,17 +76,19 @@ export default function ImpactBand({ impact }: { impact: Impact }) {
               );
             })}
           </div>
-          <p className="mt-8 text-xs text-ink-soft/70">
-            {tr({ es: "Fuente", en: "Source" })}:{" "}
-            {impact.sources.map((source, i) => (
-              <span key={source.url}>
-                {i > 0 && ", "}
-                <a href={source.url} target="_blank" rel="noopener noreferrer" className="underline-draw">
-                  {tr(source.label)}
-                </a>
-              </span>
-            ))}
-          </p>
+          {impact.sources && impact.sources.length > 0 && (
+            <p className="mt-8 text-xs text-ink-soft/70">
+              {tr({ es: "Fuente", en: "Source" })}:{" "}
+              {impact.sources.map((source, i) => (
+                <span key={source.url}>
+                  {i > 0 && ", "}
+                  <a href={source.url} target="_blank" rel="noopener noreferrer" className="underline-draw">
+                    {tr(source.label)}
+                  </a>
+                </span>
+              ))}
+            </p>
+          )}
         </div>
       </div>
     </section>

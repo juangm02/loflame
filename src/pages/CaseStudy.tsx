@@ -1,5 +1,6 @@
 import { Link, useParams, Navigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Info } from "lucide-react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import CTAButton from "../components/CTAButton";
@@ -377,6 +378,20 @@ export default function CaseStudy() {
                   {tr({ es: "Nota sobre confidencialidad:", en: "Confidentiality note:" })}
                 </p>
                 <p className="mt-1 text-sm leading-relaxed text-ink-soft">{tr(study.confidentiality)}</p>
+              </div>
+            </div>
+          </RevealOnScroll>
+        )}
+
+        {study.dataNote && (
+          <RevealOnScroll className="mt-24">
+            <div className="flex items-start gap-3 rounded-2xl border border-ink/10 bg-paper-dim/60 p-5">
+              <Info size={18} className="mt-0.5 shrink-0 text-ink-soft" aria-hidden="true" />
+              <div>
+                <p className="text-sm font-bold text-ink">
+                  {tr({ es: "Sobre los datos mostrados:", en: "About the data shown:" })}
+                </p>
+                <p className="mt-1 text-sm leading-relaxed text-ink-soft">{tr(study.dataNote)}</p>
               </div>
             </div>
           </RevealOnScroll>

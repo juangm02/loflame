@@ -211,7 +211,7 @@ export interface CaseStudyContent {
     hero: ImpactStat & { note: Bilingual };
     contextLabel: Bilingual;
     context: ImpactStat[];
-    sources: { label: Bilingual; url: string }[];
+    sources?: { label: Bilingual; url: string }[];
   };
   briefTitle: Bilingual;
   /** Real photo for the brief/hero card's background (see
@@ -261,6 +261,9 @@ export interface CaseStudyContent {
   needsTitle?: Bilingual;
   needs?: Bilingual[];
   confidentiality?: Bilingual;
+  /** Plain disclaimer about the data shown in screenshots (e.g. fictitious
+   * patient data), for cases with no confidentiality agreement to cite. */
+  dataNote?: Bilingual;
   designThinking?: { phase: Bilingual; items: Bilingual[] }[];
   processSections?: {
     title: Bilingual;
@@ -1275,6 +1278,26 @@ export const caseStudies: Record<string, CaseStudyContent> = {
       "Sistema de monitorización clínica en tiempo real, diseñado para gran formato y lectura a distancia, dentro del Clinical Command Center del hospital.",
       "Real-time clinical monitoring system, designed for large-format displays and long-distance reading, inside the hospital's Clinical Command Center."
     ),
+    impact: {
+      hero: {
+        value: 10,
+        suffix: " s",
+        label: t(
+          "para entender cómo se relacionan las alertas de una pantalla",
+          "to understand how the alerts on a screen relate to each other"
+        ),
+        note: t(
+          "Objetivo de lectura validado en un test informal con perfiles de pediatría, enfermería, datos y service design, alcanzado tras 3 iteraciones.",
+          "Reading target validated in an informal test with pediatrics, nursing, data and service design profiles, reached after 3 iterations."
+        ),
+      },
+      contextLabel: t("El DataWall", "The DataWall"),
+      context: [
+        { value: 18, label: t("pantallas: 11 rediseñadas y 7 nuevas", "screens: 11 redesigned and 7 new") },
+        { value: 16, label: t("de 31 indicadores evaluados entraron al MVP", "of 31 indicators evaluated made the MVP") },
+        { value: 5, prefix: "≥", suffix: " m", label: t("de distancia mínima de lectura", "minimum reading distance") },
+      ],
+    },
     briefTitle: t("Brief de diseño", "Design Brief"),
     briefParagraphs: [
       t(
@@ -1287,7 +1310,7 @@ export const caseStudies: Record<string, CaseStudyContent> = {
         "Hospital Sant Joan de Déu Barcelona, Direcció d'Estratègia Digital i Dades (D3)",
         "Hospital Sant Joan de Déu Barcelona, Digital Strategy & Data Division (D3)"
       ),
-      period: t("2026", "2026"),
+      period: t("Febrero a agosto 2026", "February to August 2026"),
       role: t("Product Designer (UX/UI)", "Product Designer (UX/UI)"),
       roleDetail: t(
         "A cargo de investigación, diseño del sistema visual, documentación de lógica de pantallas, prototipado y colaboración con equipos técnicos y clínicos para el diseño e implementación del sistema.",
@@ -1320,7 +1343,11 @@ export const caseStudies: Record<string, CaseStudyContent> = {
       ),
     },
     objectivesTitle: t("Objetivos", "Objectives"),
-    objectiveIcons: ["eye", "layout-dashboard", "network"],
+    dataNote: t(
+      "Las capturas mostradas contienen datos ficticios e ilustrativos y no corresponden a pacientes ni a información real.",
+      "The screenshots shown contain fictitious, illustrative data and do not correspond to real patients or information."
+    ),
+    objectiveIcons: ["eye", "layout-dashboard", "scan-search"],
     objectives: [
       t(
         "Elevar la claridad y la accesibilidad de lectura en un contexto de alta exigencia operativa.",
@@ -1331,8 +1358,8 @@ export const caseStudies: Record<string, CaseStudyContent> = {
         "Establish a consistent design system, applicable and scalable across all 18 dashboards."
       ),
       t(
-        "Diseñar una arquitectura de información clara para el ecosistema Hospital Líquid, construida desde cero junto a los equipos clínicos.",
-        "Design a clear information architecture for the Hospital Líquid ecosystem, built from scratch together with clinical teams."
+        "Identificar los indicadores y pantallas que no se usaban en el Command Center, para liberar espacio en el DataWall. De ahí nació el lugar para el nuevo ecosistema Hospital Líquid.",
+        "Identify the indicators and screens that weren't being used in the Command Center, to free up space on the DataWall. That's where the room for the new Hospital Líquid ecosystem came from."
       ),
     ],
     objectivesPlaceholder: t(
@@ -1361,10 +1388,6 @@ export const caseStudies: Record<string, CaseStudyContent> = {
         "Out of 18 screens total, 11 were redesigned by evolving existing content, optimizing data visualization and hierarchy. The remaining 7, belonging to the Hospital Líquid ecosystem, were designed from scratch in direct collaboration with healthcare professionals, since it was a new ecosystem with no prior version."
       ),
     },
-    confidentiality: t(
-      "Debido a acuerdos de confidencialidad con la institución, solo se comparte información limitada sobre este proyecto. Las capturas mostradas contienen datos ficticios/ilustrativos, no corresponden a pacientes ni información real, y se presenta únicamente una muestra parcial del ecosistema completo de pantallas del CCC, sin revelar su infraestructura completa.",
-      "Due to confidentiality agreements with the institution, only limited information about this project is shared. The screenshots shown contain fictitious/illustrative data, do not correspond to real patients or information, and represent only a partial sample of the CCC's complete screen ecosystem, without revealing its full infrastructure."
-    ),
     processSections: [
       {
         title: t("Sistema de diseño", "Design system"),
@@ -1474,14 +1497,20 @@ export const caseStudies: Record<string, CaseStudyContent> = {
       },
     ],
     reflection: {
-      title: t("Resultado y estado actual", "Result and current status"),
+      title: t("Resultado y lo que me llevo", "Result and what I take away"),
       body: t(
-        "El proyecto completó recientemente el hand-off a desarrollo y se encuentra actualmente en fase de implementación.",
-        "The project recently completed hand-off to development and is currently in the implementation phase."
+        "El diseño cerró con el hand-off a desarrollo y hoy el sistema está en implementación. Más allá de las pantallas, el proyecto deja dos bases para lo que sigue: un design system pensado para leerse a distancia, y una forma de trabajo en la que el equipo clínico decide qué mostrar antes de que se diseñe cómo mostrarlo.",
+        "Design wrapped with the hand-off to development, and the system is now being implemented. Beyond the screens, the project leaves two foundations for what comes next: a design system built to be read from a distance, and a way of working in which the clinical team decides what to show before anyone designs how to show it."
       ),
-      placeholder: t(
-        "Cuando haya pantallas ya implementadas y en producción, actualizar con capturas reales (con datos ficticios) del sistema funcionando.",
-        "Once screens are implemented and in production, update with real screenshots (with illustrative data) of the system running."
+      paragraphs: [
+        t(
+          "Diseñar para una pared que se lee a cinco metros obligó a resolverlo todo con lo mínimo: sin cursor, sin scroll y sin segundas oportunidades. Cada decisión de jerarquía, color o tamaño tenía que funcionar en los diez segundos que alguien le dedica a la pantalla antes de volver a su trabajo.",
+          "Designing for a wall read from five meters away meant solving everything with the bare minimum: no cursor, no scroll and no second chances. Every decision about hierarchy, color or size had to work in the ten seconds someone gives the screen before going back to their work."
+        ),
+      ],
+      pullQuote: t(
+        "En un contexto clínico, la claridad no es una cuestión estética: es parte de la atención.",
+        "In a clinical setting, clarity isn't an aesthetic matter: it's part of care."
       ),
     },
   },
