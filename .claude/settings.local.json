@@ -107,7 +107,21 @@
       "Bash(npx shadcn@latest add button --yes --overwrite)",
       "Bash(npx shadcn@latest add carousel --yes)",
       "Bash(npx shadcn@latest add badge --yes)",
-      "Bash(grep -rnE '#[0-9a-fA-F]{3,8}' src --include=\"*.tsx\" --include=\"*.ts\")"
+      "Bash(grep -rnE '#[0-9a-fA-F]{3,8}' src --include=\"*.tsx\" --include=\"*.ts\")",
+      "Bash(awk 'NR>=454 && NR<=771' src/data/content.ts)",
+      "Bash(grep -n -i -E \"period|company|role|100K|descarg|download|usuario|users|pa[ií]s|countr|papel|%|[0-9]{2,}\")",
+      "WebFetch(domain:www.diarioestrategia.cl)",
+      "WebFetch(domain:g5noticias.cl)",
+      "WebFetch(domain:www.df.cl)",
+      "WebFetch(domain:play.google.com)",
+      "WebFetch(domain:dplnews.com)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" http://localhost:5173/)",
+      "Bash(awk 'NR>=460 && NR<=480' src/data/content.ts)",
+      "Bash(awk '/^    slug: \"/{slug=$2} /objectives: \\\\[/{inobj=1; print \"=== \" slug; next} inobj && /^    \\\\],/{inobj=0} inobj && /^        \"/{print}' src/data/content.ts)",
+      "Bash(grep -v '^        \"[A-Z].*[a-z]\\\\.\",$')",
+      "Bash(awk '/^    slug: \"/{slug=$2} /^    objectives: \\\\[/{inobj=1; print \"=== \" slug; next} inobj && /^    \\\\],/{inobj=0} inobj' src/data/content.ts)",
+      "Bash(awk 'NR%1==0')",
+      "Bash(awk '/slug: \"datascope\",/{f++} f==2 && /briefParagraphs: \\\\[/{p=1} p{print} p && /^    \\\\],/{exit}' src/data/content.ts)"
     ]
   }
 }
