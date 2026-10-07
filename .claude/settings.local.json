@@ -121,7 +121,11 @@
       "Bash(grep -v '^        \"[A-Z].*[a-z]\\\\.\",$')",
       "Bash(awk '/^    slug: \"/{slug=$2} /^    objectives: \\\\[/{inobj=1; print \"=== \" slug; next} inobj && /^    \\\\],/{inobj=0} inobj' src/data/content.ts)",
       "Bash(awk 'NR%1==0')",
-      "Bash(awk '/slug: \"datascope\",/{f++} f==2 && /briefParagraphs: \\\\[/{p=1} p{print} p && /^    \\\\],/{exit}' src/data/content.ts)"
+      "Bash(awk '/slug: \"datascope\",/{f++} f==2 && /briefParagraphs: \\\\[/{p=1} p{print} p && /^    \\\\],/{exit}' src/data/content.ts)",
+      "WebFetch(domain:www.sjdhospitalbarcelona.org)",
+      "WebFetch(domain:www.cio.com)",
+      "WebFetch(domain:www.denodo.com)",
+      "WebFetch(domain:www.iseurope.org)"
     ]
   }
 }
